@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define EI 11  /* typically 10..13 */
+#define EI 11  /* typically 10..13 */ /** increasing this, increases the compression time but decreases compressed file size*/
 #define EJ  4  /* typically 4..5 */
 #define P   1  /* If match length <= P then output one character */
 #define N (1 << EI)  /* buffer size */

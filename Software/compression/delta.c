@@ -44,42 +44,13 @@ void flush_bit_buffer(void)
     }
 }
 
-void output1(int c)
-{
-    int mask;
-    
-    putbit1();
-    mask = 256;
-    while (mask >>= 1) {
-        if (c & mask) putbit1();
-        else putbit0();
-    }
-}
-
-void output2(int x, int y)
-{
-    int mask;
-    
-    putbit0();
-    mask = N;
-    while (mask >>= 1) {
-        if (x & mask) putbit1();
-        else putbit0();
-    }
-    mask = (1 << EJ);
-    while (mask >>= 1) {
-        if (y & mask) putbit1();
-        else putbit0();
-    }
-}
-
 void encode(void)
 {
     int i, j, f1, x, y, r, s, bufferend, c;
     
     for (i = 0; i < N - F; i++) buffer[i] = ' ';
-    for (i = N - F; i < N * 2; i++) {
-        if ((c = fgetc(infile)) == EOF) break;
+    for (i = N-F; i < N*2; i++) {
+        if ((c = fget(infile)) == EOF) break;
         buffer[i] = c;  textcount++;
     }
     bufferend = i;
@@ -88,15 +59,19 @@ void encode(void)
     for (int i = 0; i < bufferend; i++)
     {
         unsigned char current = buffer[i];
+        printf("%c  ",current);
         buffer[i] = current - last;
         last = current;
+        printf("%c   \n",last);
+        printf("%c\n",current-last);
+        codecount++;
     }
 
     flush_bit_buffer();
-    printf("compressed")
-    //printf("text:  %ld bytes\n", textcount);
-    //printf("code:  %ld bytes (%ld%%)\n",
-        //codecount, (codecount * 100) / textcount);
+    printf("compressed\n");
+    printf("text:  %ld bytes\n", textcount);
+    printf("code:  %ld bytes (%ld%%)\n",
+        codecount, (codecount * 100) / textcount);
 }
 
 int getbit(int n) /* get n bits */
@@ -119,12 +94,13 @@ int getbit(int n) /* get n bits */
 
 void decode(void)
 {
-    int i, j, k, r, c;
+    int i, j, k, r, c, bufferend;
     
     for (i = 0; i < N - F; i++) buffer[i] = ' ';
+    bufferend = i;
     while ((c = getbit(1)) != EOF) {
         unsigned char last = 0;
-        for (int i = 0; i < length; i++)
+        for (int i = 0; i < bufferend; i++)
         {
             unsigned char delta = buffer[i];
             buffer[i] = delta + last;
