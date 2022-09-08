@@ -30,7 +30,6 @@ In future versions, the data will be read from the sensor HAT ICM2098 chip
 /* USER CODE BEGIN PD */
 
 //#define waveHat
-
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -42,7 +41,7 @@ In future versions, the data will be read from the sensor HAT ICM2098 chip
  UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
-
+ uint8_t rxdata[4];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -55,7 +54,10 @@ static void MX_USART2_UART_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+//void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+//{
+//	HAL_UART_Receive_IT(&huart2, rxdata,4); //restart interupt reception
+//}
 /* USER CODE END 0 */
 
 /**
@@ -88,7 +90,11 @@ int main(void)
   MX_GPIO_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
+  //HAL_UART_Receive_IT(&huart2, rxdata,4);
 
+
+
+  uint8_t data[10];
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -98,6 +104,10 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+	  	HAL_UART_Receive(&huart2, rxdata, 4, 1000);
+
+	//sprintf(data, "\r\n Data: 2 \r\n");
+	//HAL_UART_Transmit(&huart2, data, sizeof(data), 1000);
   }
   /* USER CODE END 3 */
 }
@@ -156,7 +166,7 @@ static void MX_USART2_UART_Init(void)
 
   /* USER CODE END USART2_Init 1 */
   huart2.Instance = USART2;
-  huart2.Init.BaudRate = 38400;
+  huart2.Init.BaudRate = 9600;
   huart2.Init.WordLength = UART_WORDLENGTH_8B;
   huart2.Init.StopBits = UART_STOPBITS_1;
   huart2.Init.Parity = UART_PARITY_NONE;
