@@ -1,6 +1,6 @@
 % code used from https://www.mathworks.com/matlabcentral/answers/308231-fft-from-csv-data-file
 
-filename = 'C:\Users\9510 i9\Desktop\SHARC_buoy_data_transmission\Data\cleaned -  Turntable Example Data.csv';
+filename = 'C:\Users\9510 i9\Desktop\SHARC_buoy_data_transmission\Data\cleaned - Walking Around Example Data.csv';
 X = readmatrix(filename);
 Time = X(:,1);
 
@@ -57,7 +57,7 @@ grid
 title('Fourier Transform Of Temperature Data')
 xlabel('Frequency (Hz)')
 ylabel('Amplitude')
-saveas(2, "tempFFT.png");
+saveas(3, "tempFFT.png");
 
 figure(4)
 plot(Fv, abs(FAll(Iv))*2)
@@ -65,7 +65,7 @@ grid
 title('Fourier Transform Of All Data')
 xlabel('Frequency (Hz)')
 ylabel('Amplitude')
-saveas(2, "combinedFFT.png");
+saveas(4, "combinedFFT.png");
 
 FAccdcoc = fft(AccCorr)/L;                          % Fourier Transform (D-C Offset Corrected)
 FGyrodcoc = fft(GyroCorr)/L;                          % Fourier Transform (D-C Offset Corrected)
@@ -78,7 +78,7 @@ grid
 title('Fourier Transform Of D-C Offset Corrected Accelerometer Data')
 xlabel('Frequency (Hz)')
 ylabel('Amplitude')
-saveas(2, "accCorrFFT.png");
+saveas(5, "accCorrFFT.png");
 
 
 figure(6)
@@ -87,7 +87,7 @@ grid
 title('Fourier Transform Of D-C Offset Corrected Gyroscope Data')
 xlabel('Frequency (Hz)')
 ylabel('Amplitude')
-saveas(4, "GyroCorrFFT.png");
+saveas(6, "GyroCorrFFT.png");
 
 figure(7)
 plot(Fv, abs(FTempdcoc(Iv))*2)
@@ -95,7 +95,7 @@ grid
 title('Fourier Transform Of D-C Offset Corrected Temperature Data')
 xlabel('Frequency (Hz)')
 ylabel('Amplitude')
-saveas(4, "TempCorrFFT.png");
+saveas(7, "TempCorrFFT.png");
 
 figure(8)
 plot(Fv, abs(FAlldcoc(Iv))*2)
@@ -103,6 +103,6 @@ grid
 title('Fourier Transform Of D-C Offset Corrected All Data')
 xlabel('Frequency (Hz)')
 ylabel('Amplitude')
-saveas(4, "CombinedCorrFFT.png");
+saveas(8, "CombinedCorrFFT.png");
 
 
