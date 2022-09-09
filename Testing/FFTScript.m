@@ -14,6 +14,8 @@ tmp4 = X(:,6);
 tmp5 = X(:,7);
 tmp6 = X(:,8); 
 Gyro = [tmp4, tmp5, tmp6];
+%tmpGyro = [tmp4, tmp5, tmp6];
+%Gyro = smoothdata(tmpGyro, "gaussian", 50);
 GyroCorr = [(tmp4-mean(tmp4)), (tmp5 - mean(tmp5)), (tmp6-mean(tmp6))];
 
 Temp = X(:,9);
