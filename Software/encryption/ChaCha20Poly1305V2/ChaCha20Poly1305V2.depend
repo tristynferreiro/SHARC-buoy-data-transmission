@@ -6,7 +6,7 @@
 	"chachapoly_aead.h"
 	"poly1305.h"
 
-1662205224 c:\users\9510 i9\desktop\encryption testing s1\chachaenctest2\chacha20poly1305v2\chachapoly_aead.h
+1662762627 c:\users\9510 i9\desktop\encryption testing s1\chachaenctest2\chacha20poly1305v2\chachapoly_aead.h
 	"chacha.h"
 
 1662205224 c:\users\9510 i9\desktop\encryption testing s1\chachaenctest2\chacha20poly1305v2\chacha.h
@@ -17,7 +17,7 @@
 	<stdint.h>
 	<sys/types.h>
 
-1662471398 source:c:\users\9510 i9\desktop\encryption testing s1\chachaenctest2\chacha20poly1305v2\chachapoly_aead.c
+1662762696 source:c:\users\9510 i9\desktop\encryption testing s1\chachaenctest2\chacha20poly1305v2\chachapoly_aead.c
 	"chacha.h"
 	"poly1305.h"
 	"chachapoly_aead.h"
@@ -36,7 +36,7 @@
 1662633463 source:c:\users\9510 i9\desktop\encryption testing s1\chachaenctest2\chacha20poly1305v2\poly1305.c
 	"poly1305.h"
 
-1662205224 source:c:\users\9510 i9\desktop\encryption testing s1\chachaenctest2\chacha20poly1305v2\tests.c
+1662633661 source:c:\users\9510 i9\desktop\encryption testing s1\chachaenctest2\chacha20poly1305v2\tests.c
 	<assert.h>
 	<stdint.h>
 	<stdio.h>
@@ -47,4 +47,13 @@
 
 1662633449 source:c:\users\9510 i9\desktop\encryption testing s1\chachaenctest2\chacha20poly1305v2\chacha.c
 	"chacha.h"
+
+1662762674 source:c:\users\9510 i9\desktop\encryption testing s1\chachaenctest2\chacha20poly1305v2\chachapoly.c
+	<assert.h>
+	<stdint.h>
+	<stdio.h>
+	<string.h>
+	"chacha.h"
+	"chachapoly_aead.h"
+	"poly1305.h"
 

@@ -38,6 +38,9 @@
 		<Unit filename="chacha.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="chachapoly.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="chachapoly_aead.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -46,6 +49,7 @@
 		</Unit>
 		<Unit filename="tests.c">
 			<Option compilerVar="CC" />
+			<Option target="Release" />
 		</Unit>
 		<Extensions>
 			<lib_finder disable_auto="1" />

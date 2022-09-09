@@ -1,6 +1,6 @@
 % code used from https://www.mathworks.com/matlabcentral/answers/308231-fft-from-csv-data-file
 
-filename = 'C:\Users\9510 i9\Desktop\SHARC_buoy_data_transmission\Data\cleaned - Walking Around Example Data.csv';
+filename = 'C:\Users\9510 i9\Desktop\SHARC_buoy_data_transmission\Data\cleaned - Turntable Example Data 2.csv';
 X = readmatrix(filename);
 t = X(:,1);
 
@@ -24,7 +24,7 @@ grid
 title('Accelerometer Data')
 xlabel('Time')
 ylabel('Amplitude')
-saveas(1, "accTD.png");
+saveas(1, "accTDTT2.png");
 
 figure(2)
 plot(t, Gyro)
@@ -32,7 +32,7 @@ grid
 title('Gyroscope Data')
 xlabel('Time')
 ylabel('Amplitude')
-saveas(2, "gyroTD.png");
+saveas(2, "gyroTDTT2.png");
 
 figure(3)
 plot(t, Temp)
@@ -40,12 +40,12 @@ grid
 title('Temperature Data')
 xlabel('Time')
 ylabel('Amplitude')
-saveas(3, "tempTD.png");
+saveas(3, "tempTTT2.png");
 
-figure(4)
-plot(t,X)
-grid
-title('All Data')
-xlabel('Time')
-ylabel('Amplitude')
-saveas(4, "combinedTD.png");
+% figure(4)
+% plot(t,X)
+% grid
+% title('All Data')
+% xlabel('Time')
+% ylabel('Amplitude')
+% saveas(4, "combinedTD.png");

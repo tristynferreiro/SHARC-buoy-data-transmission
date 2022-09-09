@@ -1,10 +1,12 @@
-
+#include <stdio.h>
+#include <stdint.h>
 //main function copied from https://www.w3resource.com/c-programming-exercises/file-handling/c-file-handling-exercise-13.php
 void main()
 {
 	char fname[20];
 	uint8_t ch[256];
 	FILE *fpts, *fptt;
+	int count = 0;
 
 	printf("\n\n Encrypt a text file :\n");
 	printf("--------------------------\n");
@@ -27,15 +29,16 @@ void main()
 	}
 	while(1)
 	{
-		ch=fgetc(fpts);
-		if(ch==EOF)
+		if(ch[count]==EOF)
 		{
 			break;
 		}
 		else
-
 		{
-            struct chachapolyaead_ctx aead_ctx;
+            ch[count]=fgetc(fpts);
+            count++;
+		}
+		struct chachapolyaead_ctx aead_ctx;
             uint32_t seqnr = 0;
             uint32_t seqnr_aad = 0;
             int pos_aad = 0;
@@ -52,8 +55,7 @@ void main()
             chacha20poly1305_init(&aead_ctx, aead_k_1, 32, aead_k_2, 32);
             chacha20poly1305_crypt(&aead_ctx, seqnr, seqnr_aad, pos_aad, ciphertext_buf, 300, ch, 255, 1);
 
-            fputc(actual_ciphertext, fptt);
-		}
+            fputc(ciphertext_buf, fptt);
 	}
 	fclose(fpts);
 	fclose(fptt);
