@@ -1,6 +1,6 @@
 % code used from https://www.mathworks.com/matlabcentral/answers/308231-fft-from-csv-data-file
 
-filename = 'C:\Users\9510 i9\Desktop\SHARC_buoy_data_transmission\Data\cleaned - Walking Around Example Data.csv';
+filename = 'C:\Users\9510 i9\Desktop\SHARC_buoy_data_transmission\Data\cleaned - Turntable Example Data 2.csv';
 X = readmatrix(filename);
 Time = X(:,1);
 
@@ -34,6 +34,7 @@ grid
 title('Fourier Transform Of Accelerometer Data')
 xlabel('Frequency (Hz)')
 ylabel('Amplitude')
+saveas(1, "accFFT.png");
 
 figure(2)
 plot(Fv, abs(FGyro(Iv))*2)
@@ -41,6 +42,7 @@ grid
 title('Fourier Transform Of Gyroscope Data')
 xlabel('Frequency (Hz)')
 ylabel('Amplitude')
+saveas(2, "gyroFFT.png");
 
 FAccdcoc = fft(AccCorr)/L;                          % Fourier Transform (D-C Offset Corrected)
 FGyrodcoc = fft(GyroCorr)/L;                          % Fourier Transform (D-C Offset Corrected)
@@ -51,6 +53,8 @@ grid
 title('Fourier Transform Of D-C Offset Corrected Accelerometer Data')
 xlabel('Frequency (Hz)')
 ylabel('Amplitude')
+saveas(2, "accCorrFFT.png");
+
 
 figure(4)
 plot(Fv, abs(FGyrodcoc(Iv))*2)
@@ -58,4 +62,6 @@ grid
 title('Fourier Transform Of D-C Offset Corrected Gyroscope Data')
 xlabel('Frequency (Hz)')
 ylabel('Amplitude')
+saveas(4, "GyroCorrFFT.png");
+
 
