@@ -1,6 +1,6 @@
 % code used from https://www.mathworks.com/matlabcentral/answers/308231-fft-from-csv-data-file
 
-filename = 'C:\Users\9510 i9\Desktop\SHARC_buoy_data_transmission\Data\cleaned - Turntable Example Data 2.csv';
+filename = 'C:\Users\9510 i9\Desktop\SHARC_buoy_data_transmission\Data\cleaned -  Turntable Example Data.csv';
 X = readmatrix(filename);
 Time = X(:,1);
 
