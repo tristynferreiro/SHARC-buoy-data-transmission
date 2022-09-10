@@ -36,11 +36,25 @@ while(1):
         continue
 
 #compare all lines
-lines1 = f1.read();
-lines2 = f2.read();
 
-if(lines1 == lines2): print("The files: "+filename1+" & "+filename2+" are the same")
-else: print("Not the same")
+lines1 = f1.readline()
+numlines=0;
+while lines1:
+    lines2 = f2.readline()
+    numlines+=1
+    
+    if(lines1 != lines2):
+        print("FILES NOT THE SAME")
+        print("Difference [line",numlines,"]:\n["+filename1+"]: "+lines1+"\n["+filename2+"]: "+lines2)
+        exit();
+    lines1 = f1.readline()
+    
+print("The files: "+filename1+" & "+filename2+" are the same")
+#lines1 = f1.read();
+#lines2 = f2.read();
+
+#if(lines1 == lines2): print("The files: "+filename1+" & "+filename2+" are the same")
+#else: print("Not the same")
 
 f1.close()
 f2.close()
