@@ -1,7 +1,7 @@
 % code used from https://www.mathworks.com/matlabcentral/answers/308231-fft-from-csv-data-file
 
-inpFile = "C:\Users\9510 i9\Desktop\SHARC_buoy_data_transmission\Testing\Data\cleaned - Walking Around Example Data.csv";
-outFile = "C:\Users\9510 i9\Desktop\SHARC_buoy_data_transmission\Testing\Data\cleaned - Walking Around Example Data.csv";
+inpFile = "C:\Users\9510 i9\Desktop\SHARC_buoy_data_transmission\Testing\Data\Higher sampled turntable Example Data.csv";
+outFile = "C:\Users\9510 i9\Desktop\SHARC_buoy_data_transmission\Testing\Data\Walking Around Example Data.csv";
 
 in = readmatrix(inpFile);
 Out = readmatrix(outFile);
@@ -74,7 +74,7 @@ OUTPUTaccCorrFFT = lowpass(abs(FAccdcocOut(IvOut))*2,0.1);
 OUTPUTGyroCorrFFT = lowpass(abs(FGyrodcocOut(IvOut))*2,0.1);
 OUTPUTTempCorrFFT = lowpass(abs(FTempdcocOut(IvOut))*2, 0.1);
 
-if (length(IvIn) ~= length(IvOut))
+if (LIn ~= LOut)
     disp("not equal");
 else 
     acc = mscohere(INPUTaccCorrFFT, OUTPUTaccCorrFFT);
