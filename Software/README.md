@@ -1,6 +1,6 @@
 # Compiling the source code
 
-## lzss
+## compression/lzss.c
 On a linux terminal and using gcc compiling:
 $ gcc lzss.c
 For compression:
