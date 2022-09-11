@@ -1,6 +1,6 @@
 /* 
  * This program takes in a file, compresses it using lzss compression, passes the encoded bits to the encryption algorithm and prints
- * the result to a filee
+ * the result to a file.
  */
 
 #include <stdio.h>

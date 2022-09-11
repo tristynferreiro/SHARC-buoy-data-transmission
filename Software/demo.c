@@ -1,5 +1,4 @@
 /* 
- * Authors: Tristyn Ferreiro and Shameera Cassim
  * This is program takes in a file and compresses/decompresses or encrypts/decrypts it to a new file.
  * 
  * The compression/decompression is LZSS encoder-decoder (Haruhiko Okumura; public domain) and the 
