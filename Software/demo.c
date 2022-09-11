@@ -362,8 +362,8 @@ void decrypt() {
         fclose(inp);
 
 	inp = fopen("ciphertext.csv", "r");
-
-	    printf("message: ");
+	out = fopen("decrypted.csv", "w");
+    printf("message: ");
 
 	while (fscanf(inp, "%llu", &c) != EOF)
 	{
@@ -377,7 +377,12 @@ void decrypt() {
                 	m1m2 += p;
        		h = (qInv * m1m2) % p;
         	m = m2 + h * q;
-        	fprintf(outfile, "%c", m);
+        	if(m!=0) {
+        	fprintf(out, "%c", m);
+        	}
+        	else {
+                fprintf(out,"%c\n", m);
+        	}
             printf("%c", m);
 	}
 	fclose(inp);
