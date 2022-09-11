@@ -302,7 +302,7 @@ void encrypt(char* msg[]) {
 	int elements = sizeof(&msg);
 	unsigned long long int temp[elements];
 	printf("%d \n", elements);
-	FILE *outp = fopen("ciphertext.txt", "w");
+	FILE *outp = fopen("ciphertext.csv", "w");
     printf("ciphertext = ");
         for (i = 0; msg[0][i]!= '\n'; i++)
         {
@@ -361,7 +361,7 @@ void decrypt() {
         fscanf(inp, "%d %d", &p, &q);
         fclose(inp);
 
-	inp = fopen("ciphertext.txt", "r");
+	inp = fopen("ciphertext.csv", "r");
 
 	    printf("message: ");
 
@@ -403,6 +403,7 @@ int main(int argc, char *argv[])
         return 1;
     }
     s = argv[1];
+    char* arr= {"0.054000001","6,0.0024","-0.0006","3.856600046","-0.061000001","-0.061000001","0,34.83589935", "0.066","7","0.0048"}
     if (s[1] == 0 && (*s == 'decomp' || *s == 'Decomp' || *s == 'comp' || *s == 'Comp' || *s =='E' || *s == 'e' || *s == 'd' || *s == 'D')) {
         task = (*s == 'c' || *s == 'C');
         task2 = (*s == 'e' || *s == 'E');
@@ -419,7 +420,7 @@ int main(int argc, char *argv[])
     }
 
 
-    if (task) encode(); else if(task2) encrypt(); else if (task3) decrypt(); else decode();
+    if (task) encode(); else if(task2) encrypt(arr); else if (task3) decrypt(); else decode();
 
 
     fclose(infile);  fclose(outfile);

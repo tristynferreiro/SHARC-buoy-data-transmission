@@ -1,0 +1,87 @@
+# depslib dependency file v1.0
+1662205224 source:c:\users\9510 i9\desktop\encryption testing s1\chachaenctest2\chacha20poly1305v2\bench.c
+	"sys/time.h"
+	<math.h>
+	<stdio.h>
+	"chachapoly_aead.h"
+	"poly1305.h"
+
+1662762627 c:\users\9510 i9\desktop\encryption testing s1\chachaenctest2\chacha20poly1305v2\chachapoly_aead.h
+	"chacha.h"
+
+1662205224 c:\users\9510 i9\desktop\encryption testing s1\chachaenctest2\chacha20poly1305v2\chacha.h
+	<stdint.h>
+	<stdlib.h>
+
+1662205224 c:\users\9510 i9\desktop\encryption testing s1\chachaenctest2\chacha20poly1305v2\poly1305.h
+	<stdint.h>
+	<sys/types.h>
+
+1662762696 source:c:\users\9510 i9\desktop\encryption testing s1\chachaenctest2\chacha20poly1305v2\chachapoly_aead.c
+	"chacha.h"
+	"poly1305.h"
+	"chachapoly_aead.h"
+	"poly1305.h"
+	<inttypes.h>
+	<stdint.h>
+	<stdio.h>
+	<string.h>
+	<endian.h>
+	<libkern/OSByteOrder.h>
+	<sys/endian.h>
+	<sys/endian.h>
+	<sys/param.h>
+	<winsock2.h>
+
+1662633463 source:c:\users\9510 i9\desktop\encryption testing s1\chachaenctest2\chacha20poly1305v2\poly1305.c
+	"poly1305.h"
+
+1662633661 source:c:\users\9510 i9\desktop\encryption testing s1\chachaenctest2\chacha20poly1305v2\tests.c
+	<assert.h>
+	<stdint.h>
+	<stdio.h>
+	<string.h>
+	"chacha.h"
+	"chachapoly_aead.h"
+	"poly1305.h"
+
+1662633449 source:c:\users\9510 i9\desktop\encryption testing s1\chachaenctest2\chacha20poly1305v2\chacha.c
+	"chacha.h"
+
+1662890746 source:c:\users\9510 i9\desktop\encryption testing s1\chachaenctest2\chacha20poly1305v2\chachapoly.c
+	<stdint.h>
+	<stdio.h>
+	<string.h>
+	<inttypes.h>
+	<stdlib.h>
+	<stdint.h>
+	<sys/types.h>
+	<endian.h>
+	<libkern/OSByteOrder.h>
+	<sys/endian.h>
+	<sys/endian.h>
+	<sys/param.h>
+	<winsock2.h>
+
+1662838306 source:c:\users\9510 i9\desktop\encryption testing s1\chachaenctest2\chacha20poly1305v2\chachapolymain.c
+
+1662633449 c:\users\9510 i9\desktop\encryption testing s1\chachaenctest2\chacha20poly1305v2\chacha.c
+	"chacha.h"
+
+1662839139 c:\users\9510 i9\desktop\encryption testing s1\chachaenctest2\chacha20poly1305v2\chachapoly_aead.c
+	"chachapoly_aead.h"
+	"poly1305.h"
+	<inttypes.h>
+	<stdint.h>
+	<stdio.h>
+	<string.h>
+	<endian.h>
+	<libkern/OSByteOrder.h>
+	<sys/endian.h>
+	<sys/endian.h>
+	<sys/param.h>
+	<winsock2.h>
+
+1662633463 c:\users\9510 i9\desktop\encryption testing s1\chachaenctest2\chacha20poly1305v2\poly1305.c
+	"poly1305.h"
+
