@@ -37,15 +37,22 @@
 		</Unit>
 		<Unit filename="chacha.c">
 			<Option compilerVar="CC" />
+			<Option target="Release" />
 		</Unit>
 		<Unit filename="chachapoly.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="chachapoly_aead.c">
 			<Option compilerVar="CC" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="chachapolymain.c">
+			<Option compilerVar="CC" />
+			<Option target="Release" />
 		</Unit>
 		<Unit filename="poly1305.c">
 			<Option compilerVar="CC" />
+			<Option target="Release" />
 		</Unit>
 		<Unit filename="tests.c">
 			<Option compilerVar="CC" />

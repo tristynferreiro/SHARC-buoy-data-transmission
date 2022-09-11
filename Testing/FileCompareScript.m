@@ -1,5 +1,5 @@
-inpFile = "C:\Users\9510 i9\Desktop\SHARC_buoy_data_transmission\Testing\Data\Higher sampled turntable Example Data.csv";
-outFile = "C:\Users\9510 i9\Desktop\SHARC_buoy_data_transmission\Testing\Data\Higher sampled turntable Example Data.csv";
+inpFile = "C:\Users\9510 i9\Desktop\Encryption Testing S1\chachaencTest2\ChaCha20Poly1305V2\dtest.csv";
+outFile = "C:\Users\9510 i9\Desktop\Encryption Testing S1\chachaencTest2\compression\new.csv";
 
 in = readmatrix(inpFile);
 out = readmatrix(outFile);
