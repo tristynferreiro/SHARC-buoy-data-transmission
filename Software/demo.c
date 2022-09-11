@@ -162,8 +162,6 @@ void decode(void)
 }
 
 // modified from code available at https://github.com/yigitusta/RSA-Implementation
-#include <stdio.h>
-#include <stdlib.h>
 #include <time.h>
 #include <inttypes.h>
 
@@ -174,7 +172,6 @@ void decode(void)
 uint16_t e = E_VALUE, p, q;
 uint32_t n, phi, d;
 
-FILE *infile, *outfile;
 uint32_t findD(uint16_t e, uint32_t phi)
 {
 	uint32_t eprev, dprev, d = 1, etemp, dtemp;
@@ -357,7 +354,7 @@ void decrypt() {
         fscanf(inp, "%d %d", &p, &q);
         fclose(inp);
 
-	inp = fopen("ciphertext.csv", "r");
+	inp = infile;
 	out = fopen("decrypted.csv", "w");
 	while (fscanf(inp, "%llu", &c) != EOF)
 	{
