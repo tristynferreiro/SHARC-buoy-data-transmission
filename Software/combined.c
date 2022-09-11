@@ -1,4 +1,7 @@
-/* LZSS encoder-decoder (Haruhiko Okumura; public domain) */
+/* 
+ * This program takes in a file, compresses it using lzss compression, passes the encoded bits to the encryption algorithm and prints
+ * the result to a filee
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
