@@ -301,17 +301,13 @@ void encrypt(char* msg[]) {
 	int i;
 	int elements = sizeof(&msg);
 	unsigned long long int temp[elements];
-	printf("%d \n", elements);
 	FILE *outp = fopen("ciphertext.csv", "w");
-    printf("ciphertext = ");
         for (i = 0; msg[0][i]!= '\n'; i++)
         {
             c = ENCmodpow(msg[0][i],e,n);
-            printf("%llu \n", c);
             fprintf(outp, "%llu\n", c);
 
         }
-    printf("\n");
     fclose(outp);
 
 }
@@ -363,8 +359,6 @@ void decrypt() {
 
 	inp = fopen("ciphertext.csv", "r");
 	out = fopen("decrypted.csv", "w");
-    printf("message: ");
-
 	while (fscanf(inp, "%llu", &c) != EOF)
 	{
         	dP = d % (p - 1);
@@ -381,18 +375,10 @@ void decrypt() {
         	fprintf(out, "%c", m);
         	}
         	else {
-                fprintf(out,"%c\n", m);
+                fprintf(out,"%c \n", m);
         	}
-            printf("%c", m);
 	}
 	fclose(inp);
-	printf("\n");
-        /*printf("dP: %u\n", dP);
-        printf("dQ: %u\n", dQ);
-        printf("qInv: %u\n", qInv);
-        printf("m1: %u\n", m1);
-        printf("m2: %u\n", m2);
-        printf("h: %u\n", h);*/
 
 }
 
@@ -408,7 +394,7 @@ int main(int argc, char *argv[])
         return 1;
     }
     s = argv[1];
-    char* arr[10]= {"0.054000001","6,0.0024","-0.0006","3.856600046","-0.061000001","-0.061000001","0,34.83589935", "0.066","7","0.0048"};
+    char* arr[11]= {"0.054000001","6,0.0024","-0.0006","3.856600046","-0.061000001","-0.061000001","0,34.83589935", "0.066","7","0.0048", "\n"};
     if (s[1] == 0 && (*s == 'g' || *s == 'G' || *s == 'c' || *s == 'C' || *s =='E' || *s == 'e' || *s == 'd' || *s == 'D')) {
         task = (*s == 'c' || *s == 'C');
         task2 = (*s == 'e' || *s == 'E');

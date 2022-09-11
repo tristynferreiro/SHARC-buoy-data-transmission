@@ -1,7 +1,7 @@
 % code used from https://www.mathworks.com/matlabcentral/answers/308231-fft-from-csv-data-file
 
 %FIGURE 1
-filename = '~/Desktop/Higher sampled turntable Example Data.csv';
+filename = "C:\Users\9510 i9\Desktop\SHARC_buoy_data_transmission\Testing\combined testing results\Lower sampled turntable Example Data 2.csv";;
 X = readmatrix(filename);
 Time = X(:,1);
 
@@ -39,7 +39,7 @@ Fv = linspace(0, 1, fix(L/2)+1)*Fn;                 % Frequency Vector
 Iv = 1:length(Fv);                                  % Index Vector
 
 %FIGURE 2
-filename2 = '~/Desktop/decompressed.csv';
+filename2 = "C:\Users\9510 i9\Desktop\SHARC_buoy_data_transmission\Testing\combined testing results\compressed.csv";
 X2 = readmatrix(filename);
 Time = X2(:,1);
 

@@ -1,13 +1,14 @@
 % code used from https://www.mathworks.com/matlabcentral/answers/308231-fft-from-csv-data-file
 
-inpFile = "~/Desktop/Higher sampled turntable Example Data.csv";
-outFile = "~/Desktop/recovered.csv";
+inpFile = "C:\Users\9510 i9\Desktop\SHARC_buoy_data_transmission\Testing\combined testing results\Lower sampled turntable Example Data 2.csv";
+outFile = "C:\Users\9510 i9\Desktop\SHARC_buoy_data_transmission\Testing\combined testing results\decompressed.csv";
 
 in = readmatrix(inpFile);
 Out = readmatrix(outFile);
 
 TimeIn = in(:,1);
 TimeOut= Out(:,1);
+
 
 tmp1In = in(:,3);
 tmp2In = in(:,4);
@@ -65,7 +66,6 @@ FTempdcocIn = fft(TempCorrIn)/LIn;                          % Fourier Transform 
 FAccdcocOut = fft(AccCorrOut)/LOut;                          % Fourier Transform (D-C Offset Corrected)
 FGyrodcocOut = fft(GyroCorrOut)/LOut;                          % Fourier Transform (D-C Offset Corrected)
 FTempdcocOut = fft(TempCorrOut)/LOut;                          % Fourier Transform (D-C Offset Corrected)
-
 INPUTaccCorrFFT = lowpass(abs(FAccdcocIn(IvIn))*2,0.1);
 INPUTGyroCorrFFT = lowpass(abs(FGyrodcocIn(IvIn))*2,0.1);
 INPUTTempCorrFFT = lowpass(abs(FTempdcocIn(IvIn))*2, 0.1);
