@@ -2,24 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <inttypes.h>
-
-struct chachapolyaead_ctx aead_ctx;
-            uint32_t seqnr = 0;
-            uint32_t seqnr_aad = 0;
-            int pos_aad = 0;
-            uint8_t aead_k_1[64] = {
-                0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a,
-                0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15,
-                0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f};
-            uint8_t aead_k_2[64] = {
-                0xff, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a,
-                0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15,
-                0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f};
-    const uint8_t one[8] = {1, 0, 0, 0, 0, 0, 0, 0}; /* NB little-endian */
-    uint64_t aad_chacha_nonce_hdr = 0;
-    uint8_t expected_tag[POLY1305_TAGLEN], poly_key[POLY1305_KEYLEN];
-    int r = -1;
-    int aad_pos = 0;
+#include <stdlib.h>
 
 /*
 chacha-merged.c version 20080118
@@ -28,11 +11,55 @@ Public domain.
 */
 
 /* $OpenBSD: chacha.c,v 1.1 2013/11/21 00:45:44 djm Exp $ */
+#define CHACHA_H
+
+struct chacha_ctx {
+  uint32_t input[16];
+};
+
+#define CHACHA_MINKEYLEN 16
+#define CHACHA_NONCELEN 8
+#define CHACHA_CTRLEN 8
+#define CHACHA_STATELEN (CHACHA_NONCELEN + CHACHA_CTRLEN)
+#define CHACHA_BLOCKLEN 64
+#define CHACHA20_ROUND_OUTPUT 64
+#define CHACHA20_POLY1305_AEAD_KEY_LEN 32
+#define CHACHA20_POLY1305_AEAD_AAD_LEN 3
+#define AAD_PACKAGES_PER_ROUND 21
+
+void chacha_keysetup(struct chacha_ctx *x, const uint8_t *k, uint32_t kbits)
+    __attribute__((__bounded__(__minbytes__, 2, CHACHA_MINKEYLEN)));
+void chacha_ivsetup(struct chacha_ctx *x, const uint8_t *iv, const uint8_t *ctr)
+    __attribute__((__bounded__(__minbytes__, 2, CHACHA_NONCELEN)))
+    __attribute__((__bounded__(__minbytes__, 3, CHACHA_CTRLEN)));
+void chacha_encrypt_bytes(struct chacha_ctx *x, const uint8_t *m, uint8_t *c,
+                          uint32_t bytes)
+    __attribute__((__bounded__(__buffer__, 2, 4)))
+    __attribute__((__bounded__(__buffer__, 3, 4)));
+
+#define POLY1305_H
+
+#include <stdint.h>
+#include <sys/types.h>
+
+#define POLY1305_KEYLEN 32
+#define POLY1305_TAGLEN 16
+
+void poly1305_auth(uint8_t out[POLY1305_TAGLEN], const uint8_t *m, size_t inlen,
+                   const uint8_t key[POLY1305_KEYLEN])
+    __attribute__((__bounded__(__minbytes__, 1, POLY1305_TAGLEN)))
+    __attribute__((__bounded__(__buffer__, 2, 3)))
+    __attribute__((__bounded__(__minbytes__, 4, POLY1305_KEYLEN)));
 
 typedef unsigned char u8;
 typedef unsigned int u32;
 
-typedef struct chacha_ctx chacha_ctx;
+struct chachapolyaead_ctx {
+    struct chacha_ctx main_ctx;
+    struct chacha_ctx header_ctx;
+    uint8_t aad_keystream_buffer[CHACHA20_ROUND_OUTPUT];
+    uint64_t cached_aad_seqnr;
+};
 
 #define U8C(v) (v##U)
 #define U32C(v) (v##U)
@@ -72,7 +99,7 @@ typedef struct chacha_ctx chacha_ctx;
 static const char sigma[16] = "expand 32-byte k";
 static const char tau[16] = "expand 16-byte k";
 
-void chacha_keysetup(chacha_ctx *x, const u8 *k, u32 kbits) {
+void chacha_keysetup(struct chacha_ctx *x, const u8 *k, u32 kbits) {
   const char *constants;
 
   x->input[4] = U8TO32_LITTLE(k + 0);
@@ -95,14 +122,14 @@ void chacha_keysetup(chacha_ctx *x, const u8 *k, u32 kbits) {
   x->input[3] = U8TO32_LITTLE(constants + 12);
 }
 
-void chacha_ivsetup(chacha_ctx *x, const u8 *iv, const u8 *counter) {
+void chacha_ivsetup(struct chacha_ctx *x, const u8 *iv, const u8 *counter) {
   x->input[12] = counter == NULL ? 0 : U8TO32_LITTLE(counter + 0);
   x->input[13] = counter == NULL ? 0 : U8TO32_LITTLE(counter + 4);
   x->input[14] = U8TO32_LITTLE(iv + 0);
   x->input[15] = U8TO32_LITTLE(iv + 4);
 }
 
-void chacha_encrypt_bytes(chacha_ctx *x, const u8 *m, u8 *c, u32 bytes) {
+void chacha_encrypt_bytes(struct chacha_ctx *x, const u8 *m, u8 *c, u32 bytes) {
   u32 x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15;
   u32 j0, j1, j2, j3, j4, j5, j6, j7, j8, j9, j10, j11, j12, j13, j14, j15;
   u8 *ctarget = NULL;
@@ -533,6 +560,11 @@ int chacha20poly1305_init(struct chachapolyaead_ctx* ctx, const uint8_t* k_1, in
 
 int chacha20poly1305_crypt(struct chachapolyaead_ctx* ctx, uint64_t seqnr, uint64_t seqnr_aad, int pos_aad, uint8_t* dest, size_t dest_len, const uint8_t* src, size_t src_len, int is_encrypt)
 {
+    const uint8_t one[8] = {1, 0, 0, 0, 0, 0, 0, 0}; /* NB little-endian */
+    uint64_t aad_chacha_nonce_hdr = 0;
+    uint8_t expected_tag[POLY1305_TAGLEN], poly_key[POLY1305_KEYLEN];
+    int r = -1;
+    int aad_pos = 0;
 
     if (
         // if we encrypt, make sure the source contains at least the expected AAD and the destination has at least space for the source + MAC
@@ -614,10 +646,24 @@ int chacha20poly1305_get_length(struct chachapolyaead_ctx* ctx,
     return 0;
 }
 
+struct chachapolyaead_ctx aead_ctx;
+            uint32_t seqnr = 0;
+            uint32_t seqnr_aad = 0;
+            int pos_aad = 0;
+            uint8_t aead_k_1[64] = {
+                0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a,
+                0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15,
+                0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f};
+            uint8_t aead_k_2[64] = {
+                0xff, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a,
+                0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15,
+                0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f};
+
 FILE *infile, *outfile;
 
 void encrypt(void)
 {
+    printf("in e");
     char ch[256];
     int count = 0;
 
@@ -648,6 +694,7 @@ void encrypt(void)
 
 void decrypt(void)
 {
+    printf("in d");
     uint8_t ch[256];
     int count = 0;
 
@@ -674,15 +721,18 @@ void decrypt(void)
 int main(int argc, char *argv[])
 {
     int enc;
+    int dec;
     char *s;
 
     if (argc != 4) {
-        printf("Usage: lzss e/d infile outfile\n\te = encode\td = decode\n");
+        printf("Usage: chacha20poly1305 e/d infile outfile\n\te = encode\td = decode\n");
         return 1;
     }
     s = argv[1];
-    if (s[1] == 0 && (*s == 'd' || *s == 'D' || *s == 'e' || *s == 'E'))
+    if (s[1] == 0 && (*s == 'd' || *s == 'D' || *s == 'e' || *s == 'E')) {
         enc = (*s == 'e' || *s == 'E');
+        dec = (*s == 'd' || *s == 'D');
+    }
     else {
         printf("? %s\n", s);  return 1;
     }
@@ -692,7 +742,8 @@ int main(int argc, char *argv[])
     if ((outfile = fopen(argv[3], "a")) == NULL) {
         printf("? %s\n", argv[3]);  return 1;
     }
-    if (enc) encrypt();  else decrypt();
+    if (enc) {encrypt();}
+    else if(dec) {decrypt();}
     fclose(infile);  fclose(outfile);
     return 0;
 }
