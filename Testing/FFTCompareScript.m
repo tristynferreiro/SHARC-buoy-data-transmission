@@ -1,7 +1,7 @@
 % code used from https://www.mathworks.com/matlabcentral/answers/308231-fft-from-csv-data-file
 
 inpFile = "~/Desktop/Higher sampled turntable Example Data.csv";
-outFile = "~/Desktop/decompressed.csv";
+outFile = "~/Desktop/recovered.csv";
 
 in = readmatrix(inpFile);
 Out = readmatrix(outFile);
