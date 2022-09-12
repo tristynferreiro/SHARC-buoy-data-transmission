@@ -167,7 +167,7 @@ void encrypt(int in[]) {
     fscanf(inp, "%d %d", &n, &e);
     fclose(inp);
 
-    for (int k = 0; msg[0][k]!='n'; k++)
+    for (int k = 0; msg[0][k]!='\n'; k++)
     {
             c = ENCmodpow(msg[0][k],e,n);
             printf("in = %c, out =%c\n", msg[0][k], c);
@@ -284,8 +284,7 @@ void encode(void)
     //CHECK - DO THE LAST 4 LINES HAPPEN BEFORE OR AFTER ENCRYPTION??
     flush_bit_buffer();
     printf("text:  %ld bytes\n", textcount);
-    printf("code:  %ld bytes (%ld%%)\n",
-    codecount, (codecount * 100) / textcount);
+    printf("code:  %ld bytes (%ld%%)\n",codecount, (codecount * 100) / textcount);
     encrypt(compressed);
 }
 
