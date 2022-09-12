@@ -1,7 +1,4 @@
-/*
- * This program takes in a file, compresses it using lzss compression, passes the encoded bits to the encryption algorithm and prints
- * the result to a file.
- */
+/* LZSS encoder-decoder (Haruhiko Okumura; public domain) */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -15,169 +12,18 @@
 int bit_buffer = 0, bit_mask = 128;
 unsigned long codecount = 0, textcount = 0;
 unsigned char buffer[N * 2];
-
-/**
- * This array stores the encoded bit_buffers of all the data. The size needs to be chosen based on the number of bits of data.
- * For the STM32F0 implementation, the size will need to be determine based on available space on the STM. This will likely be
- * through trial and error
- */
-int compressed[4970000];
-int array_size =0;
-
 FILE *infile, *outfile;
-#include <time.h>
-#include <inttypes.h>
-
-#define MAX_VALUE 65535
-
-#define E_VALUE 3 /*65535*/
-
-uint16_t e = E_VALUE, p, q;
-uint32_t n, phi, d;
-
-uint32_t findD(uint16_t e, uint32_t phi)
-{
-	uint32_t eprev, dprev, d = 1, etemp, dtemp;
-
-	eprev = phi, dprev = phi;
-	while (e != 1)
-	{
-		etemp = e;
-		dtemp = d;
-		e = eprev - eprev / etemp * e;
-		d = dprev - eprev / etemp * d;
-		eprev = etemp;
-		dprev = dtemp;
-		while (d < 0)
-			d += phi;
-	}
-
-	return d;
-}
-
-int ifprime(uint16_t n)
-{
-	uint16_t i;
-	for (i = 2; i <= n / 2; i++)
-	{
-		if (n % i == 0)
-			return 0;
-	}
-	return 1;
-}
-
-uint16_t gcd(uint16_t num1, uint32_t num2)
-{
-	uint16_t i, temp;
-	if (num1 > num2)
-	{
-		temp = num1;
-		num1 = num2;
-		num2 = temp;
-	}
-	for (i = num1; i > 0; i--)
-	{
-		if (num1 % i == 0 && num2 % i == 0)
-			return i;
-	}
-}
-
-uint16_t getprime()
-{
-	uint16_t n;
-	do
-	{
-		srand(time(NULL));
-		n = rand() % MAX_VALUE + 5;
-	}while  (!ifprime(n));
-	return n;
-}
-
-void setprimes(uint16_t e, uint16_t *p, uint16_t *q, uint32_t *n, uint32_t *phi)
-{
-	do
-	{
-		*p = getprime();
-		do
-			*q = getprime();
-		while(*p == *q);
-
-		*n = *p * *q;
-		*phi = *n - *p - *q + 1;
-	}while (gcd(e,*phi) != 1);
-}
-
-void rsa_init()
-{
-	setprimes(e, &p, &q, &n, &phi);
-
-	d = findD(e,phi);
-
-	FILE *outp = fopen("public.txt", "w");
-	fprintf(outp, "%"PRIu32" %"PRIu16, n, e);
-	fclose(outp);
-
-	outp = fopen("private.txt", "w");
-	fprintf(outp, "%"PRIu32" %"PRIu32, n, d);
-	fclose(outp);
-
-	outp = fopen("pq.txt", "w");
-    fprintf(outp, "%"PRIu16" %"PRIu16, p, q);
-    fclose(outp);
-}
-
-unsigned long long int ENCmodpow(int base, int power, int mod)
-{
-        int i;
-        unsigned long long int result = 1;
-        for (i = 0; i < power; i++)
-        {
-                result = (result * base) % mod;
-        }
-        return result;
-}
-
-void encrypt() {
-    rsa_init();
-    int m, n, e;
-    unsigned long long int c;
-
-    FILE *inp = fopen("public.txt", "r");
-    fscanf(inp, "%d %d", &n, &e);
-    fclose(inp);
-
-    for (int k = 0; k < array_size-1; k++)
-    {
-            c = ENCmodpow(compressed[k],e,n);
-           // printf("in = %c, out =%llu\n", in[k], c);
-            fprintf(outfile, "%c",c);
-
-    }
-    fclose(outfile);
-
-}
 
 void error(void)
 {
     printf("Output error\n");  exit(1);
 }
 
-/**
- * This method has been added to store the compression encoded bits in an array that will be passed to the encryption algorithm.
- */
-void store(int bitbuffer){
-    compressed[array_size]=bitbuffer;
-    //if (fputc(compressed[k], outfile) == EOF) error(); //This line prints to the specified output file
-    //  printf("%d\n", array_size);
-    array_size++;
-
-}
-
 void putbit1(void)
 {
     bit_buffer |= bit_mask;
     if ((bit_mask >>= 1) == 0) {
-        store(bit_buffer);
+        if (fprintf(outfile, "%c", bit_buffer) == EOF) error();
         bit_buffer = 0;  bit_mask = 128;  codecount++;
     }
 }
@@ -185,7 +31,7 @@ void putbit1(void)
 void putbit0(void)
 {
     if ((bit_mask >>= 1) == 0) {
-        store(bit_buffer);
+        if (fprintf(outfile, "%c", bit_buffer) == EOF) error();
         bit_buffer = 0;  bit_mask = 128;  codecount++;
     }
 }
@@ -193,7 +39,7 @@ void putbit0(void)
 void flush_bit_buffer(void)
 {
     if (bit_mask != 128) {
-        store(bit_buffer);
+        if (fprintf(outfile, "%c", bit_buffer) == EOF) error();
         codecount++;
     }
 }
@@ -233,7 +79,7 @@ void encode(void)
 
     for (i = 0; i < N - F; i++) buffer[i] = ' ';
     for (i = N - F; i < N * 2; i++) {
-        if ((c = fgetc(infile)) == EOF) break;
+        if (fscanf(infile, "%d", &c) == EOF) break;
         buffer[i] = c;  textcount++;
     }
     bufferend = i;  r = N - F;  s = 0;
@@ -255,15 +101,15 @@ void encode(void)
             for (i = 0; i < N; i++) buffer[i] = buffer[i + N];
             bufferend -= N;  r -= N;  s -= N;
             while (bufferend < N * 2) {
-                if ((c = fgetc(infile)) == EOF) break;
+                if (fscanf(infile, "%d", &c) == EOF) break;
                 buffer[bufferend++] = c;  textcount++;
             }
         }
     }
     flush_bit_buffer();
-   // printf("text:  %ld bytes\n", textcount);
-   // printf("code:  %ld bytes (%ld%%)\n",codecount, (codecount * 100) / textcount);
-    encrypt();
+    printf("text:  %ld bytes\n", textcount);
+    printf("code:  %ld bytes (%ld%%)\n",
+        codecount, (codecount * 100) / textcount);
 }
 
 int getbit(int n) /* get n bits */
@@ -274,7 +120,7 @@ int getbit(int n) /* get n bits */
     x = 0;
     for (i = 0; i < n; i++) {
         if (mask == 0) {
-            if ((buf = fgetc(infile)) == EOF) return EOF;
+            if ((fscanf(infile, "%d", &buf)) == EOF) return EOF;
             mask = 128;
         }
         x <<= 1;
@@ -293,14 +139,14 @@ void decode(void)
     while ((c = getbit(1)) != EOF) {
         if (c) {
             if ((c = getbit(8)) == EOF) break;
-            fputc(c, outfile);
+            fprintf(outfile, "%d", c);
             buffer[r++] = c;  r &= (N - 1);
         } else {
             if ((i = getbit(EI)) == EOF) break;
             if ((j = getbit(EJ)) == EOF) break;
             for (k = 0; k <= j + 1; k++) {
                 c = buffer[(i + k) & (N - 1)];
-                fputc(c, outfile);
+                fprintf(outfile, "%c", c);
                 buffer[r++] = c;  r &= (N - 1);
             }
         }

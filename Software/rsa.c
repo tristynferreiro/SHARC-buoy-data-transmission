@@ -164,8 +164,8 @@ void encrypt2(char* msg[]) {
         for (i = 0; msg[0][i]!= '\n'; i++)
         {
             c = ENCmodpow(msg[0][i],e,n);
-            printf("%llu \n", c);
-            fprintf(outp, "%llu\n", c);
+            //printf("%llu \n", c);
+            fputc(c, outfile);
 
         }
     printf("\n");
@@ -234,7 +234,7 @@ void decrypt() {
         fscanf(inp, "%d %d", &p, &q);
         fclose(inp);
 
-	while (fscanf(infile, "%llu", &c) != EOF)
+	while (c = fgetc(infile)) != EOF)
 	{
         	dP = d % (p - 1);
         	dQ = d % (q - 1);
@@ -246,7 +246,7 @@ void decrypt() {
                 	m1m2 += p;
        		h = (qInv * m1m2) % p;
         	m = m2 + h * q;
-        	fprintf(outfile, "%d", m);
+        	fputc(m, outfile);
             printf("%d", m);
 	}
 	fclose(infile);
