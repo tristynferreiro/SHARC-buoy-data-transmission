@@ -159,17 +159,16 @@ void encrypt2(char* msg[]) {
 	int elements = sizeof(&msg);
 	unsigned long long int temp[elements];
 	printf("%c \n", msg[0]);
-	FILE *outp = fopen("ciphertext.txt", "w");
+	//FILE *outp = fopen("ciphertext.txt", "w");
     printf("ciphertext = ");
         for (i = 0; msg[0][i]!= '\n'; i++)
         {
             c = ENCmodpow(msg[0][i],e,n);
-            printf("%llu \n", c);
-            fprintf(outp, "%llu\n", c);
-
+          //  printf("%llu \n", c);
+            fprintf(outfile, "%llu\n", c);
         }
     printf("\n");
-    fclose(outp);
+    fclose(outfile);
 
 }
 
@@ -246,8 +245,8 @@ void decrypt() {
                 	m1m2 += p;
        		h = (qInv * m1m2) % p;
         	m = m2 + h * q;
-        	fprintf(outfile, "%d", m);
-            printf("%d", m);
+        	fprintf(outfile, "%c", m);
+            //printf("%c", m);
 	}
 	fclose(infile);
 	fclose(outfile);
@@ -266,7 +265,7 @@ int main(int argc, char *argv[])
     int dec;
     char *s;
     //char* c[3] = {"˜"};
-    char* c[3] = {"1","2","3"};
+    char* c[4] = {"13", "14", "15", "\n"} ;
 
 //    if (argc != 4) {
 //        printf("Usage: RSA e/d infile outfile\n\te = encode\td = decode\n");
@@ -283,7 +282,7 @@ int main(int argc, char *argv[])
     if ((infile  = fopen(argv[2], "rb")) == NULL) {
        printf("? %s\n", argv[2]);  return 1;
     }
-    if ((outfile = fopen(argv[3], "a")) == NULL) {
+    if ((outfile = fopen(argv[3], "w")) == NULL) {
         printf("? %s\n", argv[3]);  return 1;
     }
     if (enc) {encrypt2(c);}
