@@ -149,26 +149,33 @@ unsigned long long int ENCmodpow(int base, int power, int mod)
         return result;
 }
 
-void encrypt(char* msg[]) {
+void encrypt(int in[]) {
     //rsa_init();
     int m, n, e;
     unsigned long long int c;
 
+    int arrSize = sizeof(&in);
+    char temp1;
+    char* msg[arrSize+1];
+    FILE *outp = fopen("ciphertext.csv", "w");
+
+    for (int i = 0; i < arrSize+1; i++) {
+        msg[i] = (char)in[i];
+    }
+    msg[arrSize+1] = '\n';
     FILE *inp = fopen("public.txt", "r");
     fscanf(inp, "%d %d", &n, &e);
     fclose(inp);
 
-	int i;
-	int elements = sizeof(&msg);
-	unsigned long long int temp[elements];
-	FILE *outp = fopen("ciphertext.csv", "w");
+    for (int k = 0; msg[0][k]!='n'; k++)
+    {
+            c = ENCmodpow(msg[0][k],e,n);
+            printf("in = %c, out =%c\n", msg[0][k], c);
 
-        for (i = 0; msg[0][i]!= '\n'; i++)
-        {
-            c = ENCmodpow(msg[0][i],e,n);
             fprintf(outp, "%llu\n", c);
 
-        }
+
+    }
     fclose(outp);
 
 }
@@ -278,15 +285,7 @@ void encode(void)
     flush_bit_buffer();
     printf("text:  %ld bytes\n", textcount);
     printf("code:  %ld bytes (%ld%%)\n",
-        codecount, (codecount * 100) / textcount);
-    int arrSize = sizeof(buffer);
-    ///sizeof(buffer[0]);
-    char* compressed[arrSize];
-    char temp;
-    for(int cnt = 0; cnt < arrSize; cnt++) {
-        temp = (char)buffer[cnt] + '0';
-        compressed[cnt] = temp;
-    }
+    codecount, (codecount * 100) / textcount);
     encrypt(compressed);
 }
 
