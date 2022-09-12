@@ -160,9 +160,9 @@ void encrypt(int in[]) {
     FILE *outp = fopen("ciphertext.csv", "w");
 
     for (int i = 0; i < arrSize+1; i++) {
-        msg[i] = (char)in[i];
+        msg[0][i] = (char)in[i];
     }
-    msg[arrSize+1] = '\n';
+    msg[0][arrSize+1] = '\n';
     FILE *inp = fopen("public.txt", "r");
     fscanf(inp, "%d %d", &n, &e);
     fclose(inp);
