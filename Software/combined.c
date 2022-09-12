@@ -137,7 +137,7 @@ unsigned long long int ENCmodpow(int base, int power, int mod)
         return result;
 }
 
-void encrypt(int in[]) {
+void encrypt() {
     rsa_init();
     int m, n, e;
     unsigned long long int c;
@@ -148,7 +148,7 @@ void encrypt(int in[]) {
 
     for (int k = 0; k < array_size-1; k++)
     {
-            c = ENCmodpow(in[k],e,n);
+            c = ENCmodpow(compressed[k],e,n);
            // printf("in = %c, out =%llu\n", in[k], c);
             fprintf(outfile, "%llu\n", c);
 
@@ -263,7 +263,7 @@ void encode(void)
     flush_bit_buffer();
    // printf("text:  %ld bytes\n", textcount);
    // printf("code:  %ld bytes (%ld%%)\n",codecount, (codecount * 100) / textcount);
-    encrypt(compressed);
+    encrypt();
 }
 
 int getbit(int n) /* get n bits */

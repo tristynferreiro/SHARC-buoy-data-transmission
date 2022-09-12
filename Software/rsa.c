@@ -246,8 +246,8 @@ void decrypt() {
                 	m1m2 += p;
        		h = (qInv * m1m2) % p;
         	m = m2 + h * q;
-        	fprintf(outfile, "%c", m);
-            //printf("%c", m);
+        	fprintf(outfile, "%d", m);
+            printf("%d", m);
 	}
 	fclose(infile);
 	fclose(outfile);
