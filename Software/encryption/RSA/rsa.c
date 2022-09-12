@@ -159,17 +159,17 @@ void encrypt2(char* msg[]) {
 	int elements = sizeof(&msg);
 	unsigned long long int temp[elements];
 	printf("%c \n", msg[0]);
-	FILE *outp = fopen("ciphertext.txt", "w");
+	//FILE *outp = fopen("ciphertext.txt", "w");
     printf("ciphertext = ");
         for (i = 0; msg[0][i]!= '\n'; i++)
         {
             c = ENCmodpow(msg[0][i],e,n);
             printf("%llu \n", c);
-            fprintf(outp, "%llu\n", c);
+            fputc(c, outfile);
 
         }
     printf("\n");
-    fclose(outp);
+    fclose(outfile);
 
 }
 
@@ -246,7 +246,7 @@ void decrypt() {
                 	m1m2 += p;
        		h = (qInv * m1m2) % p;
         	m = m2 + h * q;
-        	fprintf(outfile, "%c", m);
+        	fputc(m, outfile);
             //printf("%c", m);
 	}
 	fclose(infile);
