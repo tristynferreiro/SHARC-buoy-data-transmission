@@ -234,8 +234,8 @@ void decrypt() {
         fscanf(inp, "%d %d", &p, &q);
         fclose(inp);
 
-	inp = fopen("ciphertext.csv", "r");
-    out = fopen("decrypted.csv", "w");
+	inp = fopen("ciphertext", "r");
+    out = fopen("decrypted", "w");
 
     printf("message: ");
 
