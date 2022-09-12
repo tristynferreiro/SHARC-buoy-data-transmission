@@ -234,12 +234,7 @@ void decrypt() {
         fscanf(inp, "%d %d", &p, &q);
         fclose(inp);
 
-	inp = fopen("ciphertext", "r");
-    out = fopen("decrypted", "w");
-
-    printf("message: ");
-
-	while (fscanf(inp, "%llu", &c) != EOF)
+	while (fscanf(infile, "%llu", &c) != EOF)
 	{
         	dP = d % (p - 1);
         	dQ = d % (q - 1);
@@ -251,12 +246,11 @@ void decrypt() {
                 	m1m2 += p;
        		h = (qInv * m1m2) % p;
         	m = m2 + h * q;
-        	fprintf(out, "%c", m);
-            printf("%c", m);
+        	fprintf(outfile, "%c", m);
+            //printf("%c", m);
 	}
-	fclose(inp);
-	fclose(out);
-	printf("\n");
+	fclose(infile);
+	fclose(outfile);
         /*printf("dP: %u\n", dP);
         printf("dQ: %u\n", dQ);
         printf("qInv: %u\n", qInv);
@@ -289,10 +283,9 @@ int main(int argc, char *argv[])
     if ((infile  = fopen(argv[2], "rb")) == NULL) {
        printf("? %s\n", argv[2]);  return 1;
     }
-//    if ((outfile = fopen(argv[3], "a")) == NULL) {
-//        printf("? %s\n", argv[3]);  return 1;
-//    }
-    //rsa_init();
+    if ((outfile = fopen(argv[3], "a")) == NULL) {
+        printf("? %s\n", argv[3]);  return 1;
+    }
     if (enc) {encrypt2(c);}
     else if(dec) {decrypt();}
     fclose(infile);  fclose(outfile);

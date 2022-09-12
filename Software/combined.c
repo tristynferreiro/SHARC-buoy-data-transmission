@@ -82,18 +82,6 @@ uint16_t gcd(uint16_t num1, uint32_t num2)
 	}
 }
 
-/*int chooseE(int phi)
-{
-	srand(time(NULL));
-	int e = rand() % 65533 + 3;
-	while (gcd(e,phi) != 1 || e < 4)
-	{
-		srand(time(NULL));
-		e = rand() % 65533 + 3;
-	}
-	return e;
-}*/
-
 uint16_t getprime()
 {
 	uint16_t n;
@@ -150,11 +138,9 @@ unsigned long long int ENCmodpow(int base, int power, int mod)
 }
 
 void encrypt(int in[]) {
-    //rsa_init();
+    rsa_init();
     int m, n, e;
     unsigned long long int c;
-
-    FILE *outp = fopen("ciphertext", "w");
 
     FILE *inp = fopen("public.txt", "r");
     fscanf(inp, "%d %d", &n, &e);
@@ -163,12 +149,11 @@ void encrypt(int in[]) {
     for (int k = 0; k < array_size-1; k++)
     {
             c = ENCmodpow(in[k],e,n);
-            printf("in = %c, out =%llu\n", in[k], c);
-            //printf("**%d\n", in[k+1]);
-            fprintf(outp, "%llu\n", c);
+           // printf("in = %c, out =%llu\n", in[k], c);
+            fprintf(outfile, "%llu\n", c);
 
     }
-    fclose(outp);
+    fclose(outfile);
 
 }
 
@@ -183,9 +168,9 @@ void error(void)
 void store(int bitbuffer){
     compressed[array_size]=bitbuffer;
     //if (fputc(compressed[k], outfile) == EOF) error(); //This line prints to the specified output file
-    printf("%d\n", array_size);
+    //  printf("%d\n", array_size);
     array_size++;
-    
+
 }
 
 void putbit1(void)
@@ -275,15 +260,9 @@ void encode(void)
             }
         }
     }
-    //CHECK - DO THE LAST 4 LINES HAPPEN BEFORE OR AFTER ENCRYPTION??
     flush_bit_buffer();
-    printf("text:  %ld bytes\n", textcount);
-    printf("code:  %ld bytes (%ld%%)\n",codecount, (codecount * 100) / textcount);
-    for(int j =0; j<3000;j++){
-        for (int m=0; m<400;m++){
-            int n=0;
-        }
-    }
+   // printf("text:  %ld bytes\n", textcount);
+   // printf("code:  %ld bytes (%ld%%)\n",codecount, (codecount * 100) / textcount);
     encrypt(compressed);
 }
 
