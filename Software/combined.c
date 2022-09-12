@@ -22,7 +22,7 @@ unsigned char buffer[N * 2];
  * through trial and error
  */
 int compressed[4970000];
-int k =0;
+int array_size =0;
 
 FILE *infile, *outfile;
 #include <time.h>
@@ -160,8 +160,9 @@ void encrypt(int in[]) {
     fscanf(inp, "%d %d", &n, &e);
     fclose(inp);
 
-    for (int k = 0; k < sizeof(&in); k++)
+    for (int k = 0; k < array_size; k++)
     {
+            printf("**in = %c", in[k]);
             c = ENCmodpow(in[k],e,n);
             printf("in = %c, out =%llu\n", in[k], c);
             fprintf(outp, "%llu\n", c);
@@ -180,9 +181,9 @@ void error(void)
  * This method has been added to store the compression encoded bits in an array that will be passed to the encryption algorithm.
  */
 void store(int bitbuffer){
-    compressed[k]=bitbuffer;
+    compressed[array_size]=bitbuffer;
     //if (fputc(compressed[k], outfile) == EOF) error(); //This line prints to the specified output file
-    k++;
+    array_size++;
 }
 
 void putbit1(void)
