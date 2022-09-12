@@ -150,7 +150,7 @@ void encrypt() {
     {
             c = ENCmodpow(compressed[k],e,n);
            // printf("in = %c, out =%llu\n", in[k], c);
-            fprintf(outfile, "%c",c);
+            fprintf(outfile, "%llu\n", c);
 
     }
     fclose(outfile);
