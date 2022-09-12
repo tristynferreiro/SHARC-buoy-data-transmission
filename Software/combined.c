@@ -170,7 +170,7 @@ void encrypt(int in[]) {
     for (int k = 0; msg[0][k]!='\n'; k++)
     {
             c = ENCmodpow(msg[0][k],e,n);
-            printf("in = %c, out =%c\n", msg[0][k], c);
+            printf("in = %c, out =%llu\n", msg[0][k], c);
 
             fprintf(outp, "%llu\n", c);
 
