@@ -4,7 +4,7 @@
 #include <stdlib.h>
 
 #define EI 11  /* typically 10..13 */
-#define EJ  4  /* typically 4..5 */
+#define EJ  5  /* typically 4..5 */
 #define P   1  /* If match length <= P then output one character */
 #define N (1 << EI)  /* buffer size */
 #define F ((1 << EJ) + 1)  /* lookahead buffer size */
@@ -47,7 +47,7 @@ void flush_bit_buffer(void)
 void output1(int c)
 {
     int mask;
-    
+
     putbit1();
     mask = 256;
     while (mask >>= 1) {
@@ -59,7 +59,7 @@ void output1(int c)
 void output2(int x, int y)
 {
     int mask;
-    
+
     putbit0();
     mask = N;
     while (mask >>= 1) {
@@ -76,7 +76,7 @@ void output2(int x, int y)
 void encode(void)
 {
     int i, j, f1, x, y, r, s, bufferend, c;
-    
+
     for (i = 0; i < N - F; i++) buffer[i] = ' ';
     for (i = N - F; i < N * 2; i++) {
         if ((c = fgetc(infile)) == EOF) break;
@@ -116,7 +116,7 @@ int getbit(int n) /* get n bits */
 {
     int i, x;
     static int buf, mask = 0;
-    
+
     x = 0;
     for (i = 0; i < n; i++) {
         if (mask == 0) {
@@ -133,7 +133,7 @@ int getbit(int n) /* get n bits */
 void decode(void)
 {
     int i, j, k, r, c;
-    
+
     for (i = 0; i < N - F; i++) buffer[i] = ' ';
     r = N - F;
     while ((c = getbit(1)) != EOF) {
@@ -157,7 +157,7 @@ int main(int argc, char *argv[])
 {
     int enc;
     char *s;
-    
+
     if (argc != 4) {
         printf("Usage: lzss e/d infile outfile\n\te = encode\td = decode\n");
         return 1;

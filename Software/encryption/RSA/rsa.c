@@ -271,7 +271,8 @@ int main(int argc, char *argv[])
     int enc;
     int dec;
     char *s;
-    char* c[3] = {"˜K¦Y¤Áıc…M¥Ş3	”Ñş‚ZÿÅ0› LåÓ‰¬Úl#4Áb›L_Ñ€s&ÉœĞg5œNg |lÜ@&Šp6¤àE ‘H«–à\	,"};
+    //char* c[3] = {"˜"};
+    char* c[3] = {"1","2","3"};
 
 //    if (argc != 4) {
 //        printf("Usage: RSA e/d infile outfile\n\te = encode\td = decode\n");
