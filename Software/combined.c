@@ -160,11 +160,11 @@ void encrypt(int in[]) {
     fscanf(inp, "%d %d", &n, &e);
     fclose(inp);
 
-    for (int k = 0; k < array_size; k++)
+    for (int k = 0; k < array_size-1; k++)
     {
-            printf("**in = %c", in[k]);
             c = ENCmodpow(in[k],e,n);
             printf("in = %c, out =%llu\n", in[k], c);
+            //printf("**%d\n", in[k+1]);
             fprintf(outp, "%llu\n", c);
 
     }
@@ -183,7 +183,9 @@ void error(void)
 void store(int bitbuffer){
     compressed[array_size]=bitbuffer;
     //if (fputc(compressed[k], outfile) == EOF) error(); //This line prints to the specified output file
+    printf("%d\n", array_size);
     array_size++;
+    
 }
 
 void putbit1(void)
@@ -277,6 +279,11 @@ void encode(void)
     flush_bit_buffer();
     printf("text:  %ld bytes\n", textcount);
     printf("code:  %ld bytes (%ld%%)\n",codecount, (codecount * 100) / textcount);
+    for(int j =0; j<3000;j++){
+        for (int m=0; m<400;m++){
+            int n=0;
+        }
+    }
     encrypt(compressed);
 }
 
