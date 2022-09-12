@@ -164,9 +164,8 @@ void encrypt2(char* msg[]) {
         for (i = 0; msg[0][i]!= '\n'; i++)
         {
             c = ENCmodpow(msg[0][i],e,n);
-            printf("%llu \n", c);
-            fputc(c, outfile);
-
+          //  printf("%llu \n", c);
+            fprintf(outfile, "%llu\n", c);
         }
     printf("\n");
     fclose(outfile);
@@ -246,7 +245,7 @@ void decrypt() {
                 	m1m2 += p;
        		h = (qInv * m1m2) % p;
         	m = m2 + h * q;
-        	fputc(m, outfile);
+        	fprintf(outfile, "%c", m);
             //printf("%c", m);
 	}
 	fclose(infile);
@@ -266,7 +265,7 @@ int main(int argc, char *argv[])
     int dec;
     char *s;
     //char* c[3] = {"˜"};
-    char* c[3] = {"1","2","3"};
+    char* c[11] = {"13", "14", "15", "\n"};
 
 //    if (argc != 4) {
 //        printf("Usage: RSA e/d infile outfile\n\te = encode\td = decode\n");
