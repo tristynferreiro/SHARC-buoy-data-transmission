@@ -234,7 +234,9 @@ void decrypt() {
         fscanf(inp, "%d %d", &p, &q);
         fclose(inp);
 
-	inp = fopen("ciphertext.txt", "r");
+	inp = fopen("ciphertext.csv", "r");
+    out = fopen("decrypted.csv", "w");
+
     printf("message: ");
 
 	while (fscanf(inp, "%llu", &c) != EOF)
@@ -249,10 +251,11 @@ void decrypt() {
                 	m1m2 += p;
        		h = (qInv * m1m2) % p;
         	m = m2 + h * q;
-        	fprintf(outfile, "%c", m);
+        	fprintf(out, "%c", m);
             printf("%c", m);
 	}
 	fclose(inp);
+	fclose(out);
 	printf("\n");
         /*printf("dP: %u\n", dP);
         printf("dQ: %u\n", dQ);
@@ -268,7 +271,7 @@ int main(int argc, char *argv[])
     int enc;
     int dec;
     char *s;
- //   char* c[4] = {"iAmAFile", "hello", "t", "\0"};
+    char* c[3] = {"òK¶Y§¡˝cÖM•èﬁ3	î—˛ÇZˇ≈0õ LÂ”â¨⁄l#4¡bõL_—Äs&…ú–g5úNg |l‹@&äp6§‡E ëH´ñ‡\	,"};
 
 //    if (argc != 4) {
 //        printf("Usage: RSA e/d infile outfile\n\te = encode\td = decode\n");
@@ -289,7 +292,7 @@ int main(int argc, char *argv[])
 //        printf("? %s\n", argv[3]);  return 1;
 //    }
     //rsa_init();
-    if (enc) {encrypt(infile);}
+    if (enc) {encrypt2(c);}
     else if(dec) {decrypt();}
     fclose(infile);  fclose(outfile);
     return 0;
