@@ -47,11 +47,12 @@ while lines1:
     values2 = lines2.split(',')
     valueNum = 0;
     for value in values1:
-        if(numlines!=0 or int(value) == 0 and int(values[2]) ==0):
+        if(numlines==1):
             continue
         elif(value.rstrip("0") != values2[valueNum].rstrip("0")):
+            if (value == "0" or values2[valueNum]=="0"):
+                continue
             print("FILES NOT THE SAME")
-            print(value.rstrip("0")," ",values2[valueNum].rstrip("0"),"\n")
             print("Difference [line",numlines,"]:\n["+filename1+"]: "+lines1+"\n["+filename2+"]: "+lines2)
             exit();
         valueNum+=1;
