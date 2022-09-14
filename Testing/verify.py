@@ -42,11 +42,21 @@ numlines=0;
 while lines1:
     lines2 = f2.readline()
     numlines+=1
-    
-    if(lines1 != lines2):
-        print("FILES NOT THE SAME")
-        print("Difference [line",numlines,"]:\n["+filename1+"]: "+lines1+"\n["+filename2+"]: "+lines2)
-        exit();
+
+    values1 = lines1.split(',')
+    values2 = lines2.split(',')
+    valueNum = 0;
+    for value in values1:
+        if(numlines!=0 or int(value) == 0 and int(values[2]) ==0):
+            continue
+        elif(value.rstrip("0") != values2[valueNum].rstrip("0")):
+            print("FILES NOT THE SAME")
+            print(value.rstrip("0")," ",values2[valueNum].rstrip("0"),"\n")
+            print("Difference [line",numlines,"]:\n["+filename1+"]: "+lines1+"\n["+filename2+"]: "+lines2)
+            exit();
+        valueNum+=1;
+    #if(lines1 != lines2):
+        
     lines1 = f1.readline()
     
 print("The files: "+filename1+" & "+filename2+" are the same")

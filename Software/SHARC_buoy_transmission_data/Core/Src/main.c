@@ -154,9 +154,10 @@ int main(void)
 		  {0.490399987,-0.036499999,5.02120018,0,0,0,33.69469833}};
 
   //This displays the header which explains the formating of the data outputted.
-  uint8_t header[81];
-  sprintf(header, "\r\nAccel X (g),Accel Y (g),Accel Z (g),Gyro X (dps),Gyro Y (dps),Gyro Z (dps),Temp");
-  HAL_UART_Transmit(&huart2, header, sizeof(header), 1000);
+  uint8_t header2[81];
+  sprintf(header2, "\r\nAccel X (g),Accel Y (g),Accel Z (g),Gyro X (dps),Gyro Y (dps),Gyro Z (dps),Temp");
+  HAL_UART_Transmit(&huart2, header2, sizeof(header2), 1000);
+
 
   /* USER CODE END 2 */
 
@@ -167,6 +168,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+
 	 float accel[3];
 	 float gyro[3];
 	 float temp;
