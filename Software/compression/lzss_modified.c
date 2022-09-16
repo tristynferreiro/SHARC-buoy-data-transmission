@@ -34,7 +34,9 @@ void error(void)
 void store(int bitbuffer){
     compressed[compressedBits]=bitbuffer;
     //if (fputc(compressed[k], outfile) == EOF) error(); //This line prints to the specified output file
+    printf("%c",compressed[compressedBits]);
     compressedBits++;
+    
 }
 
 void putbit1(void)
@@ -126,13 +128,13 @@ void encode(void)
         }
     }
     flush_bit_buffer();
+    //printf("---%d",compressedBits);
+    //printf("text:  %ld bytes\n", textcount);
+    //printf("code:  %ld bytes (%ld%%)\n",
+        //codecount, (codecount * 100) / textcount);
     FILE *f = fopen("hi", "w");
     fprintf(f, "%s",compressed);
     fclose(f);
-    printf("---%d",compressedBits);
-    printf("text:  %ld bytes\n", textcount);
-    printf("code:  %ld bytes (%ld%%)\n",
-        codecount, (codecount * 100) / textcount);
 }
 
 int getbit(int n) /* get n bits */
