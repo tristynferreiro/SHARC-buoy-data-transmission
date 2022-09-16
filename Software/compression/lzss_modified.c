@@ -34,7 +34,7 @@ void error(void)
 void store(int bitbuffer){
     compressed[compressedBits]=bitbuffer;
     //if (fputc(compressed[k], outfile) == EOF) error(); //This line prints to the specified output file
-    printf("%c",compressed[compressedBits]);
+    //printf("%c",compressed[compressedBits]);
     compressedBits++;
     
 }
@@ -132,8 +132,11 @@ void encode(void)
     //printf("text:  %ld bytes\n", textcount);
     //printf("code:  %ld bytes (%ld%%)\n",
         //codecount, (codecount * 100) / textcount);
-    FILE *f = fopen("hi", "w");
-    fprintf(f, "%s",compressed);
+    FILE *f = fopen("hi", "w+");
+    for (int jk=0;jk<compressedBits;jk++){
+        fputc(compressed[jk],f);
+    }
+    //fprintf(f, "%s",compressed);
     fclose(f);
 }
 
