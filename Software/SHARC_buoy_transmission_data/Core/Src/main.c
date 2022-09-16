@@ -19,6 +19,7 @@ In future versions, the data will be read from the sensor HAT ICM2098 chip
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "stdio.h"
+#include "stdlib.h"
 #include "string.h"
 /* USER CODE END Includes */
 
@@ -29,6 +30,12 @@ In future versions, the data will be read from the sensor HAT ICM2098 chip
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 
+/* FOR COMPRESSION */
+#define EI 11  /* typically 10..13 */
+#define EJ  5  /* typically 4..5 */
+#define P   1  /* If match length <= P then output one character */
+#define N (1 << EI)  /* buffer size */
+#define F ((1 << EJ) + 1)  /* lookahead buffer size */
 //#define waveHat
 /* USER CODE END PD */
 
@@ -43,6 +50,17 @@ In future versions, the data will be read from the sensor HAT ICM2098 chip
 /* USER CODE BEGIN PV */
  uint8_t rxdata[4];
  int numRecordings =0; // this keeps track of the number of recordings.
+
+ int bit_buffer = 0, bit_mask = 128;
+ unsigned long codecount = 0, textcount = 0;
+ unsigned char buffer[N * 2];
+ // needs to be at least the size of the input data (minimum). this size should be the limit of data stored at any one time
+ char compressed[4970000];
+ int compressedBits =0;
+
+ char inputData [200];
+
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -51,6 +69,13 @@ static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
 /* USER CODE BEGIN PFP */
 void pause_sec(float x);
+void store(int bitbuffer);
+void putbit1(void);
+void flush_bit_buffer(void);
+void output1(int c);
+void output2(int x, int y);
+void encode(char inputData[]);
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -94,6 +119,7 @@ int main(void)
   //HAL_UART_Receive_IT(&huart2, rxdata,4);
 
   // data is used to imitate the data that will be gathered from the sense HAT in future.
+  /*
   float data[][13]={{-0.0018,-0.0024,4.488900185,-0.061000001,-0.061000001,0,30.37709999},
 		  {-0.0042,-0.0084,4.700799942,0,-0.061000001,-0.061000001,30.3946991},
 		  {-0.0036,-0.0108,4.804399967,-0.061000001,-0.061000001,0,30.38879967},
@@ -152,6 +178,17 @@ int main(void)
 		  {0.488599986,-0.0359,5.01940012,0,0,0,33.69469833},
 		  {0.488599986,-0.0359,5.01940012,0,0,0,33.69469833},
 		  {0.490399987,-0.036499999,5.02120018,0,0,0,33.69469833}};
+   */
+
+  char inputData[] = "-0.0018,-0.0024,4.488900185,-0.061000001,-0.061000001,0,30.37709999\n"
+		  "-0.0042,-0.0084,4.700799942,0,-0.061000001,-0.061000001,30.3946991\n"
+		  "-0.0036,-0.0108,4.804399967,-0.061000001,-0.061000001,0,30.38879967\n"
+		  "-0.0036,-0.0108,4.804399967,-0.061000001,-0.061000001,0,30.38879967\n"
+		  "-0.0036,-0.0108,4.804399967,-0.061000001,-0.061000001,0,30.38879967\n"
+		  "-0.003,-0.0102,4.861299992,-0.061000001,-0.061000001,0,30.38290024\n"
+		  "0,-0.0042,4.892399788,-0.061000001,-0.061000001,0,30.37120056\n"
+		  "0,-0.0042,4.892399788,-0.061000001,-0.061000001,0,30.37120056\n"
+		  "0,-0.006,4.904399872,-0.061000001,-0.061000001,0,30.37709999";
 
   //This displays the header which explains the formating of the data outputted.
   uint8_t header2[81];
@@ -169,33 +206,42 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
-	 float accel[3];
-	 float gyro[3];
-	 float temp;
+	/*
+	float accel[3];
+	float gyro[3];
+	float temp;
 
-	 while(numRecordings<(sizeof(data)/sizeof(data[0]))){
+	while(numRecordings<(sizeof(data)/sizeof(data[0]))){
+		pause_sec(2); //delay is implemented
 
-		 pause_sec(2); //delay is implemented
+		for(int i =0; i<3;i++){
+		 		accel[i]=data[numRecordings][i];
+		 		gyro[i]=data[numRecordings][i+3];
+		}
+		temp=data[numRecordings][6];
 
-		 for(int i =0; i<3;i++){
-		 		 accel[i]=data[numRecordings][i];
-		 		 gyro[i]=data[numRecordings][i+3];
-		 	 }
-		 temp=data[numRecordings][6];
-
-	     uint8_t msg[100];
-	     /*
-	      * FORMATTING BREAK DOWN:
-	      * 0: the reading number (k-value)
-	      *
-	      * 94-100: spaces added at the end as buffer in case additional characters (like negative signs) appear
-	      */
+	    uint8_t msg[100];
+	 */
+	  /*
+	  	      * FORMATTING BREAK DOWN:
+	  	      * 0: the reading number (k-value)
+	  	      *
+	  	      * 94-100: spaces added at the end as buffer in case additional characters (like negative signs) appear
+	  	      */
+	  /*
 	     sprintf(msg, "\r\n%.9f,%.9f,%.9f,%.9f,%.9f,%.9f,%.9f         ",accel[0],accel[1],accel[2],gyro[0],gyro[1],gyro[2],temp);
 	     //sprintf(msg, "\r\n%.4f,%.4f,%.9f,%.9f,%.9f,%.9f,%.9f         ",accel[0],accel[1],accel[2],gyro[0],gyro[1],gyro[2],temp);
-	     HAL_UART_Transmit(&huart2, msg, sizeof(msg), 1000);
 
-	     numRecordings++;
-	 }
+	  */
+
+	  encode(inputData);
+
+	  uint8_t msg[compressedBits];
+	  sprintf(msg, "%s",compressed);
+	  HAL_UART_Transmit(&huart2, msg, sizeof(msg), 1000);
+
+	  numRecordings++; //used for determining what size the compressed array should be set to
+  }
 
 
   }
@@ -324,6 +370,108 @@ void pause_sec(float x)
 		}
 	}
 }
+/********************************
+ * THIS IS THE COMPRESSION CODE
+ *******************************/
+void store(int bitbuffer){
+    compressed[compressedBits]=bitbuffer;
+    compressedBits++;
+}
+
+void putbit1(void)
+{
+    bit_buffer |= bit_mask;
+    if ((bit_mask >>= 1) == 0) {
+        store(bit_buffer);
+        bit_buffer = 0;  bit_mask = 128;  codecount++;
+    }
+}
+
+void putbit0(void)
+{
+    if ((bit_mask >>= 1) == 0) {
+        store(bit_buffer);
+        bit_buffer = 0;  bit_mask = 128;  codecount++;
+    }
+}
+
+void flush_bit_buffer(void)
+{
+    if (bit_mask != 128) {
+        store(bit_buffer);
+        codecount++;
+    }
+}
+
+
+void output1(int c)
+{
+    int mask;
+
+    putbit1();
+    mask = 256;
+    while (mask >>= 1) {
+        if (c & mask) putbit1();
+        else putbit0();
+    }
+}
+
+void output2(int x, int y)
+{
+    int mask;
+
+    putbit0();
+    mask = N;
+    while (mask >>= 1) {
+        if (x & mask) putbit1();
+        else putbit0();
+    }
+    mask = (1 << EJ);
+    while (mask >>= 1) {
+        if (y & mask) putbit1();
+        else putbit0();
+    }
+}
+
+void encode(char inputData[])
+{
+    int i, j, f1, x, y, r, s, bufferend, c;
+
+    int counter = 0;
+    for (i = 0; i < N - F; i++) buffer[i] = ' ';
+    for (i = N - F; i < N * 2; i++) {
+        if ( counter >= sizeof(inputData)) break;
+        c = inputData[counter];
+        buffer[i] = c;  counter++;
+    }
+    bufferend = i;  r = N - F;  s = 0;
+    while (r < bufferend) {
+        f1 = (F <= bufferend - r) ? F : bufferend - r;
+        x = 0;  y = 1;  c = buffer[r];
+        for (i = r - 1; i >= s; i--)
+            if (buffer[i] == c) {
+                for (j = 1; j < f1; j++)
+                    if (buffer[i + j] != buffer[r + j]) break;
+                if (j > y) {
+                    x = i;  y = j;
+                }
+            }
+        if (y <= P) {  y = 1;  output1(c);  }
+        else output2(x & (N - 1), y - 2);
+        r += y;  s += y;
+        if (r >= N * 2 - F) {
+            for (i = 0; i < N; i++) buffer[i] = buffer[i + N];
+            bufferend -= N;  r -= N;  s -= N;
+            while (bufferend < N * 2) {
+                if ( counter >= sizeof(inputData)) break;
+                c = inputData[counter];
+                buffer[bufferend++] = c;  counter++;
+            }
+        }
+    }
+    flush_bit_buffer();
+}
+
 /* USER CODE END 4 */
 
 /**
