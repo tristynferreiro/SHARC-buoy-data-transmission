@@ -146,7 +146,7 @@ unsigned long long int ENCmodpow(int base, int power, int mod)
         return result;
 }
 
-void encrypt2(char* msg[]) {
+void encrypt2(char msg[]) {
     rsa_init();
     int m, n, e;
     unsigned long long int c;
@@ -161,9 +161,9 @@ void encrypt2(char* msg[]) {
 	printf("%c \n", msg[0]);
 	//FILE *outp = fopen("ciphertext.txt", "w");
     printf("ciphertext = ");
-        for (i = 0; msg[0][i]!= '\n'; i++)
+        for (i = 0; msg[i]!= '}'; i++)
         {
-            c = ENCmodpow(msg[0][i],e,n);
+            c = ENCmodpow(msg[i],e,n);
           //  printf("%llu \n", c);
             fprintf(outfile, "%llu\n", c);
         }
@@ -185,7 +185,7 @@ void readFromFile(FILE* file, char* arr[]) {
 void encrypt(FILE* file) {
     char* arr[90000];
     readFromFile(file, arr);
-    encrypt2(arr);
+    //encrypt2(arr);
 }
 
 unsigned long long int DECmodpow(unsigned long long int base, int power, int mod)
@@ -265,7 +265,7 @@ int main(int argc, char *argv[])
     int dec;
     char *s;
     //char* c[3] = {"˜"};
-    char* c[4] = {"13", "14", "15", "\n"} ;
+    char c[] = "0.054000001,6,0.0024,-0.0006,3.856600046,-0.061000001,-0.061000001,0,34.83589935\n0.066,7,0.0048,-0.003,4.239200115,0,-0.061000001,0,34.84180069\n}";
 
 //    if (argc != 4) {
 //        printf("Usage: RSA e/d infile outfile\n\te = encode\td = decode\n");
