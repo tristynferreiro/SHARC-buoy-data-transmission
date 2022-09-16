@@ -28,11 +28,12 @@ int compressedBits =0;
 /**
 * This is the mock input array of data to be compressed
 */
-char inputArray[] = "abcdefghij,weerfdtrsfaeadaed,sdfsshfidhfiab,sdjdjcaibaiwub,ahdfbdcbebsieuce,bajceibacbe,ibsfibdcibaiwnconawoncandvccanwnc,akjcd knaancawehbcaihcbiebac,aofeeeuaocnawnfnfnifu,asnjasdji,aaaaaaaaaaaaaaaaai";
+char inputArray[] = "-0.0018,-0.0024,4.488900185,-0.061000001,-0.061000001,0,30.37709999\n-0.0042,-0.0084,4.700799942,0,-0.061000001,-0.061000001,30.3946991";
 
 void error(void)
 {
-    printf("Output error\n");  exit(1);
+    //printf("Output error\n");  
+    exit(1);
 }
 
 /**
@@ -106,9 +107,8 @@ void encode(void) // should bee modified to take in value
     for (i = N - F; i < N * 2; i++) {
         if ( counter >= sizeof(inputArray)) break;
         c = inputArray[counter];
-        printf("=+%c",c);
         buffer[i] = c;  counter++;
-        textcount++; //comments out for STM
+        //textcount++;
     }
     bufferend = i;  r = N - F;  s = 0;
     while (r < bufferend) {
@@ -131,18 +131,20 @@ void encode(void) // should bee modified to take in value
             while (bufferend < N * 2) {
                 if ( counter >= sizeof(inputArray)) break;
                 c = inputArray[counter];
-                printf("++%c",c);
                 buffer[bufferend++] = c;  counter++;
-                textcount++;
+                //textcount++;
             }
         }
     }
-    flush_bit_buffer();
-    printf("text:  %ld bytes\n", textcount);
-    printf("code:  %ld bytes (%ld%%)\n",
-        codecount, (codecount * 100) / textcount);
+    FILE *f = fopen("testcomp", "w+");
+    for (int jk=0;jk<compressedBits;jk++){
+        fputc(compressed[jk],f);
+    }
+    //fprintf(f, "%s",compressed);
+    fclose(f);
 }
 
+int compressedIndex = 0;
 int getbit(int n) /* get n bits */
 {
     int i, x;
@@ -151,7 +153,9 @@ int getbit(int n) /* get n bits */
     x = 0;
     for (i = 0; i < n; i++) {
         if (mask == 0) {
-            if ((buf = fgetc(infile)) == EOF) return EOF;
+            if (compressedIndex<compressedBits) break;
+            buf = compressed[compressedIndex];
+            compressedIndex++;
             mask = 128;
         }
         x <<= 1;
@@ -165,19 +169,21 @@ void decode(void)
 {
     int i, j, k, r, c;
     
+    compressedIndex=0; //reset this
+    
     for (i = 0; i < N - F; i++) buffer[i] = ' ';
     r = N - F;
     while ((c = getbit(1)) != EOF) {
         if (c) {
             if ((c = getbit(8)) == EOF) break;
-            fputc(c, outfile);
+            printf("%c",c);
             buffer[r++] = c;  r &= (N - 1);
         } else {
             if ((i = getbit(EI)) == EOF) break;
             if ((j = getbit(EJ)) == EOF) break;
             for (k = 0; k <= j + 1; k++) {
                 c = buffer[(i + k) & (N - 1)];
-                fputc(c, outfile);
+                printf("%c",c);
                 buffer[r++] = c;  r &= (N - 1);
             }
         }
@@ -200,7 +206,6 @@ int main(int argc, char *argv[])
         printf("? %s\n", s);  return 1;
     }
    
-    if (enc) encode();  else decode();
-    fclose(infile);  fclose(outfile);
+    if (enc) encode(); else decode();
     return 0;
 }

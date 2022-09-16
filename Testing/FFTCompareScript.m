@@ -1,7 +1,7 @@
 % code used from https://www.mathworks.com/matlabcentral/answers/308231-fft-from-csv-data-file
 
-inpFile = "C:\Users\9510 i9\Desktop\SHARC_buoy_data_transmission\Testing\combined testing results\Lower sampled turntable Example Data 2.csv";
-outFile = "C:\Users\9510 i9\Desktop\SHARC_buoy_data_transmission\Testing\combined testing results\decompressed.csv";
+inpFile = "~/Desktop/o.txt";
+outFile = "~/Desktop/d.txt";
 
 in = readmatrix(inpFile);
 Out = readmatrix(outFile);
