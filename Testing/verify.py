@@ -36,6 +36,11 @@ while(1):
         continue
 
 #compare all lines
+file1 =f1.read()
+file2=f2.read()
+if(len(file1)!=len(file2)):
+    print("FILES NOT THE SAME - different lengths")
+    exit();
 
 lines1 = f1.readline()
 numlines=0;
