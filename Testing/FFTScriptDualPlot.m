@@ -1,7 +1,7 @@
 % code used from https://www.mathworks.com/matlabcentral/answers/308231-fft-from-csv-data-file
 
 %FIGURE 1
-filename = "C:\Users\9510 i9\Desktop\SHARC_buoy_data_transmission\Software\Test.csv";
+filename = "C:\Users\9510 i9\Desktop\SHARC_buoy_data_transmission\Testing\combined v2\Higher Sampled - subset 2,2409.txt";
 X = readmatrix(filename);
 Fs = 80000;                                       % Sampling frequency
 T = 1/Fs;                                           % Sampling period
@@ -41,7 +41,7 @@ Fv = linspace(0, 1, fix(L/2)+1)*Fn;                 % Frequency Vector
 Iv = 1:length(Fv);                                  % Index Vector
 
 %FIGURE 2
-filename2 = "C:\Users\9510 i9\Desktop\SHARC_buoy_data_transmission\Software\out";
+filename2 = "C:\Users\9510 i9\Desktop\SHARC_buoy_data_transmission\Testing\combined v2\Higher Sampled - subset 2,2409 decrypted.txt";
 X2 = readmatrix(filename);
 
 tmp12 = X2(:,1);
