@@ -22,6 +22,7 @@ unsigned char buffer[N * 2];
  * through trial and error
  */
 int compressed[4970000];
+uint64_t encryptedData[20000];
 int array_size =0;
 
 FILE *infile, *outfile;
@@ -150,7 +151,9 @@ void encrypt() {
     {
             c = ENCmodpow(compressed[k],e,n);
            // printf("in = %c, out =%llu\n", in[k], c);
-           fprintf(outfile, "%llu\n", c);
+           //fprintf(outfile, "%llu\n", c);
+           encryptedData[i] = c;
+
     }
     fclose(outfile);
 
