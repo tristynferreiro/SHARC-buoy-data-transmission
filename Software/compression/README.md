@@ -1,6 +1,6 @@
 # Compiling the source code
 
-## compression/lzss.c
+## lzss.c
 On a linux terminal and using gcc compiling:
 $ gcc lzss.c
 For compression:
@@ -9,8 +9,9 @@ $ ./a.out e inputFileName compressedFileName
 For decompression:
 $ ./a.out d compressedFileName outputFileName
 
-## encryption/
+## lzss_modified_array_input.c
 
-## SHARC_buoy_transmission_data/
-This is an STM32Cube project. It contains all the source code to run the algorithms on an STM32F0 board. This can be run using the STM32Cube IDE.
+## lzss_modified_file_input.c
+
+## lzss_modified_stm32_test.c
 
