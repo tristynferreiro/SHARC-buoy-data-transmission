@@ -159,7 +159,7 @@ void encrypt2(char msg[]) {
 	int i;
 	int elements = sizeof(&msg);
 	unsigned long long int temp[elements];
-	printf("%c \n", msg[0]);
+	//printf("%c \n", msg[0]);
 	//FILE *outp = fopen("ciphertext.txt", "w");
    // printf("ciphertext = ");
         for (i = 0; msg[i]!= '}'; i++)
@@ -171,7 +171,7 @@ void encrypt2(char msg[]) {
           //  printf("arr = %d\n", encryptedData[i]);
         }
     printf("\n");
-    fclose(outfile);
+    //fclose(outfile);
 
 }
 
