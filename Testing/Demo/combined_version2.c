@@ -6,6 +6,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 #include <inttypes.h>
 
@@ -23,8 +24,8 @@
 //For compression:
 int bit_buffer = 0, bit_mask = 128;
 unsigned long codecount = 0, textcount = 0;
-//unsigned char buffer[N * 2];
-uint64_t buffer[N * 2];
+unsigned char buffer[N * 2];
+//uint64_t buffer[N * 2];
 
 //For encryption:
 uint16_t e = E_VALUE, p, q;
@@ -36,13 +37,15 @@ FILE *infile, *outfile;
  * For the STM32F0 implementation, the size will need to be determine based on available space on the STM. This will likely be 
  * through trial and error
  */
-uint64_t compressed[2000]; // needs to be atleast the size of the input data (minimum). this size should be the limit of data stored at any one time
+char compressed[2000]; // needs to be atleast the size of the input data (minimum). this size should be the limit of data stored at any one time
 int compressedBits =0;
 
-/**
-* This is the mock input array of data to be compressed
-*/
-uint64_t encryptedData[20000];
+/*
+ * This is the mock input array of data to be compressed
+ */
+
+//char encryptedData[][2000];
+char encryptedData[20000];
 int encryptedBits = 0;
 void error(void)
 {
@@ -112,19 +115,19 @@ void output2(int x, int y)
     }
 }
 
-void encode(void) // should bee modified to take in value
+void encode(void) // should be modified to take in value
 {
-    int i, j, f1, x, y, r, s, bufferend;
-    uint64_t c;
+    //printf("enc Data = %s\n", encryptedData);
+    
+    int i, j, f1, x, y, r, s, bufferend, c;
     
     int counter = 0;
     for (i = 0; i < N - F; i++) buffer[i] = ' ';
     for (i = N - F; i < N * 2; i++) {
-        if ( counter >= encryptedBits) break;
+        if (counter > strlen(encryptedData)) break;
         c = encryptedData[counter];
         buffer[i] = c;  counter++;
-        printf("-c = %llu\n", c);
-        printf("comp = %llu\n", buffer[bufferend]);
+        //printf("c = %d\n", c);;
         //textcount++;
     }
     bufferend = i;  r = N - F;  s = 0;
@@ -146,17 +149,16 @@ void encode(void) // should bee modified to take in value
             for (i = 0; i < N; i++) buffer[i] = buffer[i + N];
             bufferend -= N;  r -= N;  s -= N;
             while (bufferend < N * 2) {
-                if (counter >= encryptedBits) break;
+                if (counter > strlen(encryptedData)) break;
                 c = encryptedData[counter];
                 buffer[bufferend++] = c;  counter++;
-                //printf("comp = %llu\n", buffer[bufferend]);
                 //textcount++;
             }
         }
     }
     
-    //Write to file
-    for (int jk=0;jk<compressedBits;jk++){
+    //WRITE COMPRESSED DATA to FILE
+    for (int jk=0;jk<compressedBits-1;jk++){
         fputc(compressed[jk],outfile);
     }
     //fprintf(f, "%s",compressed);
@@ -207,6 +209,7 @@ uint16_t gcd(uint16_t num1, uint32_t num2)
 		if (num1 % i == 0 && num2 % i == 0)
 			return i;
 	}
+    return -1;
 }
 
 uint16_t getprime()
@@ -265,9 +268,10 @@ unsigned long long int ENCmodpow(int base, int power, int mod)
 }
 
 void encrypt2(char msg[]) {
-    rsa_init();
+    //rsa_init();
     int m, n, e;
     unsigned long long int c;
+    //unsigned char c;
 
     FILE *inp = fopen("public.txt", "r");
     fscanf(inp, "%d %d", &n, &e);
@@ -276,19 +280,19 @@ void encrypt2(char msg[]) {
 	int i;
 	int elements = sizeof(&msg);
 	unsigned long long int temp[elements];
-	//printf("%c \n", msg[0]);
-    //FILE *in  = fopen ("enc","w+");
     for (i = 0; msg[i]!= '}'; i++)
     {
         c = ENCmodpow(msg[i],e,n);
-        // printf("c = %llu \n", c);
-        //  fprintf(outfile, "%llu\n", c);
-        encryptedData[i] = c;
+        
+        // FORMATS the encrypted data into a string.
+        if(encryptedBits==0){
+            sprintf(encryptedData, "%llu",c);
+        }else{
+            sprintf(encryptedData, "%s\n%llu",encryptedData,c);
+        }
         encryptedBits++;
-
-        //printf("arr = %11u\n", encryptedData[i]);
-        //fprintf(outfile, "%llu\n", c);
     }
+    
     //Call compression
     encode();
 
@@ -301,7 +305,7 @@ int main(int argc, char *argv[])
     char *s;
     //char* c[3] = {"˜"};
     //char c[] = 
-    char c[] = "0.054000001,6,0.0024,-0.0006,3.856600046,-0.061000001,-0.061000001,0,34.83589935\n0.066,7,0.0048,-0.003,4.239200115,0,-0.061000001,0,34.84180069\n0.07,8,0.0048,-0.003,4.239200115,0,-0.061000001,0,34.84180069\n0.082999997,9,0.0006,-0.006,4.485300064,0,-0.061000001,0,34.83589935\n0.085000001,10,0.0006,-0.006,4.485300064,0,-0.061000001,0,34.83589935\n0.101999998,11,-0.0006,-0.0048,4.633200169,-0.061000001,-0.061000001,0,34.81240082\n0.109999999,12,0,-0.0042,4.732600212,-0.061000001,-0.061000001,0,34.82410049\n0.112999998,13,0,-0.0042,4.732600212,-0.061000001,-0.061000001,0,34.82410049\n0.131999999,14,0.003,-0.003,4.794199944,0,-0.061000001,0,34.83000183\n0.140000001,15,-0.0006,-0.003,4.829599857,-0.061000001,-0.061000001,0,34.83000183\n0.143999994,16,-0.0006,-0.003,4.829599857,-0.061000001,-0.061000001,0,34.83000183\n0.156000003,17,-0.0006,-0.003,4.829599857,-0.061000001,-0.061000001,0,34.83000183\n0.164000005,18,0,-0.006,4.858300209,-0.061000001,-0.061000001,0,34.81240082\n0.172999993,19,-0.003,-0.0054,4.869699955,-0.061000001,-0.061000001,0,34.81240082}";
+    char input[] = "0.054000001,6,0.0024,-0.0006,3.856600046,-0.061000001,-0.061000001,0,34.83589935\n0.066,7,0.0048,-0.003,4.239200115,0,-0.061000001,0,34.84180069\n0.07,8,0.0048,-0.003,4.239200115,0,-0.061000001,0,34.84180069\n0.082999997,9,0.0006,-0.006,4.485300064,0,-0.061000001,0,34.83589935\n0.085000001,10,0.0006,-0.006,4.485300064,0,-0.061000001,0,34.83589935\n0.101999998,11,-0.0006,-0.0048,4.633200169,-0.061000001,-0.061000001,0,34.81240082\n0.109999999,12,0,-0.0042,4.732600212,-0.061000001,-0.061000001,0,34.82410049\n0.112999998,13,0,-0.0042,4.732600212,-0.061000001,-0.061000001,0,34.82410049\n0.131999999,14,0.003,-0.003,4.794199944,0,-0.061000001,0,34.83000183\n0.140000001,15,-0.0006,-0.003,4.829599857,-0.061000001,-0.061000001,0,34.83000183\n0.143999994,16,-0.0006,-0.003,4.829599857,-0.061000001,-0.061000001,0,34.83000183\n0.156000003,17,-0.0006,-0.003,4.829599857,-0.061000001,-0.061000001,0,34.83000183\n0.164000005,18,0,-0.006,4.858300209,-0.061000001,-0.061000001,0,34.81240082\n0.172999993,19,-0.003,-0.0054,4.869699955,-0.061000001,-0.061000001,0,34.81240082}";
     
     if (argc != 3) {
         printf("Usage: combined e/d outfile\n\te = encode\n");
@@ -318,7 +322,7 @@ int main(int argc, char *argv[])
     if ((outfile = fopen(argv[2], "w")) == NULL) {
         printf("? %s\n", argv[2]);  return 1;
     }
-    if (enc) {encrypt2(c);}
+    if (enc) {encrypt2(input);}
     fclose(infile);  fclose(outfile);
     return 0;
 }

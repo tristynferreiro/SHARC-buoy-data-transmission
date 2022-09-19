@@ -28,7 +28,7 @@ int compressedBits =0;
 /**
 * This is the mock input array of data to be compressed
 */
-char encryptedData[] = "encrypted array";
+char encryptedData[] = "encrypted array\nhow are you?";
 
 void error(void)
 {
@@ -105,8 +105,9 @@ void encode(void) // should bee modified to take in value
     int counter = 0;
     for (i = 0; i < N - F; i++) buffer[i] = ' ';
     for (i = N - F; i < N * 2; i++) {
-        if ( counter >= sizeof(encryptedData)) break;
+        if ( counter >= sizeof(encryptedData)-1) break;
         c = encryptedData[counter];
+        //printf("===%c", c);
         buffer[i] = c;  counter++;
         //textcount++;
     }
@@ -144,52 +145,6 @@ void encode(void) // should bee modified to take in value
     fclose(f);
 }
 
-int compressedIndex = 0;
-int getbit(int n) /* get n bits */
-{
-    int i, x;
-    static int buf, mask = 0;
-    
-    x = 0;
-    for (i = 0; i < n; i++) {
-        if (mask == 0) {
-            if (compressedIndex<compressedBits) break;
-            buf = compressed[compressedIndex];
-            compressedIndex++;
-            mask = 128;
-        }
-        x <<= 1;
-        if (buf & mask) x++;
-        mask >>= 1;
-    }
-    return x;
-}
-
-void decode(void)
-{
-    int i, j, k, r, c;
-    
-    compressedIndex=0; //reset this
-    
-    for (i = 0; i < N - F; i++) buffer[i] = ' ';
-    r = N - F;
-    while ((c = getbit(1)) != EOF) {
-        if (c) {
-            if ((c = getbit(8)) == EOF) break;
-            printf("%c",c);
-            buffer[r++] = c;  r &= (N - 1);
-        } else {
-            if ((i = getbit(EI)) == EOF) break;
-            if ((j = getbit(EJ)) == EOF) break;
-            for (k = 0; k <= j + 1; k++) {
-                c = buffer[(i + k) & (N - 1)];
-                printf("%c",c);
-                buffer[r++] = c;  r &= (N - 1);
-            }
-        }
-    }
-}
-
 int main(int argc, char *argv[])
 {
     int enc;
@@ -206,6 +161,6 @@ int main(int argc, char *argv[])
         printf("? %s\n", s);  return 1;
     }
    
-    if (enc) encode(); else decode();
+    if (enc) encode();
     return 0;
 }

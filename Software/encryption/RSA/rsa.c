@@ -235,17 +235,18 @@ void decrypt() {
 
 	while (fscanf(infile, "%llu", &c) != EOF)
 	{
-        	dP = d % (p - 1);
-        	dQ = d % (q - 1);
-        	qInv = inverse(q,p);
-        	m1 = DECmodpow(c,dP,p);
-        	m2 = DECmodpow(c,dQ,q);
-        	m1m2 = m1 - m2;
-        	if (m1m2 < 0)
-                	m1m2 += p;
-       		h = (qInv * m1m2) % p;
-        	m = m2 + h * q;
-        	fprintf(outfile, "%c", m);
+        if(c == '}') breeak;
+        dP = d % (p - 1);
+        dQ = d % (q - 1);
+        qInv = inverse(q,p);
+        m1 = DECmodpow(c,dP,p);
+        m2 = DECmodpow(c,dQ,q);
+        m1m2 = m1 - m2;
+        if (m1m2 < 0)
+                m1m2 += p;
+       	h = (qInv * m1m2) % p;
+        m = m2 + h * q;
+        fprintf(outfile, "%c", m);
             //printf("%c", m);
 	}
 	fclose(infile);
