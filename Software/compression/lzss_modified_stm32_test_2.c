@@ -17,6 +17,8 @@ int bit_buffer = 0, bit_mask = 128;
 unsigned long codecount = 0, textcount = 0;
 unsigned char buffer[N * 2];
 
+FILE *infile, *outfile;
+
 /** 
  * This array stores the encoded bit_buffers of all the data. The size needs to be chosen based on the number of bits of data.
  * For the STM32F0 implementation, the size will need to be determine based on available space on the STM. This will likely be 
@@ -24,7 +26,6 @@ unsigned char buffer[N * 2];
  */
 uint32_t compressed[4970000]; // needs to be atleast the size of the input data (minimum). this size should be the limit of data stored at any one time
 int compressedBits =0;
-FILE *infile, *outfile;
 
 /**
 * This is the mock input array of data to be compressed
