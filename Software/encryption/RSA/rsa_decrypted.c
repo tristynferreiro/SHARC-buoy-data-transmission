@@ -4,7 +4,7 @@
 #include <time.h>
 #include <inttypes.h>
 
-#define MAX_VALUE 32
+#define MAX_VALUE 8
 
 #define E_VALUE 3 /*65535*/
 

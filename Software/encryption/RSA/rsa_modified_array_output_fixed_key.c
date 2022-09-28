@@ -4,18 +4,18 @@
 #include <time.h>
 #include <inttypes.h>
 
-#define MAX_VALUE 65535
+#define MAX_VALUE 8
 
 #define E_VALUE 3 /*65535*/
 
 uint16_t e = E_VALUE;
 uint64_t encryptedData[20000];
 
-uint32_t n = 15366391;
-uint32_t d = 10239035;
+int n = 55;
+int d = 27;
 
-uint16_t p = 3917;
-uint16_t q = 3923;
+int p = 11;
+int q = 5;
 
 FILE *infile, *outfile;
 
@@ -46,7 +46,7 @@ void encrypt2(char msg[]) {
            // printf("c = %llu \n", c);
             //fprintf(outp, "%llu\n", c);
             encryptedData[i] = c;
-            //printf("%d\n", encryptedData[i]);
+            printf("%d\n", encryptedData[i]);
         }
     printf("\n");
     //fclose(outfile);
