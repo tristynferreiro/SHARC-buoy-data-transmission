@@ -21,6 +21,7 @@ In future versions, the data will be read from the sensor HAT ICM2098 chip
 #include "stdio.h"
 #include "stdlib.h"
 #include "string.h"
+#include "time.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -30,12 +31,18 @@ In future versions, the data will be read from the sensor HAT ICM2098 chip
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 
-/* FOR COMPRESSION */
-#define EI 11  /* typically 10..13 */
-#define EJ  5  /* typically 4..5 */
-#define P   1  /* If match length <= P then output one character */
-#define N (1 << EI)  /* buffer size */
-#define F ((1 << EJ) + 1)  /* lookahead buffer size */
+/* FOR COMPRESSION
+#define EI 11  // typically 10..13
+#define EJ  5  // typically 4..5
+#define P   1  //If match length <= P then output one character
+#define N (1 << EI)  // buffer size
+#define F ((1 << EJ) + 1)  // lookahead buffer size
+*/
+
+/* FOR ENCRYPTION */
+#define MAX_VALUE 32
+#define E_VALUE 3 /*65535*/
+
 //#define waveHat
 /* USER CODE END PD */
 
@@ -48,17 +55,26 @@ In future versions, the data will be read from the sensor HAT ICM2098 chip
  UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
- uint8_t rxdata[4];
+ /*uint8_t rxdata[4];
  int numRecordings =0; // this keeps track of the number of recordings.
 
  int bit_buffer = 0, bit_mask = 128;
  unsigned long codecount = 0, textcount = 0;
- unsigned char buffer[N * 2];
+ unsigned char buffer[N * 2]; */
  // needs to be at least the size of the input data (minimum). this size should be the limit of data stored at any one time
- char compressed[4970000];
+/* char compressed[4970000];
  int compressedBits =0;
-
+*/
  char inputData [200];
+
+ int encryptedData[200];
+ int encryptedBits = 0;
+ int e = E_VALUE;
+ int n = 667;
+ int d = 411;
+ int p = 23;
+ int q = 29;
+
 
 
 /* USER CODE END PV */
@@ -68,13 +84,15 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
 /* USER CODE BEGIN PFP */
-void pause_sec(float x);
+/*void pause_sec(float x);
 void store(int bitbuffer);
 void putbit1(void);
 void flush_bit_buffer(void);
 void output1(int c);
 void output2(int x, int y);
-void encode(char inputData[]);
+void encode(char inputData[]); */
+int ENCmodpow(int base, int power, int mod);
+int* encrypt(char msg[]);
 
 /* USER CODE END PFP */
 
@@ -119,8 +137,68 @@ int main(void)
   //HAL_UART_Receive_IT(&huart2, rxdata,4);
 
   // data is used to imitate the data that will be gathered from the sense HAT in future.
+  /*
+  float data[][13]={{-0.0018,-0.0024,4.488900185,-0.061000001,-0.061000001,0,30.37709999},
+		  {-0.0042,-0.0084,4.700799942,0,-0.061000001,-0.061000001,30.3946991},
+		  {-0.0036,-0.0108,4.804399967,-0.061000001,-0.061000001,0,30.38879967},
+		  {-0.0036,-0.0108,4.804399967,-0.061000001,-0.061000001,0,30.38879967},
+		  {-0.0036,-0.0108,4.804399967,-0.061000001,-0.061000001,0,30.38879967},
+		  {-0.0036,-0.0108,4.804399967,-0.061000001,-0.061000001,0,30.38879967},
+		  {-0.003,-0.0102,4.861299992,-0.061000001,-0.061000001,0,30.38290024},
+		  {-0.003,-0.0102,4.861299992,-0.061000001,-0.061000001,0,30.38290024},
+		  {-0.003,-0.0102,4.861299992,-0.061000001,-0.061000001,0,30.38290024},
+		  {0,-0.0042,4.892399788,-0.061000001,-0.061000001,0,30.37120056},
+		  {0,-0.0042,4.892399788,-0.061000001,-0.061000001,0,30.37120056},
+		  {0,-0.0042,4.892399788,-0.061000001,-0.061000001,0,30.37120056},
+		  {0,-0.006,4.904399872,-0.061000001,-0.061000001,0,30.37709999},
+		  {0,-0.006,4.904399872,-0.061000001,-0.061000001,0,30.37709999},
+		  {0,-0.006,4.904399872,-0.061000001,-0.061000001,0,30.37709999},
+		  {-0.0006,-0.0072,4.893599987,-0.061000001,-0.061000001,0,30.36529922},
+		  {-0.0006,-0.0072,4.893599987,-0.061000001,-0.061000001,0,30.36529922},
+		  {-0.0006,-0.0072,4.893599987,-0.061000001,-0.061000001,0,30.36529922},
+		  {0.0012,-0.0066,4.892399788,0,-0.061000001,0,30.36529922},
+		  {0.0012,-0.0066,4.892399788,0,-0.061000001,0,30.36529922},
+		  {0.0012,-0.0066,4.892399788,0,-0.061000001,0,30.36529922},
+		  {0.0036,-0.003,4.907400131,-0.061000001,-0.061000001,-0.061000001,30.37120056},
+		  {0.0036,-0.003,4.907400131,-0.061000001,-0.061000001,-0.061000001,30.37120056},
+		  {0.0036,-0.003,4.907400131,-0.061000001,-0.061000001,-0.061000001,30.37120056},
+		  {0.0048,-0.0018,4.914000034,-0.061000001,-0.061000001,0,30.3593998},
+		  {0.0048,-0.0018,4.914000034,-0.061000001,-0.061000001,0,30.3593998},
+		  {0.0048,-0.0018,4.914000034,-0.061000001,-0.061000001,0,30.3593998},
+		  {0.0042,-0.0066,4.902599812,0,-0.061000001,-0.061000001,30.34760094},
+		  {0.0042,-0.0066,4.902599812,0,-0.061000001,-0.061000001,30.34760094},
+		  {0.0042,-0.0066,4.902599812,0,-0.061000001,-0.061000001,30.34760094},
+		  {0.0042,-0.0066,4.902599812,0,-0.061000001,-0.061000001,30.34760094},
+		  {0.0036,-0.0084,4.893599987,0,-0.061000001,0,30.35350037},
+		  {0.0036,-0.0084,4.893599987,0,-0.061000001,0,30.35350037},
+		  {-0.0036,-0.0054,4.901400089,-0.061000001,-0.061000001,-0.061000001,30.353500366},
+		  {-0.0036,-0.0054,4.901400089,-0.061000001,-0.061000001,-0.061000001,30.3535003},
+		  {-0.0018,-0.003,4.910399914,-0.061000001,-0.061000001,0,30.33589935},
+		  {-0.0018,-0.003,4.910399914,-0.061000001,-0.061000001,0,30.33589935},
+		  {0.485599995,-0.0341,5.011000156,0,0,0,33.71239853},
+		  {0.485599995,-0.0341,5.011000156,0,0,0,33.71239853},
+		  {0.485599995,-0.0341,5.011000156,0,0,0,33.71239853},
+		  {0.488599986,-0.037700001,5.015200138,-0.061000001,0,0,33.68880081},
+		  {0.488599986,-0.037700001,5.015200138,-0.061000001,0,0,33.68880081},
+		  {0.488599986,-0.037700001,5.015200138,-0.061000001,0,0,33.68880081},
+		  {0.488599986,-0.037700001,5.015200138,-0.061000001,0,0,33.68880081},
+		  {0.488599986,-0.0359,5.015799999,0,0,-0.061000001,33.68289948},
+		  {0.488599986,-0.0359,5.015799999,0,0,-0.061000001,33.68289948},
+		  {0.488599986,-0.0359,5.015799999,0,0,-0.061000001,33.68289948},
+		  {0.488599986,-0.0359,5.015799999,0,0,-0.061000001,33.68289948},
+		  {0.489199996,-0.0383,5.01639986,0,0,0,33.71820068},
+		  {0.489199996,-0.0383,5.01639986,0,0,0,33.71820068},
+		  {0.489800006,-0.037099998,5.021800041,0,-0.061000001,0,33.71239853},
+		  {0.489800006,-0.037099998,5.021800041,0,-0.061000001,0,33.71239853},
+		  {0.489800006,-0.037099998,5.021800041,0,-0.061000001,0,33.71239853},
+		  {0.488599986,-0.0359,5.01940012,0,0,0,33.69469833},
+		  {0.488599986,-0.0359,5.01940012,0,0,0,33.69469833},
+		  {0.488599986,-0.0359,5.01940012,0,0,0,33.69469833},
+		  {0.488599986,-0.0359,5.01940012,0,0,0,33.69469833},
+		  {0.490399987,-0.036499999,5.02120018,0,0,0,33.69469833}};
+   */
 
-  char inputArray[] = "0.054000001,6,0.0024,-0.0006,3.856600046,-0.061000001,-0.061000001,0,34.83589935\n"
+  /*char inputArray[] = "0.054000001,6,0.0024,-0.0006,3.856600046,-0.061000001,-0.061000001,0,34.83589935\n"
 		  "0.066,7,0.0048,-0.003,4.239200115,0,-0.061000001,0,34.84180069\n"
 		  "0.07,8,0.0048,-0.003,4.239200115,0,-0.061000001,0,34.84180069\n"
 		  "0.082999997,9,0.0006,-0.006,4.485300064,0,-0.061000001,0,34.83589935\n"
@@ -151,7 +229,10 @@ int main(void)
 		  "0.31400001,34,-0.0006,-0.0006,4.901400089,-0.061000001,-0.061000001,-0.061000001,34.84180069\n"
 		  "0.326000005,35,0,-0.0006,4.901400089,-0.061000001,-0.061000001,0,34.85350037\n"
 		  "0.330000013,36,0,-0.0006,4.901400089,-0.061000001,-0.061000001,0,34.85350037";
+	*/
 
+  //char inputArray[] = "0.054000001,6,0.0024,-0.0006,3.856600046,-0.061000001,-0.061000001,0,34.83589935}";
+  char inputArray[] = {"13, 14, 15}"};
 
   //This displays the header which explains the formating of the data outputed.
   uint8_t header2[81];
@@ -197,18 +278,25 @@ int main(void)
 
 	  */
 
-	  encode(inputArray);
+	 /* encode(inputArray);
 
 	  uint8_t msg[compressedBits];
 	  sprintf(msg, "%s",compressed);
-	  HAL_UART_Transmit(&huart2, msg, sizeof(msg), 1000);
+    */
+	  //HAL_UART_Transmit(&huart2, header2, sizeof(header2), 1000);
+	  int* encrypted = encrypt(inputArray);
+	  memcpy(encryptedData, encrypted, sizeof(encrypted));
+	  char temp[4];
+	  sprintf(temp, "%d, ",encryptedData[0]);
+	  HAL_UART_Transmit(&huart2, temp, sizeof(temp), 1000);
 
-	  numRecordings++; //used for determining what size the compressed array should be set to
+	  //numRecordings++; //used for determining what size the compressed array should be set to
   }
 
 
+  }
   /* USER CODE END 3 */
-}
+
 
 /**
   * @brief System Clock Configuration
@@ -335,7 +423,7 @@ void pause_sec(float x)
 /********************************
  * THIS IS THE COMPRESSION CODE
  *******************************/
-void store(int bitbuffer){
+/*void store(int bitbuffer){
     compressed[compressedBits]=bitbuffer;
     compressedBits++;
 }
@@ -433,6 +521,44 @@ void encode(char inputData[])
     }
     flush_bit_buffer();
 }
+*/
+
+/********************************
+ * THIS IS THE ENCRYPTION CODE
+ *******************************/
+int ENCmodpow(int base, int power, int mod)
+{
+        int i;
+        int result = 1;
+        for (i = 0; i < power; i++)
+        {
+                result = (result * base) % mod;
+        }
+        return result;
+}
+
+int* encrypt(char msg[]) {
+    int c;
+	int i;
+	int enc[200];
+        for (i = 0; msg[i]!= '}'; i++)
+        {
+            c = ENCmodpow(msg[i],e,n);
+            encryptedData[i] = c;
+            enc[i] = c;
+            //int mesg[4];
+           // if (i > 0) {
+           // sprintf(mesg, "%d and i-1 =%dP",encryptedData[i], encryptedData[i-1]);
+           //  HAL_UART_Transmit(&huart2, mesg, sizeof(mesg), 1000);
+           // }
+        }
+        char mesg[4];
+        sprintf(mesg, "%d,",encryptedData[0]);
+        HAL_UART_Transmit(&huart2, mesg, sizeof(mesg), 1000);
+       return enc;
+}
+
+
 
 /* USER CODE END 4 */
 
