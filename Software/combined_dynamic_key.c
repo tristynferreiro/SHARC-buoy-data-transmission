@@ -1,8 +1,6 @@
 /*
- * This program takes in a file, encrypts it using RSA encryption passes it to the compression algorithm which compresses it using lzss compression and then
+ * This program takes in a file, encrypts it using RSA encryption passes it to the compression algorithm which compresses it using lzss compression and then 
  * prints the result to a file.
- * 
- * This uses fixed key encryption.
  */
 
 
@@ -30,18 +28,13 @@ unsigned char buffer[N * 2];
 //uint64_t buffer[N * 2];
 
 //For encryption:
-uint16_t e = E_VALUE;
-
-uint32_t n = 15366391;
-uint32_t d = 10239035;
-
-uint16_t p = 3917;
-uint16_t q = 3923;
+uint16_t e = E_VALUE, p, q;
+uint32_t n, phi, d;
 
 FILE *infile, *outfile;
-/**
+/** 
  * This array stores the encoded bit_buffers of all the data. The size needs to be chosen based on the number of bits of data.
- * For the STM32F0 implementation, the size will need to be determine based on available space on the STM. This will likely be
+ * For the STM32F0 implementation, the size will need to be determine based on available space on the STM. This will likely be 
  * through trial and error
  */
 char compressed[2000]; // needs to be atleast the size of the input data (minimum). this size should be the limit of data stored at any one time
@@ -56,7 +49,7 @@ char encryptedData[20000];
 int encryptedBits = 0;
 void error(void)
 {
-    //printf("Output error\n");
+    //printf("Output error\n");  
     exit(1);
 }
 
@@ -96,7 +89,7 @@ void flush_bit_buffer(void)
 void output1(int c)
 {
     int mask;
-
+    
     putbit1();
     mask = 256;
     while (mask >>= 1) {
@@ -108,7 +101,7 @@ void output1(int c)
 void output2(int x, int y)
 {
     int mask;
-
+    
     putbit0();
     mask = N;
     while (mask >>= 1) {
@@ -122,11 +115,12 @@ void output2(int x, int y)
     }
 }
 
-void encode(void)
+void encode(void) // should be modified to take in value
 {
-
+    //printf("enc Data = %s\n", encryptedData);
+    
     int i, j, f1, x, y, r, s, bufferend, c;
-
+    
     int counter = 0;
     for (i = 0; i < N - F; i++) buffer[i] = ' ';
     for (i = N - F; i < N * 2; i++) {
@@ -134,6 +128,7 @@ void encode(void)
         c = encryptedData[counter];
         buffer[i] = c;  counter++;
         //printf("c = %d\n", c);;
+        //textcount++;
     }
     bufferend = i;  r = N - F;  s = 0;
     while (r < bufferend) {
@@ -157,15 +152,108 @@ void encode(void)
                 if (counter > strlen(encryptedData)) break;
                 c = encryptedData[counter];
                 buffer[bufferend++] = c;  counter++;
+                //textcount++;
             }
         }
     }
-
+    
     //WRITE COMPRESSED DATA to FILE
     for (int jk=0;jk<compressedBits-1;jk++){
         fputc(compressed[jk],outfile);
     }
     //fprintf(f, "%s",compressed);
+}
+
+uint32_t findD(uint16_t e, uint32_t phi)
+{
+	uint32_t eprev, dprev, d = 1, etemp, dtemp;
+
+	eprev = phi, dprev = phi;
+	while (e != 1)
+	{
+		etemp = e;
+		dtemp = d;
+		e = eprev - eprev / etemp * e;
+		d = dprev - eprev / etemp * d;
+		eprev = etemp;
+		dprev = dtemp;
+		while (d < 0)
+			d += phi;
+	}
+
+	return d;
+}
+
+int ifprime(uint16_t n)
+{
+	uint16_t i;
+	for (i = 2; i <= n / 2; i++)
+	{
+		if (n % i == 0)
+			return 0;
+	}
+	return 1;
+}
+
+uint16_t gcd(uint16_t num1, uint32_t num2)
+{
+	uint16_t i, temp;
+	if (num1 > num2)
+	{
+		temp = num1;
+		num1 = num2;
+		num2 = temp;
+	}
+	for (i = num1; i > 0; i--)
+	{
+		if (num1 % i == 0 && num2 % i == 0)
+			return i;
+	}
+    return -1;
+}
+
+uint16_t getprime()
+{
+	uint16_t n;
+	do
+	{
+		srand(time(NULL));
+		n = rand() % MAX_VALUE + 5;
+	}while  (!ifprime(n));
+	return n;
+}
+
+void setprimes(uint16_t e, uint16_t *p, uint16_t *q, uint32_t *n, uint32_t *phi)
+{
+	do
+	{
+		*p = getprime();
+		do
+			*q = getprime();
+		while(*p == *q);
+
+		*n = *p * *q;
+		*phi = *n - *p - *q + 1;
+	}while (gcd(e,*phi) != 1);
+}
+
+void rsa_init()
+{
+	setprimes(e, &p, &q, &n, &phi);
+
+	d = findD(e,phi);
+
+	FILE *outp = fopen("public.txt", "w");
+	fprintf(outp, "%"PRIu32" %"PRIu16, n, e);
+	fclose(outp);
+
+	outp = fopen("private.txt", "w");
+	fprintf(outp, "%"PRIu32" %"PRIu32, n, d);
+	fclose(outp);
+
+	outp = fopen("pq.txt", "w");
+    fprintf(outp, "%"PRIu16" %"PRIu16, p, q);
+    fclose(outp);
 }
 
 unsigned long long int ENCmodpow(int base, int power, int mod)
@@ -180,8 +268,14 @@ unsigned long long int ENCmodpow(int base, int power, int mod)
 }
 
 void encrypt2(char msg[]) {
-    int m;
+    //rsa_init();
+    int m, n, e;
     unsigned long long int c;
+    //unsigned char c;
+
+    FILE *inp = fopen("public.txt", "r");
+    fscanf(inp, "%d %d", &n, &e);
+    fclose(inp);
 
 	int i;
 	int elements = sizeof(&msg);
@@ -189,7 +283,7 @@ void encrypt2(char msg[]) {
     for (i = 0; msg[i]!= '}'; i++)
     {
         c = ENCmodpow(msg[i],e,n);
-
+        
         // FORMATS the encrypted data into a string.
         if(encryptedBits==0){
             sprintf(encryptedData, "%llu",c);
@@ -198,7 +292,7 @@ void encrypt2(char msg[]) {
         }
         encryptedBits++;
     }
-
+    
     //Call compression
     encode();
 
@@ -209,14 +303,16 @@ int main(int argc, char *argv[])
     int enc;
     int dec;
     char *s;
+    //char* c[3] = {"˜"};
+    //char c[] = 
+    char input[] = "0.054000001,6,0.0024,-0.0006,3.856600046,-0.061000001,-0.061000001,0,34.83589935\n0.066,7,0.0048,-0.003,4.239200115,0,-0.061000001,0,34.84180069\n0.07,8,0.0048,-0.003,4.239200115,0,-0.061000001,0,34.84180069\n0.082999997,9,0.0006,-0.006,4.485300064,0,-0.061000001,0,34.83589935\n0.085000001,10,0.0006,-0.006,4.485300064,0,-0.061000001,0,34.83589935\n0.101999998,11,-0.0006,-0.0048,4.633200169,-0.061000001,-0.061000001,0,34.81240082\n0.109999999,12,0,-0.0042,4.732600212,-0.061000001,-0.061000001,0,34.82410049\n0.112999998,13,0,-0.0042,4.732600212,-0.061000001,-0.061000001,0,34.82410049\n0.131999999,14,0.003,-0.003,4.794199944,0,-0.061000001,0,34.83000183\n0.140000001,15,-0.0006,-0.003,4.829599857,-0.061000001,-0.061000001,0,34.83000183\n0.143999994,16,-0.0006,-0.003,4.829599857,-0.061000001,-0.061000001,0,34.83000183\n0.156000003,17,-0.0006,-0.003,4.829599857,-0.061000001,-0.061000001,0,34.83000183\n0.164000005,18,0,-0.006,4.858300209,-0.061000001,-0.061000001,0,34.81240082\n0.172999993,19,-0.003,-0.0054,4.869699955,-0.061000001,-0.061000001,0,34.81240082}";
     
-    char input[] = "13, 14, 15, 16}";
     if (argc != 3) {
-        printf("Usage: combined e outfile\n\te = encrypt and compress\n");
+        printf("Usage: combined e/d outfile\n\te = encode\n");
         return 1;
     }
     s = argv[1];
-
+    
     if (s[1] == 0 && (*s == 'e' || *s == 'E')) {
         enc = (*s == 'e' || *s == 'E');
     }

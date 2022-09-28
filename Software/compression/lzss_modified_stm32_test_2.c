@@ -1,7 +1,7 @@
 /* 
  * This is a modified version of the original LZSS encoder-decoder (Haruhiko Okumura; public domain) 
- * Instead of taking in a file and array of values is used as input.
- * Instead of printing to a file, the compressed data is store in an array.
+ * Instead of taking in a file an array of values is used as input. This input is compressed and stored in another array.
+ * The integer values of the compressed array are printed to a file.
  */
 
 #include <stdio.h>
@@ -17,7 +17,7 @@ int bit_buffer = 0, bit_mask = 128;
 unsigned long codecount = 0, textcount = 0;
 unsigned char buffer[N * 2];
 
-FILE *infile, *outfile;
+FILE *outfile; //the file to print the compressed bits to.
 
 /** 
  * This array stores the encoded bit_buffers of all the data. The size needs to be chosen based on the number of bits of data.
@@ -28,8 +28,8 @@ int compressed[4970000]; // needs to be atleast the size of the input data (mini
 int compressedBits =0;
 
 /**
-* This is the mock input array of data to be compressed
-*/
+ * This is the mock input array of data to be compressed
+ */
 char inputArray[] = "0.054000001,6,0.0024,-0.0006,3.856600046,-0.061000001,-0.061000001,0,34.83589935, 0.054000001,6,0.0024,-0.0006,3.856600046,-0.061000001,-0.061000001,0,34.83589935";
 
 void error(void)
@@ -100,7 +100,7 @@ void output2(int x, int y)
     }
 }
 
-void encode(void) // should bee modified to take in value
+void encode(void)
 {
     int i, j, f1, x, y, r, s, bufferend, c;
     
@@ -110,7 +110,6 @@ void encode(void) // should bee modified to take in value
         if ( counter >= sizeof(inputArray)) break;
         c = inputArray[counter];
         buffer[i] = c;  counter++;
-        //textcount++;
     }
     bufferend = i;  r = N - F;  s = 0;
     while (r < bufferend) {
@@ -139,13 +138,10 @@ void encode(void) // should bee modified to take in value
         }
     }
     
-    FILE *f = fopen("testcomp", "w+");
+    // WRITE compressed bits to FILE
     for (int jk=0;jk<compressedBits;jk++){
-        fputc(compressed[jk],f);
-        printf("%d\n",compressed[jk]);
+        fprintf(outfile,"%d\n",compressed[jk]);
     }
-    //fprintf(f, "%s",compressed);
-    fclose(f);
 }
 
 int main(int argc, char *argv[])
@@ -154,7 +150,7 @@ int main(int argc, char *argv[])
     char *s;
     
     if (argc != 3) {
-        printf("Usage: lzss e outfile\n\te = encode\td = decode\n");
+        printf("Usage: lzss e outfile\n\te = encode\n"); //only deals with encryption
         return 1;
     }
     s = argv[1];
@@ -167,6 +163,6 @@ int main(int argc, char *argv[])
         printf("? %s\n", argv[2]);  return 1;
     }
     if (enc) encode();
-    fclose(infile); fclose(outfile);
+    fclose(outfile);
     return 0;
 }
