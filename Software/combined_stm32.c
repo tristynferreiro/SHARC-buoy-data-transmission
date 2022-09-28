@@ -23,9 +23,7 @@
 
 //For compression:
 int bit_buffer = 0, bit_mask = 128;
-unsigned long codecount = 0, textcount = 0;
-unsigned char buffer[N * 2];
-//uint64_t buffer[N * 2];
+int buffer[N * 2];
 
 //For encryption:
  char inputData [200];
@@ -38,7 +36,6 @@ unsigned char buffer[N * 2];
  int p = 23;
  int q = 29;
 
-FILE *outfile;
 /**
  * This array stores the encoded bit_buffers of all the data. The size needs to be chosen based on the number of bits of data.
  * For the STM32F0 implementation, the size will need to be determine based on available space on the STM. This will likely be
@@ -47,47 +44,7 @@ FILE *outfile;
 char compressed[2000]; // needs to be atleast the size of the input data (minimum). this size should be the limit of data stored at any one time
 int compressedBits =0;
 
-/*
- * This is the mock input array of data to be compressed
- */
-int encryptedData[200];
-int encryptedBits = 0;
-
-/**************
- * ENCRYPTION *
- **************/
-int ENCmodpow(int base, int power, int mod)
-{
-        int i;
-        int result = 1;
-        for (i = 0; i < power; i++)
-        {
-                result = (result * base) % mod;
-        }
-        return result;
-}
-
-void encrypt(char msg[]) {
-    int c;
-	int i;
-        for (i = 0; msg[i]!= '}'; i++)
-        {
-            c = ENCmodpow(msg[i],e,n);
-            encryptedData[i] = c;
-            encryptedBits++;
-            //int mesg[4];
-           // if (i > 0) {
-           // sprintf(mesg, "%d and i-1 =%dP",encryptedData[i], encryptedData[i-1]);
-           //  HAL_UART_Transmit(&huart2, mesg, sizeof(mesg), 1000);
-           // }
-        }
-
-    //Call compression
-    encode();
-}
-
-
-
+FILE *outfile;
 
 /***************
  * COMPRESSION *
@@ -103,6 +60,7 @@ void error(void)
  */
 void store(int bitbuffer){
     compressed[compressedBits]=bitbuffer;
+    //printf("Out: %d\n",compressed[compressedBits]);
     compressedBits++;
 }
 
@@ -111,7 +69,7 @@ void putbit1(void)
     bit_buffer |= bit_mask;
     if ((bit_mask >>= 1) == 0) {
         store(bit_buffer);
-        bit_buffer = 0;  bit_mask = 128;  codecount++;
+        bit_buffer = 0;  bit_mask = 128;  
     }
 }
 
@@ -119,7 +77,8 @@ void putbit0(void)
 {
     if ((bit_mask >>= 1) == 0) {
         store(bit_buffer);
-        bit_buffer = 0;  bit_mask = 128;  codecount++;
+        bit_buffer = 0;  
+        bit_mask = 128;  
     }
 }
 
@@ -127,7 +86,6 @@ void flush_bit_buffer(void)
 {
     if (bit_mask != 128) {
         store(bit_buffer);
-        codecount++;
     }
 }
 
@@ -171,6 +129,7 @@ void encode(void)
         if (counter >= encryptedBits) break;
         c = encryptedData[counter];
         buffer[i] = c;  counter++;
+        printf("HERE2: %d\n",buffer[i]);
         //printf("c = %d\n", c);;
     }
     bufferend = i;  r = N - F;  s = 0;
@@ -192,7 +151,7 @@ void encode(void)
             for (i = 0; i < N; i++) buffer[i] = buffer[i + N];
             bufferend -= N;  r -= N;  s -= N;
             while (bufferend < N * 2) {
-                if (counter > strlen(encryptedData)) break;
+                if (counter >= encryptedBits) break;
                 c = encryptedData[counter];
                 buffer[bufferend++] = c;  counter++;
             }
@@ -200,12 +159,49 @@ void encode(void)
     }
 
     // WRITE compressed bits to FILE
-    /*
     for (int jk=0;jk<compressedBits;jk++){
         fprintf(outfile,"%d\n",compressed[jk]);
     }
-    */
+    
 }
+
+/**************
+ * ENCRYPTION *
+ **************/
+int ENCmodpow(int base, int power, int mod)
+{
+        int i;
+        int result = 1;
+        for (i = 0; i < power; i++)
+        {
+                result = (result * base) % mod;
+        }
+        return result;
+}
+
+void encrypt(char msg[]) {
+    int c;
+	int i;
+        for (i = 0; msg[i]!= '}'; i++)
+        {
+            c = ENCmodpow(msg[i],e,n);
+            encryptedData[i] = c;
+            encryptedBits++;
+            //int mesg[4];
+           // if (i > 0) {
+           // sprintf(mesg, "%d and i-1 =%dP",encryptedData[i], encryptedData[i-1]);
+           //  HAL_UART_Transmit(&huart2, mesg, sizeof(mesg), 1000);
+           // }
+        }
+    
+    for(int i =0; i<encryptedBits;i++){
+        printf("%d\n",encryptedData[i]);
+    }
+    //Call compression
+    encode();
+}
+
+
 
 int main(int argc, char *argv[])
 {
@@ -213,7 +209,7 @@ int main(int argc, char *argv[])
     int dec;
     char *s;
 
-    char input[] = "13, 14, 15, 16}";
+    char input[] = "13, 14, 15}";
     if (argc != 3) {
         printf("Usage: combined e outfile\n\te = encrypt and compress\n");
         return 1;
