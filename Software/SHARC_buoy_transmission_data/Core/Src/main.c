@@ -70,10 +70,10 @@ In future versions, the data will be read from the sensor HAT ICM2098 chip
  int encryptedData[200];
  int encryptedBits = 0;
  int e = E_VALUE;
- int n = 667;
- int d = 411;
- int p = 23;
- int q = 29;
+ int n = 55;
+ int d = 27;
+ int p = 11;
+ int q = 5;
 
 
 

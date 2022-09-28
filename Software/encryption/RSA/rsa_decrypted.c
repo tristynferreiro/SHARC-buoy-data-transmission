@@ -11,11 +11,11 @@
 int e = E_VALUE;
 int encryptedData[20000];
 
-int n = 667;
-int d = 411;
+int n = 55;
+int d = 27;
 
-int p = 23;
-int q = 29;
+int p = 11;
+int q = 5;
 
 FILE *infile, *outfile;
 
