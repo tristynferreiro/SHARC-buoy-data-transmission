@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
     char *s;
     
     if (argc != 4) {
-        printf("Usage: lzss e/d infile outfile\n\te = encode\td = decode\n");
+        printf("Usage: lzss d infile outfile\n\te = encode\td = decode\n");
         return 1;
     }
     s = argv[1];
