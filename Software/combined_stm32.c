@@ -1,7 +1,7 @@
 /*
  * This program takes in a file, encrypts it using RSA encryption passes it to the compression algorithm which compresses it using lzss compression and then
  * prints the result to a file.
- * 
+ *
  * This uses fixed key encryption.
  */
 
@@ -10,8 +10,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include <inttypes.h>
-
 //For compression:
 #define EI 11  /* typically 10..13 */
 #define EJ  5  /* typically 4..5 */
@@ -20,7 +18,7 @@
 #define F ((1 << EJ) + 1)  /* lookahead buffer size */
 
 //For encryption:
-#define MAX_VALUE 65535
+#define MAX_VALUE 32
 #define E_VALUE 3 /*65535*/
 
 //For compression:
@@ -30,13 +28,15 @@ unsigned char buffer[N * 2];
 //uint64_t buffer[N * 2];
 
 //For encryption:
-uint16_t e = E_VALUE;
+ char inputData [200];
 
-uint32_t n = 15366391;
-uint32_t d = 10239035;
-
-uint16_t p = 3917;
-uint16_t q = 3923;
+ int encryptedData[200];
+ int encryptedBits = 0;
+ int e = E_VALUE;
+ int n = 667;
+ int d = 411;
+ int p = 23;
+ int q = 29;
 
 FILE *outfile;
 /**
@@ -56,10 +56,10 @@ int encryptedBits = 0;
 /**************
  * ENCRYPTION *
  **************/
-unsigned long long int ENCmodpow(int base, int power, int mod)
+int ENCmodpow(int base, int power, int mod)
 {
         int i;
-        unsigned long long int result = 1;
+        int result = 1;
         for (i = 0; i < power; i++)
         {
                 result = (result * base) % mod;
@@ -68,23 +68,26 @@ unsigned long long int ENCmodpow(int base, int power, int mod)
 }
 
 void encrypt(char msg[]) {
-    int m;
-    unsigned long long int c;
-
+    int c;
 	int i;
-	int elements = sizeof(&msg);
-	unsigned long long int temp[elements];
-    for (i = 0; msg[i]!= '}'; i++)
-    {
-        c = ENCmodpow(msg[i],e,n);
-        encryptedData[i]=c;
-        encryptedBits++;
-    }
-    
+        for (i = 0; msg[i]!= '}'; i++)
+        {
+            c = ENCmodpow(msg[i],e,n);
+            encryptedData[i] = c;
+            encryptedBits++;
+            //int mesg[4];
+           // if (i > 0) {
+           // sprintf(mesg, "%d and i-1 =%dP",encryptedData[i], encryptedData[i-1]);
+           //  HAL_UART_Transmit(&huart2, mesg, sizeof(mesg), 1000);
+           // }
+        }
+
     //Call compression
     encode();
-
 }
+
+
+
 
 /***************
  * COMPRESSION *
@@ -162,7 +165,7 @@ void encode(void)
     int i, j, f1, x, y, r, s, bufferend, c;
 
     int counter = 0;
-    
+
     for (i = 0; i < N - F; i++) buffer[i] = ' ';
     for (i = N - F; i < N * 2; i++) {
         if (counter >= encryptedBits) break;
@@ -209,7 +212,7 @@ int main(int argc, char *argv[])
     int enc;
     int dec;
     char *s;
-    
+
     char input[] = "13, 14, 15, 16}";
     if (argc != 3) {
         printf("Usage: combined e outfile\n\te = encrypt and compress\n");
