@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+
 //For compression:
 #define EI 11  /* typically 10..13 */
 #define EJ  5  /* typically 4..5 */
@@ -31,10 +32,10 @@ int buffer[N * 2];
  int encryptedData[200];
  int encryptedBits = 0;
  int e = E_VALUE;
-int n = 55;
-int d = 27;
+int n = 187;
+int d = 107;
 int p = 11;
-int q = 5;
+int q = 17;
 
 /**
  * This array stores the encoded bit_buffers of all the data. The size needs to be chosen based on the number of bits of data.

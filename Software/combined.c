@@ -34,7 +34,6 @@ int e = E_VALUE;
 
 int n = 187;
 int d = 107;
-
 int p = 11;
 int q = 17;
 
