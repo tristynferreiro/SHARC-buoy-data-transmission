@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define EI 11  /* typically 10..13 */
+#define EI 5  /* typically 10..13 */
 #define EJ  5  /* typically 4..5 */
 #define P   1  /* If match length <= P then output one character */
 #define N (1 << EI)  /* buffer size */
@@ -20,9 +20,9 @@ FILE *outfile;
 
 /*
 int inputComp[]={152,75,166,19,89,164,193,249,5,49,150,77,165,143,190,25,132,202,105,44,150,191,104,166,15,214,9,156,186,113,53,155,77,159,220,51,71,250,3,250,10,109,49,126,66,128,66,230,15,246,9,163,254,130,103,53,156,78,103,32,80,8};*/
-int inputComp[]={-115,81,44,114,-72,-42,-83,-8,67,25};
+int inputComp[]={-115,81,44,114,-72,-42,-82,-57,43,-115,70};
 int lineNumber =0;
-int compDataArraySize = 10;
+int compDataArraySize = 13;
 
 int getbit(int n) /* get n bits */
 {

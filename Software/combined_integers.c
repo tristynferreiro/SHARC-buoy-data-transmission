@@ -12,7 +12,7 @@
 #include <time.h>
 
 //For compression:
-#define EI 11  /* typically 10..13 */
+#define EI  6  /* typically 10..13 */
 #define EJ  5  /* typically 4..5 */
 #define P   1  /* If match length <= P then output one character */
 #define N (1 << EI)  /* buffer size */
@@ -24,12 +24,11 @@
 
 //For compression:
 int bit_buffer = 0, bit_mask = 128;
-int buffer[N * 2];
 
 //For encryption:
- char inputData [200];
+ char inputData [20];
 
- int encryptedData[200];
+ int encryptedData[20];
  int encryptedBits = 0;
  int e = E_VALUE;
 int n = 187;
@@ -42,7 +41,7 @@ int q = 17;
  * For the STM32F0 implementation, the size will need to be determine based on available space on the STM. This will likely be
  * through trial and error
  */
-char compressed[2000]; // needs to be atleast the size of the input data (minimum). this size should be the limit of data stored at any one time
+char compressed[200]; // needs to be atleast the size of the input data (minimum). this size should be the limit of data stored at any one time
 int compressedBits =0;
 
 FILE *outfile;
@@ -50,11 +49,6 @@ FILE *outfile;
 /***************
  * COMPRESSION *
  ***************/
-void error(void)
-{
-    //printf("Output error\n");
-    exit(1);
-}
 
 /**
  * This method has been added to store the compression encoded bits in one array for printing/transmission.
@@ -122,9 +116,9 @@ void output2(int x, int y)
 void encode(void)
 {
     int i, j, f1, x, y, r, s, bufferend, c;
-
     int counter = 0;
-
+    int buffer[N * 2];
+    
     for (i = 0; i < N - F; i++) buffer[i] = ' ';
     for (i = N - F; i < N * 2; i++) {
         if (counter >= encryptedBits) break;
@@ -210,7 +204,7 @@ int main(int argc, char *argv[])
     int dec;
     char *s;
 
-    char input[] = "13, 14, 15}";
+    char input[] = {"13, 14, 15}"};
     if (argc != 3) {
         printf("Usage: combined e outfile\n\te = encrypt and compress\n");
         return 1;
