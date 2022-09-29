@@ -20,7 +20,7 @@
 #define F ((1 << EJ) + 1)  /* lookahead buffer size */
 
 //For encryption:
-#define MAX_VALUE 8
+#define MAX_VALUE 16
 #define E_VALUE 3 /*65535*/
 
 //For compression:
@@ -30,13 +30,13 @@ unsigned char buffer[N * 2];
 //uint64_t buffer[N * 2];
 
 //For encryption:
-uint16_t e = E_VALUE;
+int e = E_VALUE;
 
-int n = 55;
-int d = 27;
+int n = 187;
+int d = 107;
 
 int p = 11;
-int q = 5;
+int q = 17;
 
 FILE *infile, *outfile;
 /**

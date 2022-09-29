@@ -4,18 +4,18 @@
 #include <time.h>
 #include <inttypes.h>
 
-#define MAX_VALUE 8
+#define MAX_VALUE 16
 
 #define E_VALUE 3 /*65535*/
 
 int e = E_VALUE;
 int encryptedData[20000];
 
-int n = 55;
-int d = 27;
+int n = 187;
+int d = 107;
 
 int p = 11;
-int q = 5;
+int q = 17;
 
 FILE *infile, *outfile;
 

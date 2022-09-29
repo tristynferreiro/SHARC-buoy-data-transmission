@@ -8,8 +8,8 @@
 
 #define E_VALUE 3 /*65535*/
 
-uint16_t e = E_VALUE;
-uint64_t encryptedData[20000];
+int e = E_VALUE;
+int encryptedData[20000];
 
 int n = 55;
 int d = 27;
