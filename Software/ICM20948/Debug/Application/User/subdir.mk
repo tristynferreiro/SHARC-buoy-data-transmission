@@ -36,19 +36,19 @@ C_DEPS += \
 
 
 # Each subdirectory must supply rules for building sources it contributes
-Application/User/gpio.o: /Users/tris/Documents/2022UCT/2nd\ sem/3097/SHARC_buoy_data_transmission/Software/ICM20948/Src/gpio.c Application/User/subdir.mk
+Application/User/gpio.o: C:/Users/9510\ i9/Desktop/SHARC_buoy_data_transmission/Software/ICM20948/Src/gpio.c Application/User/subdir.mk
 	arm-none-eabi-gcc "$<" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../../Inc -I../../Drivers/STM32F1xx_HAL_Driver/Inc -I../../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Application/User/gpio.d" -MT"$@" --specs=nano.specs -mfloat-abi=soft -mthumb -o "$@"
-Application/User/i2c.o: /Users/tris/Documents/2022UCT/2nd\ sem/3097/SHARC_buoy_data_transmission/Software/ICM20948/Src/i2c.c Application/User/subdir.mk
+Application/User/i2c.o: C:/Users/9510\ i9/Desktop/SHARC_buoy_data_transmission/Software/ICM20948/Src/i2c.c Application/User/subdir.mk
 	arm-none-eabi-gcc "$<" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../../Inc -I../../Drivers/STM32F1xx_HAL_Driver/Inc -I../../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Application/User/i2c.d" -MT"$@" --specs=nano.specs -mfloat-abi=soft -mthumb -o "$@"
-Application/User/main.o: /Users/tris/Documents/2022UCT/2nd\ sem/3097/SHARC_buoy_data_transmission/Software/ICM20948/Src/main.c Application/User/subdir.mk
+Application/User/main.o: C:/Users/9510\ i9/Desktop/SHARC_buoy_data_transmission/Software/ICM20948/Src/main.c Application/User/subdir.mk
 	arm-none-eabi-gcc "$<" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../../Inc -I../../Drivers/STM32F1xx_HAL_Driver/Inc -I../../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Application/User/main.d" -MT"$@" --specs=nano.specs -mfloat-abi=soft -mthumb -o "$@"
-Application/User/stm32f1xx_hal_msp.o: /Users/tris/Documents/2022UCT/2nd\ sem/3097/SHARC_buoy_data_transmission/Software/ICM20948/Src/stm32f1xx_hal_msp.c Application/User/subdir.mk
+Application/User/stm32f1xx_hal_msp.o: C:/Users/9510\ i9/Desktop/SHARC_buoy_data_transmission/Software/ICM20948/Src/stm32f1xx_hal_msp.c Application/User/subdir.mk
 	arm-none-eabi-gcc "$<" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../../Inc -I../../Drivers/STM32F1xx_HAL_Driver/Inc -I../../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Application/User/stm32f1xx_hal_msp.d" -MT"$@" --specs=nano.specs -mfloat-abi=soft -mthumb -o "$@"
-Application/User/stm32f1xx_it.o: /Users/tris/Documents/2022UCT/2nd\ sem/3097/SHARC_buoy_data_transmission/Software/ICM20948/Src/stm32f1xx_it.c Application/User/subdir.mk
+Application/User/stm32f1xx_it.o: C:/Users/9510\ i9/Desktop/SHARC_buoy_data_transmission/Software/ICM20948/Src/stm32f1xx_it.c Application/User/subdir.mk
 	arm-none-eabi-gcc "$<" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../../Inc -I../../Drivers/STM32F1xx_HAL_Driver/Inc -I../../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Application/User/stm32f1xx_it.d" -MT"$@" --specs=nano.specs -mfloat-abi=soft -mthumb -o "$@"
 Application/User/%.o Application/User/%.su: ../Application/User/%.c Application/User/subdir.mk
 	arm-none-eabi-gcc "$<" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../../Inc -I../../Drivers/STM32F1xx_HAL_Driver/Inc -I../../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" --specs=nano.specs -mfloat-abi=soft -mthumb -o "$@"
-Application/User/usart.o: /Users/tris/Documents/2022UCT/2nd\ sem/3097/SHARC_buoy_data_transmission/Software/ICM20948/Src/usart.c Application/User/subdir.mk
+Application/User/usart.o: C:/Users/9510\ i9/Desktop/SHARC_buoy_data_transmission/Software/ICM20948/Src/usart.c Application/User/subdir.mk
 	arm-none-eabi-gcc "$<" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../../Inc -I../../Drivers/STM32F1xx_HAL_Driver/Inc -I../../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Application/User/usart.d" -MT"$@" --specs=nano.specs -mfloat-abi=soft -mthumb -o "$@"
 
 clean: clean-Application-2f-User

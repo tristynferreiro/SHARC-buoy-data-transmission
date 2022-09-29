@@ -20,8 +20,8 @@ In future versions, the data will be read from the sensor HAT ICM2098 chip
 /* USER CODE BEGIN Includes */
 #include "stdio.h"
 #include "stdlib.h"
-#include "string.h"
-#include "time.h"
+//#include "string.h"
+//#include "time.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -31,17 +31,17 @@ In future versions, the data will be read from the sensor HAT ICM2098 chip
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 
-/* FOR COMPRESSION
-#define EI 11  // typically 10..13
+/* FOR COMPRESSION */
+#define EI 6  // typically 10..13
 #define EJ  5  // typically 4..5
 #define P   1  //If match length <= P then output one character
 #define N (1 << EI)  // buffer size
 #define F ((1 << EJ) + 1)  // lookahead buffer size
-*/
+
 
 /* FOR ENCRYPTION */
-#define MAX_VALUE 32
-#define E_VALUE 3 /*65535*/
+//#define MAX_VALUE 16
+//#define E_VALUE 3 /*65535*/
 
 //#define waveHat
 /* USER CODE END PD */
@@ -55,25 +55,25 @@ In future versions, the data will be read from the sensor HAT ICM2098 chip
  UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
- /*uint8_t rxdata[4];
  int numRecordings =0; // this keeps track of the number of recordings.
 
  int bit_buffer = 0, bit_mask = 128;
- unsigned long codecount = 0, textcount = 0;
- unsigned char buffer[N * 2]; */
- // needs to be at least the size of the input data (minimum). this size should be the limit of data stored at any one time
-/* char compressed[4970000];
- int compressedBits =0;
-*/
- char inputData [200];
+ unsigned char buffer[N * 2];
 
- int encryptedData[200];
- int encryptedBits = 0;
- int e = E_VALUE;
- int n = 55;
- int d = 27;
+ // needs to be at least the size of the input data (minimum). this size should be the limit of data stored at any one time
+ int compressed[20];
+ int compressedBits =0;
+
+
+ //char inputData [20];
+ int e = 3;
+ int n = 187;
+ int d = 107;
  int p = 11;
- int q = 5;
+ int q = 17;
+ int encryptedBits = 0;
+ int encryptedData[20];
+
 
 
 
@@ -84,13 +84,13 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
 /* USER CODE BEGIN PFP */
-/*void pause_sec(float x);
+void pause_sec(float x);
 void store(int bitbuffer);
 void putbit1(void);
 void flush_bit_buffer(void);
 void output1(int c);
 void output2(int x, int y);
-void encode(char inputData[]); */
+void encode(int encryptedData[], int encryptedBits);
 int ENCmodpow(int base, int power, int mod);
 void encrypt(char msg[]);
 
@@ -155,51 +155,20 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
-	/*
-	float accel[3];
-	float gyro[3];
-	float temp;
-
-	while(numRecordings<(sizeof(data)/sizeof(data[0]))){
-		pause_sec(2); //delay is implemented
-
-		for(int i =0; i<3;i++){
-		 		accel[i]=data[numRecordings][i];
-		 		gyro[i]=data[numRecordings][i+3];
-		}
-		temp=data[numRecordings][6];
-
-	    uint8_t msg[100];
-	 */
-	  /*
-	  	      * FORMATTING BREAK DOWN:
-	  	      * 0: the reading number (k-value)
-	  	      *
-	  	      * 94-100: spaces added at the end as buffer in case additional characters (like negative signs) appear
-	  	      */
-	  /*
-	     sprintf(msg, "\r\n%.9f,%.9f,%.9f,%.9f,%.9f,%.9f,%.9f         ",accel[0],accel[1],accel[2],gyro[0],gyro[1],gyro[2],temp);
-	     //sprintf(msg, "\r\n%.4f,%.4f,%.9f,%.9f,%.9f,%.9f,%.9f         ",accel[0],accel[1],accel[2],gyro[0],gyro[1],gyro[2],temp);
-
-	  */
-
-	 /* encode(inputArray);
-
-	  uint8_t msg[compressedBits];
-	  sprintf(msg, "%s",compressed);
-    */
-	  //HAL_UART_Transmit(&huart2, header2, sizeof(header2), 1000);
 
 	  if (run ==0) {
 		  encrypt(inputArray);
 		  //memcpy(encryptedData, &encrypted, sizeof(encrypted)+1);
 		  int count = 0;
-		  while (count < encryptedBits) {
+		//  char temp1[4];
+		//  sprintf(temp1, "%d, ",encryptedBits);
+		//  HAL_UART_Transmit(&huart2, temp1, sizeof(temp1), 1000);
+		/*  while (count < encryptedBits) {
 			  char temp[4];
 			  sprintf(temp, "%d, ",encryptedData[count]);
 			  HAL_UART_Transmit(&huart2, temp, sizeof(temp), 1000);
 			  count++;
-		  }
+		  } */
 		  run++;
 	  }
 
@@ -317,28 +286,28 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-void pause_sec(float x)
-{
-	/* Delay program execution for x seconds */
 
-	//declare loop variables
-	int i, j, k= 0;
-
-	/*
-	 * run through 2 for loops incrementing counter to ensure loop runs (no actual impact on code)
-	 * Multiplying by x gives the delay for x seconds
-	 */
-	for (i = 0; i < 630; i++) {
-		for(j = 0; j < 110*x; j++) { //
-			k++; // this is added to ensure that the loop does run
-		}
-	}
-}
 /********************************
  * THIS IS THE COMPRESSION CODE
  *******************************/
-/*void store(int bitbuffer){
-    compressed[compressedBits]=bitbuffer;
+
+/**
+ * This method has been added to store the compression encoded bits in one array for printing/transmission.
+ */
+void store(int bitbuffer){
+	 int tempvar = (int)log2(bitbuffer)+1;
+	    if (tempvar >=8) {
+	    	int val = 256 - bitbuffer;
+	    	val = -1 * val;
+	        compressed[compressedBits]=val;
+
+	    }
+	    else {
+	        compressed[compressedBits]=bitbuffer;
+	    }
+    char temp[5];
+    sprintf(temp, "%d, ",compressed[compressedBits]);
+    HAL_UART_Transmit(&huart2, temp, sizeof(temp), 1000);
     compressedBits++;
 }
 
@@ -347,7 +316,7 @@ void putbit1(void)
     bit_buffer |= bit_mask;
     if ((bit_mask >>= 1) == 0) {
         store(bit_buffer);
-        bit_buffer = 0;  bit_mask = 128;  codecount++;
+        bit_buffer = 0;  bit_mask = 128;
     }
 }
 
@@ -355,7 +324,8 @@ void putbit0(void)
 {
     if ((bit_mask >>= 1) == 0) {
         store(bit_buffer);
-        bit_buffer = 0;  bit_mask = 128;  codecount++;
+        bit_buffer = 0;
+        bit_mask = 128;
     }
 }
 
@@ -363,10 +333,8 @@ void flush_bit_buffer(void)
 {
     if (bit_mask != 128) {
         store(bit_buffer);
-        codecount++;
     }
 }
-
 
 void output1(int c)
 {
@@ -397,16 +365,18 @@ void output2(int x, int y)
     }
 }
 
-void encode(char inputData[])
+void encode(int encryptedData[], int encryptedBits)
 {
     int i, j, f1, x, y, r, s, bufferend, c;
-
     int counter = 0;
+
     for (i = 0; i < N - F; i++) buffer[i] = ' ';
     for (i = N - F; i < N * 2; i++) {
-        if ( counter >= sizeof(inputData)) break;
-        c = inputData[counter];
+        if (counter >= encryptedBits) break;
+        c = encryptedData[counter];
         buffer[i] = c;  counter++;
+        //printf("HERE2: %d\n",buffer[i]);
+        //printf("c = %d\n", c);;
     }
     bufferend = i;  r = N - F;  s = 0;
     while (r < bufferend) {
@@ -427,20 +397,33 @@ void encode(char inputData[])
             for (i = 0; i < N; i++) buffer[i] = buffer[i + N];
             bufferend -= N;  r -= N;  s -= N;
             while (bufferend < N * 2) {
-                if ( counter >= sizeof(inputData)) break;
-                c = inputData[counter];
+                if (counter >= encryptedBits) break;
+                c = encryptedData[counter];
                 buffer[bufferend++] = c;  counter++;
             }
         }
     }
-    flush_bit_buffer();
+
+    // WRITE compressed bits to FILE
+   // for (int jk=0;jk<compressedBits;jk++){
+   //     fprintf(outfile,"%d\n",compressed[jk]);
+   // }
+  /*  int count = 0;
+    while (count < compressedBits) {
+		char temp[4];
+		sprintf(temp, "%i, ",compressed[count]);
+		HAL_UART_Transmit(&huart2, temp, sizeof(temp), 1000);
+		count++;
+    } */
+
 }
-*/
+
+
 
 /********************************
  * THIS IS THE ENCRYPTION CODE
  *******************************/
-int ENCmodpow(int base, int power, int mod)
+ int ENCmodpow(int base, int power, int mod)
 {
         int i;
         int result = 1;
@@ -459,12 +442,13 @@ void encrypt(char msg[]) {
             c = ENCmodpow(msg[i],e,n);
             encryptedData[i] = c;
             encryptedBits++;
-            //int mesg[4];
            // if (i > 0) {
            // sprintf(mesg, "%d and i-1 =%dP",encryptedData[i], encryptedData[i-1]);
            //  HAL_UART_Transmit(&huart2, mesg, sizeof(mesg), 1000);
            // }
         }
+        //call compression
+        encode(encryptedData, encryptedBits);
 }
 
 

@@ -141,8 +141,8 @@ all: main-build
 main-build: ICM20948.elf secondary-outputs
 
 # Tool invocations
-ICM20948.elf ICM20948.map: $(OBJS) $(USER_OBJS) /Users/tris/Documents/2022UCT/2nd\ sem/3097/SHARC_buoy_data_transmission/Software/ICM20948/STM32F103RBTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "ICM20948.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"/Users/tris/Documents/2022UCT/2nd sem/3097/SHARC_buoy_data_transmission/Software/ICM20948/STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ICM20948.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+ICM20948.elf ICM20948.map: $(OBJS) $(USER_OBJS) C:\Users\9510\ i9\Desktop\SHARC_buoy_data_transmission\Software\ICM20948\STM32F103RBTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "ICM20948.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\9510 i9\Desktop\SHARC_buoy_data_transmission\Software\ICM20948\STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ICM20948.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
