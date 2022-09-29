@@ -1,6 +1,6 @@
 /*
  * This program takes in a file, encrypts it using RSA encryption passes it to the compression algorithm which compresses it using lzss compression and then
- * prints the result to a file.
+ * prints the result to a file of characters.
  *
  * This uses fixed key encryption.
  */
