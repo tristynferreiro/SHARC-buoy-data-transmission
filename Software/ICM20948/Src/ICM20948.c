@@ -74,23 +74,38 @@ extern void invmsICM20948Init(void)
 extern void invmsICM20948GyroRead(int16_t* ps16X, int16_t* ps16Y, int16_t* ps16Z)
 {
     uint8_t u8Buf[6];
-    int16_t s16Buf[3] = {0}; 
+    int16_t s16Buf[3] = {0}; //X Y Z
     uint8_t i;
     int32_t s32OutBuf[3] = {0};
     static ICM20948_ST_AVG_DATA sstAvgBuf[3];
     static int16_t ss16c = 0;
     ss16c++;
 
-    u8Buf[0]=DEV_I2C_ReadByte(REG_ADD_GYRO_XOUT_L); 
-    u8Buf[1]=DEV_I2C_ReadByte(REG_ADD_GYRO_XOUT_H);
+    uint8_t Buf[1];
+
+    //GYRO X
+    HAL_I2C_Mem_Read(&hi2c1, IIC_Addr_t, REG_ADD_GYRO_XOUT_L, I2C_MEMADD_SIZE_8BIT, Buf, 1, 0x10);
+    u8Buf[0]=Buf[0];
+
+    HAL_I2C_Mem_Read(&hi2c1, IIC_Addr_t, REG_ADD_GYRO_XOUT_H, I2C_MEMADD_SIZE_8BIT, Buf, 1, 0x10);
+    u8Buf[1]=Buf[0];
+
     s16Buf[0]=	(u8Buf[1]<<8)|u8Buf[0];
 
-    u8Buf[0]=DEV_I2C_ReadByte(REG_ADD_GYRO_YOUT_L); 
-    u8Buf[1]=DEV_I2C_ReadByte(REG_ADD_GYRO_YOUT_H);
+    //GYRO Y
+    HAL_I2C_Mem_Read(&hi2c1, IIC_Addr_t, REG_ADD_GYRO_YOUT_L, I2C_MEMADD_SIZE_8BIT, Buf, 1, 0x10);
+    u8Buf[0]=Buf[0];
+    HAL_I2C_Mem_Read(&hi2c1, IIC_Addr_t, REG_ADD_GYRO_YOUT_H, I2C_MEMADD_SIZE_8BIT, Buf, 1, 0x10);
+    u8Buf[1]=Buf[0];
+
     s16Buf[1]=	(u8Buf[1]<<8)|u8Buf[0];
 
-    u8Buf[0]=DEV_I2C_ReadByte(REG_ADD_GYRO_ZOUT_L); 
-    u8Buf[1]=DEV_I2C_ReadByte(REG_ADD_GYRO_ZOUT_H);
+    //GYRO Z
+    HAL_I2C_Mem_Read(&hi2c1, IIC_Addr_t, REG_ADD_GYRO_ZOUT_L, I2C_MEMADD_SIZE_8BIT, Buf, 1, 0x10);
+    u8Buf[0]=Buf[0];
+    HAL_I2C_Mem_Read(&hi2c1, IIC_Addr_t, REG_ADD_GYRO_ZOUT_H, I2C_MEMADD_SIZE_8BIT, Buf, 1, 0x10);
+    u8Buf[1]=Buf[0];
+
     s16Buf[2]=	(u8Buf[1]<<8)|u8Buf[0];
     
 #if 1
