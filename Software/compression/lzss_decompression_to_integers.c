@@ -61,7 +61,7 @@ void decode(void)
         if (c) {
             if (lineNumber >= compDataArraySize) break;
             c=getbit(8);
-            //printf("%d\n",c);
+            printf("+%d\n",c);
             fprintf(outfile, "%d\n",c);
             //fputc(c, outfile);
             buffer[r++] = c;  r &= (N - 1);
@@ -71,7 +71,8 @@ void decode(void)
             if (lineNumber>=compDataArraySize) break;
             for (k = 0; k <= j + 1; k++) {
                 c = buffer[(i + k) & (N - 1)];
-                fprintf(outfile, "%d\n",c);
+                printf("=%d\n",c);
+                fprintf(outfile, "%ld\n",c);
                 //fputc(c, outfile);
                 buffer[r++] = c;  r &= (N - 1);
             }
