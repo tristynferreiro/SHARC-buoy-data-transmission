@@ -58,7 +58,7 @@ In future versions, the data will be read from the sensor HAT ICM2098 chip
  int numRecordings =0; // this keeps track of the number of recordings.
 
  int bit_buffer = 0, bit_mask = 128;
- unsigned char buffer[N * 2];
+ int buffer[N * 2];
 
  // needs to be at least the size of the input data (minimum). this size should be the limit of data stored at any one time
  int compressed[20];
@@ -84,7 +84,7 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
 /* USER CODE BEGIN PFP */
-void pause_sec(float x);
+int correctBitbuffer(int bitbuffer);
 void store(int bitbuffer);
 void putbit1(void);
 void flush_bit_buffer(void);
@@ -290,21 +290,22 @@ static void MX_GPIO_Init(void)
 /********************************
  * THIS IS THE COMPRESSION CODE
  *******************************/
-
+int correctBitbuffer(int bitbuffer) {
+	int val;
+	int tempvar = (int)log2(bitbuffer)+1;
+	if (tempvar >=8) {
+		val = 256 - bitbuffer;
+		val = -1 * val;
+		return val;
+	}
+	return bitbuffer;
+}
 /**
  * This method has been added to store the compression encoded bits in one array for printing/transmission.
  */
-void store(int bitbuffer){
-	 int tempvar = (int)log2(bitbuffer)+1;
-	    if (tempvar >=8) {
-	    	int val = 256 - bitbuffer;
-	    	val = -1 * val;
-	        compressed[compressedBits]=val;
 
-	    }
-	    else {
-	        compressed[compressedBits]=bitbuffer;
-	    }
+void store(int bitbuffer){
+	compressed[compressedBits] = correctBitbuffer(bitbuffer);
     char temp[5];
     sprintf(temp, "%d, ",compressed[compressedBits]);
     HAL_UART_Transmit(&huart2, temp, sizeof(temp), 1000);
