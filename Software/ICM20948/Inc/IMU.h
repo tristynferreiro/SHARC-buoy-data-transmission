@@ -25,6 +25,7 @@
 #ifndef __IMU_H
 #define __IMU_H
 
+#include "Public_StdTypes.h"
 #include "invMotionSensor.h"
 
 #define M_PI  (float)3.1415926535
