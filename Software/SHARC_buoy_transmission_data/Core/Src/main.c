@@ -160,15 +160,15 @@ int main(void)
 		  encrypt(inputArray);
 		  //memcpy(encryptedData, &encrypted, sizeof(encrypted)+1);
 		  int count = 0;
-		//  char temp1[4];
+		  char temp1[5];
 		//  sprintf(temp1, "%d, ",encryptedBits);
 		//  HAL_UART_Transmit(&huart2, temp1, sizeof(temp1), 1000);
-		/*  while (count < encryptedBits) {
-			  char temp[4];
-			  sprintf(temp, "%d, ",encryptedData[count]);
+		  while (count < compressedBits) {
+			  char temp[5];
+			  sprintf(temp, "%d, ",compressed[count]);
 			  HAL_UART_Transmit(&huart2, temp, sizeof(temp), 1000);
 			  count++;
-		  } */
+		  }
 		  run++;
 	  }
 
@@ -306,9 +306,6 @@ int correctBitbuffer(int bitbuffer) {
 
 void store(int bitbuffer){
 	compressed[compressedBits] = correctBitbuffer(bitbuffer);
-    char temp[5];
-    sprintf(temp, "%d, ",compressed[compressedBits]);
-    HAL_UART_Transmit(&huart2, temp, sizeof(temp), 1000);
     compressedBits++;
 }
 
