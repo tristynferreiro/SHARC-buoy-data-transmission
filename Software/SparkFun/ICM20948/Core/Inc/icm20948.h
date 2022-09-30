@@ -9,16 +9,14 @@
 #ifndef __ICM20948_H__
 #define	__ICM20948_H__
 
-
-//#include "spi.h"			// header from stm32cubemx code generate
 #include <stdbool.h>
 
 
 /* User Configuration */
-#define ICM20948_SPI					(&hspi1)
+#define ICM20948_SPI					(&hspi2)
 
-#define ICM20948_SPI_CS_PIN_PORT		GPIOA
-#define ICM20948_SPI_CS_PIN_NUMBER		GPIO_PIN_4
+#define ICM20948_SPI_CS_PIN_PORT		GPIOB
+#define ICM20948_SPI_CS_PIN_NUMBER		GPIO_PIN_12
 
 
 /* Defines */

@@ -30,6 +30,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "icm20948.h"
+#include "stdio.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -48,6 +49,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 SPI_HandleTypeDef hspi2;
+UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
 axises my_gyro;
@@ -63,13 +65,14 @@ static float accel_scale_factor;
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_SPI2_Init(void);
+static void MX_USART2_UART_Init(void);
 /* USER CODE BEGIN PFP */
-bool icm20948_who_am_i();
 void icm20948_init();
 void icm20948_gyro_read(axises* data);
 void icm20948_accel_read(axises* data);
 void icm20948_gyro_read_dps(axises* data);
 void icm20948_accel_read_g(axises* data);
+/* Sub Functions */
 void icm20948_accel_full_scale_select(accel_full_scale full_scale);
 void icm20948_gyro_full_scale_select(gyro_full_scale full_scale);
 void icm20948_accel_calibration();
@@ -80,14 +83,22 @@ void icm20948_accel_low_pass_filter(uint8_t config);
 void icm20948_gyro_low_pass_filter(uint8_t config);
 void icm20948_odr_align_enable();
 void icm20948_clock_source(uint8_t source);
-void icm20948_i2c_master_clk_frq(uint8_t config);
-void icm20948_i2c_master_enable();
-void icm20948_i2c_master_reset();
+//void icm20948_i2c_master_clk_frq(uint8_t config);
+//void icm20948_i2c_master_enable();
+//void icm20948_i2c_master_reset();
 void icm20948_spi_slave_enable();
 void icm20948_sleep();
 void icm20948_wakeup();
 void icm20948_device_reset();
-
+bool icm20948_who_am_i();
+/*Static functions*/
+static void cs_high();
+static void cs_low();
+static void select_user_bank(userbank ub);
+static uint8_t read_single_icm20948_reg(userbank ub, uint8_t reg);
+static void write_single_icm20948_reg(userbank ub, uint8_t reg, uint8_t val);
+static uint8_t* read_multiple_icm20948_reg(userbank ub, uint8_t reg, uint8_t len);
+static void write_multiple_icm20948_reg(userbank ub, uint8_t reg, uint8_t* val, uint8_t len);
 
 /* USER CODE END PFP */
 
@@ -125,6 +136,7 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_SPI2_Init();
+  MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
 
   icm20948_init();
@@ -137,16 +149,23 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-	  // raw data
-	  icm20948_gyro_read(&my_gyro);
-	  icm20948_accel_read(&my_accel);
-	 // ak09916_mag_read(&my_mag);
 
-	  //unit conversion
-	  icm20948_gyro_read_dps(&my_gyro);
-	  icm20948_accel_read_g(&my_accel);
-	 // ak09916_mag_read_uT(&my_mag);
     /* USER CODE BEGIN 3 */
+	// raw data
+	icm20948_gyro_read(&my_gyro);
+	char temp[5];
+	sprintf(temp, "%d",my_gyro.x);
+	HAL_UART_Transmit(&huart2, temp, sizeof(temp), 1000);
+
+	icm20948_accel_read(&my_accel);
+	//ak09916_mag_read(&my_mag);
+
+	// or unit conversion
+	//icm20948_gyro_read_dps(&my_gyro);
+	//icm20948_accel_read_g(&my_accel);
+	//ak09916_mag_read_uT(&my_mag);
+
+
   }
   /* USER CODE END 3 */
 }
@@ -227,6 +246,41 @@ static void MX_SPI2_Init(void)
 }
 
 /**
+  * @brief USART2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_USART2_UART_Init(void)
+{
+
+  /* USER CODE BEGIN USART2_Init 0 */
+
+  /* USER CODE END USART2_Init 0 */
+
+  /* USER CODE BEGIN USART2_Init 1 */
+
+  /* USER CODE END USART2_Init 1 */
+  huart2.Instance = USART2;
+  huart2.Init.BaudRate = 9600;
+  huart2.Init.WordLength = UART_WORDLENGTH_8B;
+  huart2.Init.StopBits = UART_STOPBITS_1;
+  huart2.Init.Parity = UART_PARITY_NONE;
+  huart2.Init.Mode = UART_MODE_TX_RX;
+  huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart2.Init.OverSampling = UART_OVERSAMPLING_16;
+  huart2.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
+  huart2.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
+  if (HAL_UART_Init(&huart2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN USART2_Init 2 */
+
+  /* USER CODE END USART2_Init 2 */
+
+}
+
+/**
   * @brief GPIO Initialization Function
   * @param None
   * @retval None
@@ -236,6 +290,7 @@ static void MX_GPIO_Init(void)
   GPIO_InitTypeDef GPIO_InitStruct = {0};
 
   /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
@@ -294,7 +349,7 @@ void icm20948_accel_read(axises* data)
 	data->z = (int16_t)(temp[4] << 8 | temp[5]) + accel_scale_factor;
 	// Add scale factor because calibraiton function offset gravity acceleration.
 }
-
+/*
 void icm20948_gyro_read_dps(axises* data)
 {
 	icm20948_gyro_read(data);
@@ -312,7 +367,7 @@ void icm20948_accel_read_g(axises* data)
 	data->y /= accel_scale_factor;
 	data->z /= accel_scale_factor;
 }
-
+*/
 bool icm20948_who_am_i()
 {
 	uint8_t icm20948_id = read_single_icm20948_reg(ub_0, B0_WHO_AM_I);
@@ -355,6 +410,7 @@ void icm20948_spi_slave_enable()
 	write_single_icm20948_reg(ub_0, B0_USER_CTRL, new_val);
 }
 
+/*
 void icm20948_i2c_master_reset()
 {
 	uint8_t new_val = read_single_icm20948_reg(ub_0, B0_USER_CTRL);
@@ -379,7 +435,7 @@ void icm20948_i2c_master_clk_frq(uint8_t config)
 
 	write_single_icm20948_reg(ub_3, B3_I2C_MST_CTRL, new_val);
 }
-
+*/
 void icm20948_clock_source(uint8_t source)
 {
 	uint8_t new_val = read_single_icm20948_reg(ub_0, B0_PWR_MGMT_1);
@@ -565,6 +621,81 @@ void icm20948_accel_full_scale_select(accel_full_scale full_scale)
 	}
 
 	write_single_icm20948_reg(ub_2, B2_ACCEL_CONFIG, new_val);
+}
+
+/* Static Functions */
+
+static void cs_high()
+{
+	HAL_GPIO_WritePin(ICM20948_SPI_CS_PIN_PORT, ICM20948_SPI_CS_PIN_NUMBER, SET);
+}
+
+static void cs_low()
+{
+	HAL_GPIO_WritePin(ICM20948_SPI_CS_PIN_PORT, ICM20948_SPI_CS_PIN_NUMBER, RESET);
+}
+
+static void select_user_bank(userbank ub)
+{
+	uint8_t write_reg[2];
+	write_reg[0] = WRITE | REG_BANK_SEL;
+	write_reg[1] = ub;
+
+	cs_low();
+	HAL_SPI_Transmit(ICM20948_SPI, write_reg, 2, 10);
+	cs_high();
+}
+
+static uint8_t read_single_icm20948_reg(userbank ub, uint8_t reg)
+{
+	uint8_t read_reg = READ | reg;
+	uint8_t reg_val;
+	select_user_bank(ub);
+
+	cs_low();
+	HAL_SPI_Transmit(ICM20948_SPI, &read_reg, 1, 1000);
+	HAL_SPI_Receive(ICM20948_SPI, &reg_val, 1, 1000);
+	cs_high();
+
+	return reg_val;
+}
+
+static void write_single_icm20948_reg(userbank ub, uint8_t reg, uint8_t val)
+{
+	uint8_t write_reg[2];
+	write_reg[0] = WRITE | reg;
+	write_reg[1] = val;
+
+	select_user_bank(ub);
+
+	cs_low();
+	HAL_SPI_Transmit(ICM20948_SPI, write_reg, 2, 1000);
+	cs_high();
+}
+
+static uint8_t* read_multiple_icm20948_reg(userbank ub, uint8_t reg, uint8_t len)
+{
+	uint8_t read_reg = READ | reg;
+	static uint8_t reg_val[6];
+	select_user_bank(ub);
+
+	cs_low();
+	HAL_SPI_Transmit(ICM20948_SPI, &read_reg, 1, 1000);
+	HAL_SPI_Receive(ICM20948_SPI, reg_val, len, 1000);
+	cs_high();
+
+	return reg_val;
+}
+
+static void write_multiple_icm20948_reg(userbank ub, uint8_t reg, uint8_t* val, uint8_t len)
+{
+	uint8_t write_reg = WRITE | reg;
+	select_user_bank(ub);
+
+	cs_low();
+	HAL_SPI_Transmit(ICM20948_SPI, &write_reg, 1, 1000);
+	HAL_SPI_Transmit(ICM20948_SPI, val, len, 1000);
+	cs_high();
 }
 
 /* USER CODE END 4 */
