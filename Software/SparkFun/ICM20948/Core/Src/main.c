@@ -152,17 +152,25 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 	// raw data
-	icm20948_gyro_read(&my_gyro);
-	char temp[5];
-	sprintf(temp, "%d",my_gyro.x);
-	HAL_UART_Transmit(&huart2, temp, sizeof(temp), 1000);
-
 	icm20948_accel_read(&my_accel);
+	icm20948_gyro_read(&my_gyro);
+
+	/*memset(temp,0,sizeof(temp));
+
+	sprintf(temp, "\r\nGyro:x:%.f y:%.f z:%.f\r\n\r\n",my_gyro.x,my_gyro.y,my_gyro.z);
+	HAL_UART_Transmit(&huart2, temp, sizeof(temp), 1000);*/
+
+
 	//ak09916_mag_read(&my_mag);
 
 	// or unit conversion
 	//icm20948_gyro_read_dps(&my_gyro);
-	//icm20948_accel_read_g(&my_accel);
+	icm20948_accel_read_g(&my_accel);
+	char temp[35];
+	sprintf(temp, "\r\nAccel:x:%.4f y:%.4f z:%.4f",my_accel.x,my_accel.y,my_accel.z);
+	HAL_UART_Transmit(&huart2, temp, sizeof(temp), 1000);
+	memset(temp,0,sizeof(temp));
+	HAL_Delay(200);
 	//ak09916_mag_read_uT(&my_mag);
 
 
@@ -330,25 +338,60 @@ void icm20948_init()
 	icm20948_gyro_full_scale_select(_2000dps);
 	icm20948_accel_full_scale_select(_16g);
 }
-
+/*
 void icm20948_gyro_read(axises* data)
 {
-	uint8_t* temp = read_multiple_icm20948_reg(ub_0, B0_GYRO_XOUT_H, 6);
+	uint8_t* tempH = read_multiple_icm20948_reg(ub_0, B0_GYRO_XOUT_H, 6);
 
-	data->x = (int16_t)(temp[0] << 8 | temp[1]);
-	data->y = (int16_t)(temp[2] << 8 | temp[3]);
-	data->z = (int16_t)(temp[4] << 8 | temp[5]);
+
+	data->x = (int16_t)((tempH[0]+tempL[0])/2 << 8 | (tempH[1]+tempL[1])/2);
+	data->y = (int16_t)((tempH[2]+tempL[2])/2 << 8 | (tempH[3]+tempL[3])/2);
+	data->z = (int16_t)((tempH[4]+tempL[4])/2 << 8 | (tempH[5]+tempL[5])/2);
+}
+*/
+void icm20948_gyro_read(axises* data)
+{
+	uint8_t tempH = read_single_icm20948_reg(ub_0, B0_GYRO_XOUT_H);
+	uint8_t tempL = read_single_icm20948_reg(ub_0, B0_GYRO_XOUT_L);
+
+	data->x = (int16_t)(tempH<< 8|tempL);
+
+	tempH = read_single_icm20948_reg(ub_0, B0_GYRO_YOUT_H);
+	tempL = read_single_icm20948_reg(ub_0, B0_GYRO_YOUT_L);
+	data->y = (int16_t)(tempH<< 8|tempL);
+
+	tempH = read_single_icm20948_reg(ub_0, B0_GYRO_ZOUT_H);
+	tempL = read_single_icm20948_reg(ub_0, B0_GYRO_ZOUT_L);
+	data->z = (int16_t)(tempH<< 8|tempL);
 }
 
 void icm20948_accel_read(axises* data)
 {
-	uint8_t* temp = read_multiple_icm20948_reg(ub_0, B0_ACCEL_XOUT_H, 6);
+	uint8_t tempH = read_single_icm20948_reg(ub_0, B0_ACCEL_XOUT_H);
+	uint8_t tempL = read_single_icm20948_reg(ub_0, B0_ACCEL_XOUT_L);
 
-	data->x = (int16_t)(temp[0] << 8 | temp[1]);
-	data->y = (int16_t)(temp[2] << 8 | temp[3]);
-	data->z = (int16_t)(temp[4] << 8 | temp[5]) + accel_scale_factor;
+	data->x = (int16_t)(tempH<< 8|tempL);
+
+	tempH = read_single_icm20948_reg(ub_0, B0_ACCEL_YOUT_H);
+	tempL = read_single_icm20948_reg(ub_0, B0_ACCEL_YOUT_L);
+	data->y = (int16_t)(tempH<< 8|tempL);
+
+	tempH = read_single_icm20948_reg(ub_0, B0_ACCEL_ZOUT_H);
+	tempL = read_single_icm20948_reg(ub_0, B0_ACCEL_ZOUT_L);
+	data->z = (int16_t)(tempH<< 8|tempL);
 	// Add scale factor because calibraiton function offset gravity acceleration.
 }
+/*
+void icm20948_accel_read(axises* data)
+{
+	uint8_t* tempH = read_multiple_icm20948_reg(ub_0, B0_ACCEL_XOUT_H, 6);
+
+	data->x = (int16_t)(tempH[0] << 8 | tempH[1]);
+	data->y = (int16_t)(tempH[2] << 8 | tempH[3]);
+	data->z = (int16_t)(tempH[4] << 8 | tempH[5]) + accel_scale_factor;
+	// Add scale factor because calibraiton function offset gravity acceleration.
+}
+*/
 /*
 void icm20948_gyro_read_dps(axises* data)
 {
@@ -358,7 +401,7 @@ void icm20948_gyro_read_dps(axises* data)
 	data->y /= gyro_scale_factor;
 	data->z /= gyro_scale_factor;
 }
-
+*/
 void icm20948_accel_read_g(axises* data)
 {
 	icm20948_accel_read(data);
@@ -367,7 +410,7 @@ void icm20948_accel_read_g(axises* data)
 	data->y /= accel_scale_factor;
 	data->z /= accel_scale_factor;
 }
-*/
+
 bool icm20948_who_am_i()
 {
 	uint8_t icm20948_id = read_single_icm20948_reg(ub_0, B0_WHO_AM_I);
@@ -410,32 +453,6 @@ void icm20948_spi_slave_enable()
 	write_single_icm20948_reg(ub_0, B0_USER_CTRL, new_val);
 }
 
-/*
-void icm20948_i2c_master_reset()
-{
-	uint8_t new_val = read_single_icm20948_reg(ub_0, B0_USER_CTRL);
-	new_val |= 0x02;
-
-	write_single_icm20948_reg(ub_0, B0_USER_CTRL, new_val);
-}
-
-void icm20948_i2c_master_enable()
-{
-	uint8_t new_val = read_single_icm20948_reg(ub_0, B0_USER_CTRL);
-	new_val |= 0x20;
-
-	write_single_icm20948_reg(ub_0, B0_USER_CTRL, new_val);
-	HAL_Delay(100);
-}
-
-void icm20948_i2c_master_clk_frq(uint8_t config)
-{
-	uint8_t new_val = read_single_icm20948_reg(ub_3, B3_I2C_MST_CTRL);
-	new_val |= config;
-
-	write_single_icm20948_reg(ub_3, B3_I2C_MST_CTRL, new_val);
-}
-*/
 void icm20948_clock_source(uint8_t source)
 {
 	uint8_t new_val = read_single_icm20948_reg(ub_0, B0_PWR_MGMT_1);

@@ -72,22 +72,22 @@ typedef enum
 // sensor init function.
 // if sensor id is wrong, it is stuck in while.
 void icm20948_init();
-void ak09916_init();
+//void ak09916_init();
 
 // 16 bits ADC value. raw data.
 void icm20948_gyro_read(axises* data);	
 void icm20948_accel_read(axises* data);
-bool ak09916_mag_read(axises* data); 
+//bool ak09916_mag_read(axises* data);
 
 // Convert 16 bits ADC value to their unit.
 void icm20948_gyro_read_dps(axises* data); 
 void icm20948_accel_read_g(axises* data);
-bool ak09916_mag_read_uT(axises* data);
+//bool ak09916_mag_read_uT(axises* data);
 
 
 /* Sub Functions */
 bool icm20948_who_am_i();
-bool ak09916_who_am_i();
+//bool ak09916_who_am_i();
 
 void icm20948_device_reset();
 void ak09916_soft_reset();
@@ -97,9 +97,9 @@ void icm20948_sleep();
 
 void icm20948_spi_slave_enable();
 
-void icm20948_i2c_master_reset();
-void icm20948_i2c_master_enable();
-void icm20948_i2c_master_clk_frq(uint8_t config); // 0 - 15
+//void icm20948_i2c_master_reset();
+//void icm20948_i2c_master_enable();
+//void icm20948_i2c_master_clk_frq(uint8_t config); // 0 - 15
 
 void icm20948_clock_source(uint8_t source);
 void icm20948_odr_align_enable();
@@ -110,7 +110,7 @@ void icm20948_accel_low_pass_filter(uint8_t config); // 0 - 7
 // Output Data Rate = 1.125kHz / (1 + divider)
 void icm20948_gyro_sample_rate_divider(uint8_t divider);
 void icm20948_accel_sample_rate_divider(uint16_t divider);
-void ak09916_operation_mode_setting(operation_mode mode);
+//void ak09916_operation_mode_setting(operation_mode mode);
 
 // Calibration before select full scale.
 void icm20948_gyro_calibration();
@@ -227,6 +227,7 @@ void icm20948_accel_full_scale_select(accel_full_scale full_scale);
 #define B2_MOD_CTRL_USR					0X54
 
 // USER BANK 3
+/*
 #define B3_I2C_MST_ODR_CONFIG			0x00
 #define B3_I2C_MST_CTRL					0x01
 #define B3_I2C_MST_DELAY_CTRL			0x02	
@@ -251,9 +252,10 @@ void icm20948_accel_full_scale_select(accel_full_scale full_scale);
 #define B3_I2C_SLV4_CTRL				0x15
 #define B3_I2C_SLV4_DO					0x16
 #define B3_I2C_SLV4_DI					0x17
-	
+*/
 
 /* AK09916 Registers */
+/*
 #define AK09916_ID						0x09
 #define MAG_SLAVE_ADDR                  0x0C
 
@@ -270,5 +272,5 @@ void icm20948_accel_full_scale_select(accel_full_scale full_scale);
 #define MAG_CNTL3						0x32
 #define MAG_TS1							0x33
 #define MAG_TS2							0x34
-
+*/
 #endif	/* __ICM20948_H__ */
