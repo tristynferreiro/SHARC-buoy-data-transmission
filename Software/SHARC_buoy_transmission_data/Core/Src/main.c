@@ -74,6 +74,8 @@ In future versions, the data will be read from the sensor HAT ICM2098 chip
  int encryptedBits = 0;
  int encryptedData[20];
 
+//for timing
+ int start, end, t;
 
 
 
@@ -157,18 +159,21 @@ int main(void)
 
 
 	  if (run ==0) {
+		  start = HAL_GetTick();
 		  encrypt(inputArray);
+		  end = HAL_GetTick();
+		  t = end-start;
 		  //memcpy(encryptedData, &encrypted, sizeof(encrypted)+1);
-		  int count = 0;
-		  char temp1[5];
-		//  sprintf(temp1, "%d, ",encryptedBits);
-		//  HAL_UART_Transmit(&huart2, temp1, sizeof(temp1), 1000);
+	       int count = 0;
 		  while (count < compressedBits) {
-			  char temp[5];
-			  sprintf(temp, "%d, ",compressed[count]);
+			  char temp[7];
+			  sprintf(temp, "\r\n%d, ",compressed[count]);
 			  HAL_UART_Transmit(&huart2, temp, sizeof(temp), 1000);
 			  count++;
 		  }
+		  char temp2[22];
+		  sprintf(temp2, "\r\ntime taken:%d ticks",t);
+		  HAL_UART_Transmit(&huart2, temp2, sizeof(temp2), 1000);
 		  run++;
 	  }
 
