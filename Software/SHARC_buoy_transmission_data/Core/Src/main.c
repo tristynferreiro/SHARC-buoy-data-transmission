@@ -20,8 +20,6 @@ In future versions, the data will be read from the sensor HAT ICM2098 chip
 /* USER CODE BEGIN Includes */
 #include "stdio.h"
 #include "stdlib.h"
-//#include "string.h"
-//#include "time.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/

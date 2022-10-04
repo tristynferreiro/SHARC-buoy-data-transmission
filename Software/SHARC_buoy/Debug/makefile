@@ -34,34 +34,34 @@ $(wildcard ../makefile.init) \
 $(wildcard ../makefile.targets) \
 
 
-BUILD_ARTIFACT_NAME := ICM20948
+BUILD_ARTIFACT_NAME := SHARC_buoy
 BUILD_ARTIFACT_EXTENSION := elf
 BUILD_ARTIFACT_PREFIX :=
 BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ARTIFACT_EXTENSION),.$(BUILD_ARTIFACT_EXTENSION),)
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXECUTABLES += \
-ICM20948.elf \
+SHARC_buoy.elf \
 
 MAP_FILES += \
-ICM20948.map \
+SHARC_buoy.map \
 
 SIZE_OUTPUT += \
 default.size.stdout \
 
 OBJDUMP_LIST += \
-ICM20948.list \
+SHARC_buoy.list \
 
 
 # All Target
 all: main-build
 
 # Main-build Target
-main-build: ICM20948.elf secondary-outputs
+main-build: SHARC_buoy.elf secondary-outputs
 
 # Tool invocations
-ICM20948.elf ICM20948.map: $(OBJS) $(USER_OBJS) /Users/tris/Documents/2022UCT/2nd\ sem/3097/SHARC_buoy_data_transmission/Software/SparkFun/ICM20948/STM32F051R8TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "ICM20948.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m0 -T"/Users/tris/Documents/2022UCT/2nd sem/3097/SHARC_buoy_data_transmission/Software/SparkFun/ICM20948/STM32F051R8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ICM20948.map" -Wl,--gc-sections -static -u  _printf_float --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+SHARC_buoy.elf SHARC_buoy.map: $(OBJS) $(USER_OBJS) /Users/tris/Documents/2022UCT/2nd\ sem/3097/SHARC_buoy_data_transmission/Software/SHARC_buoy/STM32F051R8TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "SHARC_buoy.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m0 -T"/Users/tris/Documents/2022UCT/2nd sem/3097/SHARC_buoy_data_transmission/Software/SHARC_buoy/STM32F051R8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="SHARC_buoy.map" -Wl,--gc-sections -static -u  _printf_float --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -70,14 +70,14 @@ default.size.stdout: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-ICM20948.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "ICM20948.list"
+SHARC_buoy.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "SHARC_buoy.list"
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) ICM20948.elf ICM20948.list ICM20948.map default.size.stdout
+	-$(RM) SHARC_buoy.elf SHARC_buoy.list SHARC_buoy.map default.size.stdout
 	-@echo ' '
 
 secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)

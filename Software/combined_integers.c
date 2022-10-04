@@ -188,10 +188,11 @@ void encrypt(char msg[]) {
            //  HAL_UART_Transmit(&huart2, mesg, sizeof(mesg), 1000);
            // }
         }
-    
+    /*
     for(int i =0; i<encryptedBits;i++){
         printf("%d\n",encryptedData[i]);
     }
+    */
     //Call compression
     encode();
 }
@@ -204,7 +205,7 @@ int main(int argc, char *argv[])
     int dec;
     char *s;
 
-    char input[] = {"13, 14, 15}"};
+    char input[] = {"0.0007,-0.0122,0.0051,-0.3659,-0.0610,-0.3049}"};
     if (argc != 3) {
         printf("Usage: combined e outfile\n\te = encrypt and compress\n");
         return 1;
