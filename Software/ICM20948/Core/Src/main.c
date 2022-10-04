@@ -149,6 +149,12 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+/*
+		char temp[5];
+		sprintf(temp, "\r\nHi");
+		HAL_UART_Transmit(&huart2, temp, sizeof(temp), 1000);
+		*/
+
 	// raw data
 	icm20948_accel_read(&my_accel);
 	icm20948_gyro_read(&my_gyro);
@@ -160,9 +166,8 @@ int main(void)
 	icm20948_accel_read_g(&my_accel);
 	//ak09916_mag_read_uT(&my_mag);
 
-
 	//TRANSMIT VALUES
-	char temp[35];
+	//char temp[35];
 	sprintf(temp, "\r\nAccel:x:%.4f y:%.4f z:%.4f",my_accel.x,my_accel.y,my_accel.z);
 	HAL_UART_Transmit(&huart2, temp, sizeof(temp), 1000);
 	memset(temp,0,sizeof(temp));
@@ -172,8 +177,8 @@ int main(void)
 	HAL_Delay(200);
 
 	//WRITE TO ARRAY
-	char input[70];
-	sprintf(input, "%.4,%.4f,%.4f,%.4,%.4f,%.4f,%.4",my_accel.x,my_accel.y,my_accel.z,my_gyro.x,my_gyro.y,my_gyro.z,temperature);
+	//char input[70];
+	//sprintf(input, "%.4,%.4f,%.4f,%.4,%.4f,%.4f,%.4",my_accel.x,my_accel.y,my_accel.z,my_gyro.x,my_gyro.y,my_gyro.z);
 
 
   }

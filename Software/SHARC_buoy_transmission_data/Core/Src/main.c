@@ -38,12 +38,10 @@ In future versions, the data will be read from the sensor HAT ICM2098 chip
 #define N (1 << EI)  // buffer size
 #define F ((1 << EJ) + 1)  // lookahead buffer size
 
-
 /* FOR ENCRYPTION */
 //#define MAX_VALUE 16
 //#define E_VALUE 3 /*65535*/
 
-//#define waveHat
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -76,8 +74,6 @@ In future versions, the data will be read from the sensor HAT ICM2098 chip
 
 //for timing
  int start, end, t;
-
-
 
 /* USER CODE END PV */
 
@@ -141,11 +137,11 @@ int main(void)
   char inputArray[] = {"13, 14, 15}"};
 
   //This displays the header which explains the formating of the data outputed.
-  uint8_t header2[81];
-  sprintf(header2, "\r\nAccel X (g),Accel Y (g),Accel Z (g),Gyro X (dps),Gyro Y (dps),Gyro Z (dps),Temp");
-  HAL_UART_Transmit(&huart2, header2, sizeof(header2), 1000);
+  uint8_t header[81];
+  sprintf(header, "\r\nAccel X (g),Accel Y (g),Accel Z (g),Gyro X (dps),Gyro Y (dps),Gyro Z (dps),Temp");
+  HAL_UART_Transmit(&huart2, header, sizeof(header), 1000);
 
-	 int run = 0;
+  int run = 0;
 
   /* USER CODE END 2 */
 
@@ -164,7 +160,7 @@ int main(void)
 		  end = HAL_GetTick();
 		  t = end-start;
 		  //memcpy(encryptedData, &encrypted, sizeof(encrypted)+1);
-	       int count = 0;
+	      int count = 0;
 		  while (count < compressedBits) {
 			  char temp[7];
 			  sprintf(temp, "\r\n%d, ",compressed[count]);
@@ -406,12 +402,7 @@ void encode(int encryptedData[], int encryptedBits)
             }
         }
     }
-
-    // WRITE compressed bits to FILE
-   // for (int jk=0;jk<compressedBits;jk++){
-   //     fprintf(outfile,"%d\n",compressed[jk]);
-   // }
-  /*  int count = 0;
+    /*int count = 0;
     while (count < compressedBits) {
 		char temp[4];
 		sprintf(temp, "%i, ",compressed[count]);
@@ -453,9 +444,6 @@ void encrypt(char msg[]) {
         //call compression
         encode(encryptedData, encryptedBits);
 }
-
-
-
 /* USER CODE END 4 */
 
 /**
