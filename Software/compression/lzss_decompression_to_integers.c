@@ -1,5 +1,5 @@
-/* 
- * This is a modified version of the original LZSS decoder (Haruhiko Okumura; public domain) 
+/*
+ * This is a modified version of the original LZSS decoder (Haruhiko Okumura; public domain)
  * Instead of taking in a file an array of values is used as input.
  * The decompressed data is then printed to a file.
  */
@@ -20,7 +20,91 @@ FILE *outfile;
 
 /*
 int inputComp[]={152,75,166,19,89,164,193,249,5,49,150,77,165,143,190,25,132,202,105,44,150,191,104,166,15,214,9,156,186,113,53,155,77,159,220,51,71,250,3,250,10,109,49,126,66,128,66,230,15,246,9,163,254,130,103,53,156,78,103,32,80,8};*/
-int inputComp[]={-115,81,44,114,-72,-42,-82,-57,43,-115,70};
+int inputComp[]={-58,
+80,
+105,
+118,
+10,
+92,
+106,
+-119,
+84,
+-79,
+-50,
+16,
+-122,
+-105,
+68,
+-43,
+-40,
+-44,
+-118,
+21,
+85,
+140,
+65,
+75,
+96,
+75,
+26,
+68,
+84,
+99,
+56,
+75,
+96,
+75,
+75,
+68,
+171,
+99,
+75,
+96,
+75,
+75,
+10,
+68,
+99,
+75,
+96,
+75,
+10,
+26,
+75,
+99,
+75,
+96,
+26,
+23,
+84,
+63,
+99,
+56,
+75,
+96,
+84,
+171,
+68,
+63,
+0,
+0,
+0,
+94,
+40,
+84,
+106,
+-106,
+-40,
+2624,
+-88,
+-67,
+82,
+126,
+-100,
+85,
+77,
+93,
+18};
 int lineNumber =0;
 int compDataArraySize = 13;
 
@@ -28,14 +112,14 @@ int getbit(int n) /* get n bits */
 {
     int i, x;
     static int buf, mask = 0;
-    
+
     x = 0;
     for (i = 0; i < n; i++) {
         if (mask == 0) {
             if (lineNumber>=compDataArraySize) break;
-            
+
             printf("%d; %d\n",lineNumber,inputComp[lineNumber]);
-            
+
             buf = inputComp[lineNumber];
             mask = 128;
             lineNumber++;
@@ -50,11 +134,11 @@ int getbit(int n) /* get n bits */
 void decode(void)
 {
     int i, j, k, r, c;
-    
+
     lineNumber=0;
-    
+
    //printf("SIZE: %d",compDataArraySize);
-    
+
     for (i = 0; i < N - F; i++) buffer[i] = ' ';
     r = N - F;
     while ((c = getbit(1)) != EOF) {
@@ -84,7 +168,7 @@ int main(int argc, char *argv[])
 {
     int denc;
     char *s;
-    
+
     if (argc != 3) {
         printf("Usage: lzss d outfile\n\td = decode\n");
         return 1;
