@@ -138,9 +138,7 @@ int main(void)
   MX_SPI2_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-
   icm20948_init();
- // ak09916_init();
 
   /* USER CODE END 2 */
 
@@ -155,12 +153,10 @@ int main(void)
 	icm20948_accel_read(&my_accel);
 	icm20948_gyro_read(&my_gyro);
 
-	//ak09916_mag_read(&my_mag);
-
 	// or unit conversion
 	icm20948_gyro_read_dps(&my_gyro);
 	icm20948_accel_read_g(&my_accel);
-	char temp[47];
+	char temp[40];
 	/*sprintf(temp, "\r\nAccel:x:%.4f y:%.4f z:%.4f",my_accel.x,my_accel.y,my_accel.z);
 	HAL_UART_Transmit(&huart2, temp, sizeof(temp), 1000);
 	memset(temp,0,sizeof(temp));
@@ -168,9 +164,17 @@ int main(void)
 	sprintf(temp, "\r\nGyro:x:%.4f y:%.4f z:%.4f",my_gyro.x,my_gyro.y,my_gyro.z);
 	HAL_UART_Transmit(&huart2, temp, sizeof(temp), 1000);
 	 */
-	sprintf(temp, "\r\n%.4f,%.4f,%.4f,%.4f,%.4f,%.4f",my_accel.x,my_accel.y,my_accel.z,my_gyro.x,my_gyro.y,my_gyro.z);
-	HAL_UART_Transmit(&huart2, temp, sizeof(temp), 1000);
-	HAL_Delay(1000);
+
+	sprintf(temp, "\r\n%.2f,%.2f,%.2f,%.2f,%.2f,%.2f",my_accel.x,my_accel.y,my_accel.z,my_gyro.x,my_gyro.y,my_gyro.z);
+	HAL_UART_Transmit(&huart2, (uint8_t*)temp, sizeof(temp), 1000);
+	//HAL_Delay(100); //wave propoation is usually 10Hz
+	/*
+	sprintf(temp, "\r\n%.2f,%.2f,%.2f",my_accel.x,my_accel.y,my_accel.z);
+	HAL_UART_Transmit(&huart2, (uint8_t*)temp, sizeof(temp), 1000);
+	*/
+	icm20948_sleep();
+	icm20948_wakeup();
+	//HAL_Delay(100); //wave propoation is usually 10Hz
 
   }
   /* USER CODE END 3 */
@@ -333,8 +337,20 @@ void icm20948_init()
 	icm20948_gyro_calibration();
 	icm20948_accel_calibration();
 
-	icm20948_gyro_full_scale_select(_2000dps);
-	icm20948_accel_full_scale_select(_2g);
+	/*
+	 * The following full scale select resolutions are chosen based on the intended application
+	 * of the IMU: for use on the SHARC ice buoy.
+	 *
+	 * More information can be found in the project documentation.
+	 */
+	icm20948_gyro_full_scale_select(_500dps); //chosen in line with application
+	icm20948_accel_full_scale_select(_2g); //chosen in line with application
+
+	/** Indicate that startup sequence is successful*/
+	char startUp[22];
+	sprintf(startUp, "\r\nICM20948 Intialised");
+	HAL_UART_Transmit(&huart2, (uint8_t*)startUp, sizeof(startUp), 1000);
+
 }
 
 void icm20948_gyro_read(axises* data)
@@ -502,7 +518,12 @@ void icm20948_gyro_calibration()
 	gyro_offset[4] = (-gyro_bias[2] / 4  >> 8) & 0xFF;
 	gyro_offset[5] = (-gyro_bias[2] / 4)       & 0xFF;
 
-	write_multiple_icm20948_reg(ub_2, B2_XG_OFFS_USRH, gyro_offset, 6);
+	write_single_icm20948_reg(ub_2, B2_XG_OFFS_USRH,  gyro_offset[0]);
+	write_single_icm20948_reg(ub_2, B2_XG_OFFS_USRL,  gyro_offset[1]);
+	write_single_icm20948_reg(ub_2, B2_YG_OFFS_USRH,  gyro_offset[2]);
+	write_single_icm20948_reg(ub_2, B2_YG_OFFS_USRL,  gyro_offset[3]);
+	write_single_icm20948_reg(ub_2, B2_ZG_OFFS_USRH,  gyro_offset[4]);
+	write_single_icm20948_reg(ub_2, B2_ZG_OFFS_USRL,  gyro_offset[5]);
 }
 
 void icm20948_accel_calibration()
@@ -558,9 +579,19 @@ void icm20948_accel_calibration()
 	accel_offset[5] = (accel_bias_reg[2])      & 0xFE;
 	accel_offset[5] = accel_offset[5] | mask_bit[2];
 
+	/*
 	write_multiple_icm20948_reg(ub_1, B1_XA_OFFS_H, &accel_offset[0], 2);
 	write_multiple_icm20948_reg(ub_1, B1_YA_OFFS_H, &accel_offset[2], 2);
 	write_multiple_icm20948_reg(ub_1, B1_ZA_OFFS_H, &accel_offset[4], 2);
+	*/
+
+	write_single_icm20948_reg(ub_1, B1_XA_OFFS_H,  accel_offset[0]);
+	write_single_icm20948_reg(ub_1, B1_XA_OFFS_L,  accel_offset[1]);
+	write_single_icm20948_reg(ub_1, B1_YA_OFFS_H,  accel_offset[2]);
+	write_single_icm20948_reg(ub_1, B1_YA_OFFS_L,  accel_offset[3]);
+	write_single_icm20948_reg(ub_1, B1_ZA_OFFS_H,  accel_offset[4]);
+	write_single_icm20948_reg(ub_1, B1_YA_OFFS_L,  accel_offset[5]);
+
 }
 
 void icm20948_gyro_full_scale_select(gyro_full_scale full_scale)
