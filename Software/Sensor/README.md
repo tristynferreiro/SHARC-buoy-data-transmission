@@ -5,7 +5,7 @@ The STM32F051-discovery board has two SPI connection groups. This project is set
 
 Following the current setup of the project, the follwing connections should be made:
 
-![Screenshot]()
+![Screenshot](https://github.com/tristynferreiro/SHARC_buoy_data_transmission/blob/main/Docs/Other/icm20948_interfacing.png)
 
 
 
