@@ -23,7 +23,7 @@ Then write the following to the terminal in order:
 2. ./decrypt_text
 
 ## How does it work?
-[The guide I followed](https://www.cs.utexas.edu/~mitra/honors/soln.html)
+[The guide followed](https://www.cs.utexas.edu/~mitra/honors/soln.html)
 
 1. **./rsa**
 
