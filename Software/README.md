@@ -9,10 +9,10 @@ This project can be opened using STM32CubesIDE and then flashed onto an STM32F0 
 ## combined/
 This contains all previous developed versions of the the combine algorithm code needed for testing. These were created throughout the development of the final solution and serve a different function.
 
-### SHARC_buoy_transmission_data
+### 1. SHARC_buoy_transmission_data
 The STM32CubeIDE project of the combined algorithms (without sensor interfacing, instead hard coded array data is compressed and encrypted). Can be flashed on to a STM32F051 compatible microcontroller.
 
-### combined_chars.c
+### 2. combined_chars.c
 This version of the program:
 - prints the compressed-encrypted data to a file as **characters**.
 - uses a hardcoded array of values as input.
@@ -22,7 +22,7 @@ This version of the program:
 $ gcc combined.c
 $ ./.aout e *nameOfOutfile*.
 
-### combined_dynamic_key.c
+### 3. combined_dynamic_key.c
 This version of the program:
 - prints the compressed-encrypted data to a file as **characters**.
 - uses a hardcoded array of values as input.
@@ -32,7 +32,7 @@ This version of the program:
 $ gcc combined_dynamic_key.c
 $ ./.aout e *nameOfOutfile*.
 
-### combined_integers.c
+### 4. combined_integers.c
 This version of the program:
 - prints the compressed-encrypted data to a file as **integers**.
 - uses a hardcoded array of values as input.
