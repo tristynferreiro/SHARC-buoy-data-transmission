@@ -1,4 +1,4 @@
-# encryption #
+# Encryption #
 This contains both ChaCha20Poly1305 and RSA code. ChaCha20Poly1305 was the original algorithm chosen in the paper design, however the system was updated to utilize RSA for encryption in the first progress report. 
 
 ## RSA #
