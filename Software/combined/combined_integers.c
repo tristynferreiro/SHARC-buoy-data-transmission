@@ -1,10 +1,16 @@
-/*
- * This program takes in a file, encrypts it using RSA encryption passes it to the compression algorithm which compresses it using lzss compression and then
- * prints the result to a file.
- *
- * This uses fixed key encryption.
- */
+/**
+**************************************************
+Info:		encryption (RSA) and compresstion (lzss)
+Author:		Tristyn Ferreiro and Shameera Cassim
+****************************************************
+This code compresses and encrypts data in a hard coded array and prints the result 
+to a file (as INTEGER VALUES). The encryption uses a FIXED KEY.
 
+The compression algorithm uses a modified version of (Haruhiko Okumura; public domain)'s 
+lzss encoder. Encryption is based off of AES encryption. Modifications to both of these 
+algorithms have been made to suite the desing requirements of this project.
+******************************************************************************
+*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -18,30 +24,29 @@
 #define N (1 << EI)  /* buffer size */
 #define F ((1 << EJ) + 1)  /* lookahead buffer size */
 
+int bit_buffer = 0, bit_mask = 128;
+
+
 //For encryption:
 #define MAX_VALUE 32
 #define E_VALUE 3 /*65535*/
 
-//For compression:
-int bit_buffer = 0, bit_mask = 128;
+char inputData [20];
 
-//For encryption:
- char inputData [20];
-
- int encryptedData[20];
- int encryptedBits = 0;
- int e = E_VALUE;
+int encryptedData[20];
+int encryptedBits = 0;
+int e = E_VALUE;
 int n = 187;
 int d = 107;
 int p = 11;
 int q = 17;
 
 /**
- * This array stores the encoded bit_buffers of all the data. The size needs to be chosen based on the number of bits of data.
- * For the STM32F0 implementation, the size will need to be determine based on available space on the STM. This will likely be
- * through trial and error
+ * This array stores the encoded bit_buffers of all the data. The size needs to be chosen based on the 
+ * number of bits of data. For the STM32F0 implementation, the size will need to be determine based on 
+ * available space on the STM. This will likely be through trial and error.
  */
-char compressed[200]; // needs to be atleast the size of the input data (minimum). this size should be the limit of data stored at any one time
+char compressed[200]; // should be at leas half the size of the inout data.
 int compressedBits =0;
 
 FILE *outfile;
@@ -51,7 +56,7 @@ FILE *outfile;
  ***************/
 
 /**
- * This method has been added to store the compression encoded bits in one array for printing/transmission.
+ * This method has been added to store the compression bits in one array for printing/transmission.
  */
 void store(int bitbuffer){
     compressed[compressedBits]=bitbuffer;
@@ -113,7 +118,7 @@ void output2(int x, int y)
     }
 }
 
-void encode(void)
+void compress(void)
 {
     int i, j, f1, x, y, r, s, bufferend, c;
     int counter = 0;
@@ -194,7 +199,7 @@ void encrypt(char msg[]) {
     }
     */
     //Call compression
-    encode();
+    compress();
 }
 
 

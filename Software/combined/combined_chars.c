@@ -1,9 +1,16 @@
-/*
- * This program takes in a file, encrypts it using RSA encryption passes it to the compression algorithm which compresses it using lzss compression and then
- * prints the result to a file of characters.
- *
- * This uses fixed key encryption.
- */
+/**
+**************************************************
+Info:		encryption (RSA) and compresstion (lzss)
+Author:		Tristyn Ferreiro and Shameera Cassim
+****************************************************
+This code compresses and encrypts data in a hard coded array and prints the result 
+to a file (as CHARACTERS). The encryption uses a FIXED KEY.
+
+The compression algorithm uses a modified version of (Haruhiko Okumura; public domain)'s 
+lzss encoder. Encryption is based off of AES encryption. Modifications to both of these 
+algorithms have been made to suite the desing requirements of this project.
+******************************************************************************
+*/
 
 
 #include <stdio.h>
@@ -27,7 +34,6 @@
 int bit_buffer = 0, bit_mask = 128;
 unsigned long codecount = 0, textcount = 0;
 unsigned char buffer[N * 2];
-//uint64_t buffer[N * 2];
 
 //For encryption:
 int e = E_VALUE;

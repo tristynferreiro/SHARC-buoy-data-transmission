@@ -1,8 +1,16 @@
-/*
- * This program takes in a file, encrypts it using RSA encryption passes it to the compression algorithm which compresses it using lzss compression and then 
- * prints the result to a file.
- */
+/**
+**************************************************
+Info:		encryption (RSA) and compresstion (lzss)
+Author:		Tristyn Ferreiro and Shameera Cassim
+****************************************************
+This code compresses and encrypts data in a hard coded array and prints the result 
+to a file (as CHARACTERS). The encryption uses a DYNAMIC KEY.
 
+The compression algorithm uses a modified version of (Haruhiko Okumura; public domain)'s 
+lzss encoder. Encryption is based off of AES encryption. Modifications to both of these 
+algorithms have been made to suite the desing requirements of this project.
+******************************************************************************
+*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -17,21 +25,18 @@
 #define N (1 << EI)  /* buffer size */
 #define F ((1 << EJ) + 1)  /* lookahead buffer size */
 
+int bit_buffer = 0, bit_mask = 128;
+unsigned long codecount = 0, textcount = 0;
+unsigned char buffer[N * 2];
+
 //For encryption:
 #define MAX_VALUE 65535
 #define E_VALUE 3 /*65535*/
 
-//For compression:
-int bit_buffer = 0, bit_mask = 128;
-unsigned long codecount = 0, textcount = 0;
-unsigned char buffer[N * 2];
-//uint64_t buffer[N * 2];
-
-//For encryption:
 uint16_t e = E_VALUE, p, q;
 uint32_t n, phi, d;
 
-FILE *infile, *outfile;
+FILE *outfile;
 /** 
  * This array stores the encoded bit_buffers of all the data. The size needs to be chosen based on the number of bits of data.
  * For the STM32F0 implementation, the size will need to be determine based on available space on the STM. This will likely be 
@@ -54,7 +59,7 @@ void error(void)
 }
 
 /**
- * This method has been added to store the compression encoded bits in an array that will be passed to the encryption algorithm.
+ * This method has been added to store the compression bits in an array that will be passed to the encryption algorithm.
  */
 void store(int bitbuffer){
     compressed[compressedBits]=bitbuffer;
@@ -115,7 +120,7 @@ void output2(int x, int y)
     }
 }
 
-void encode(void) // should be modified to take in value
+void compress(void) // should be modified to take in value
 {
     //printf("enc Data = %s\n", encryptedData);
     
@@ -294,7 +299,7 @@ void encrypt2(char msg[]) {
     }
     
     //Call compression
-    encode();
+    compress();
 
 }
 
@@ -308,7 +313,7 @@ int main(int argc, char *argv[])
     char input[] = "0.054000001,6,0.0024,-0.0006,3.856600046,-0.061000001,-0.061000001,0,34.83589935\n0.066,7,0.0048,-0.003,4.239200115,0,-0.061000001,0,34.84180069\n0.07,8,0.0048,-0.003,4.239200115,0,-0.061000001,0,34.84180069\n0.082999997,9,0.0006,-0.006,4.485300064,0,-0.061000001,0,34.83589935\n0.085000001,10,0.0006,-0.006,4.485300064,0,-0.061000001,0,34.83589935\n0.101999998,11,-0.0006,-0.0048,4.633200169,-0.061000001,-0.061000001,0,34.81240082\n0.109999999,12,0,-0.0042,4.732600212,-0.061000001,-0.061000001,0,34.82410049\n0.112999998,13,0,-0.0042,4.732600212,-0.061000001,-0.061000001,0,34.82410049\n0.131999999,14,0.003,-0.003,4.794199944,0,-0.061000001,0,34.83000183\n0.140000001,15,-0.0006,-0.003,4.829599857,-0.061000001,-0.061000001,0,34.83000183\n0.143999994,16,-0.0006,-0.003,4.829599857,-0.061000001,-0.061000001,0,34.83000183\n0.156000003,17,-0.0006,-0.003,4.829599857,-0.061000001,-0.061000001,0,34.83000183\n0.164000005,18,0,-0.006,4.858300209,-0.061000001,-0.061000001,0,34.81240082\n0.172999993,19,-0.003,-0.0054,4.869699955,-0.061000001,-0.061000001,0,34.81240082}";
     
     if (argc != 3) {
-        printf("Usage: combined e/d outfile\n\te = encode\n");
+        printf("Usage: combined e/d outfile\n\te = encrypt and compress\n");
         return 1;
     }
     s = argv[1];
@@ -323,6 +328,6 @@ int main(int argc, char *argv[])
         printf("? %s\n", argv[2]);  return 1;
     }
     if (enc) {encrypt2(input);}
-    fclose(infile);  fclose(outfile);
+    fclose(outfile);
     return 0;
 }
