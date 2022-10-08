@@ -11,7 +11,7 @@ This version of the program:
 - uses a **static** encryption key.
 
 ### running:
-$ gcc combined.c
+$ gcc combined_chars.c <br />
 $ ./.aout e *nameOfOutfile*.
 
 ## combined_dynamic_key.c
@@ -21,7 +21,7 @@ This version of the program:
 - uses a **dynamic** encryption key.
 
 #### running:
-$ gcc combined_dynamic_key.c
+$ gcc combined_dynamic_key.c <br />
 $ ./.aout e *nameOfOutfile*.
 
 ## combined_integers.c
@@ -31,5 +31,5 @@ This version of the program:
 - uses a **static** encryption key.
 
 #### running:
-$ gcc combined_integers.c
+$ gcc combined_integers.c <br />
 $ ./.aout e *nameOfOutfile*.
