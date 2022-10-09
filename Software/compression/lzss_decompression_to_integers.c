@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define EI 5  /* typically 10..13 */
+#define EI 6  /* typically 10..13 */
 #define EJ  5  /* typically 4..5 */
 #define P   1  /* If match length <= P then output one character */
 #define N (1 << EI)  /* buffer size */
@@ -18,95 +18,79 @@ int buffer[N * 2];
 
 FILE *outfile;
 
-/*
-int inputComp[]={152,75,166,19,89,164,193,249,5,49,150,77,165,143,190,25,132,202,105,44,150,191,104,166,15,214,9,156,186,113,53,155,77,159,220,51,71,250,3,250,10,109,49,126,66,128,66,230,15,246,9,163,254,130,103,53,156,78,103,32,80,8};*/
-int inputComp[]={-58,
-80,
-105,
-118,
+int inputComp[]={-100,
+82,
+-20,
+21,
+72,
+-67,
+-116,
+-8,
+99,
+49,
+-85,
+26,
+96,
+81,
+42,
+-106,
+58,
+-91,
+-125,
+87,
+-124,
+72,
+8,
+-67,
+-125,
+9,
+25,
+-79,
+-58,
+-93,
+86,
 10,
 92,
 106,
--119,
-84,
--79,
--50,
-16,
--122,
--105,
-68,
--43,
--40,
--44,
--118,
-21,
-85,
-140,
+-87,
 65,
-75,
-96,
-75,
+74,
 26,
-68,
-84,
-99,
-56,
-75,
-96,
-75,
-75,
-68,
-171,
-99,
-75,
-96,
-75,
-75,
-10,
-68,
-99,
-75,
-96,
-75,
-10,
-26,
-75,
-99,
-75,
-96,
-26,
-23,
-84,
-63,
-99,
-56,
-75,
-96,
-84,
-171,
-68,
-63,
-0,
-0,
-0,
-94,
-40,
-84,
-106,
--106,
--40,
-2624,
--88,
--67,
-82,
-126,
--100,
-85,
-77,
+-92,
 93,
-18};
+-96,
+1,
+-126,
+51,
+26,
+-79,
+-119,
+5,
+18,
+-87,
+99,
+-86,
+88,
+53,
+120,
+64,
+-32,
+-117,
+-40,
+48,
+-111,
+-101,
+28,
+106,
+53,
+96,
+-91,
+-58,
+-86,
+-112};
+
+int compDataArraySize = 70;
 int lineNumber =0;
-int compDataArraySize = 13;
 
 int getbit(int n) /* get n bits */
 {
@@ -117,9 +101,8 @@ int getbit(int n) /* get n bits */
     for (i = 0; i < n; i++) {
         if (mask == 0) {
             if (lineNumber>=compDataArraySize) break;
-
-            printf("%d; %d\n",lineNumber,inputComp[lineNumber]);
-
+            
+            //printf("%d; %d\n",lineNumber,inputComp[lineNumber]);
             buf = inputComp[lineNumber];
             mask = 128;
             lineNumber++;
@@ -131,12 +114,13 @@ int getbit(int n) /* get n bits */
     return x;
 }
 
-void decode(void)
+void decompress()
 {
     int i, j, k, r, c;
 
     lineNumber=0;
 
+    //fileToArray();
    //printf("SIZE: %d",compDataArraySize);
 
     for (i = 0; i < N - F; i++) buffer[i] = ' ';
@@ -145,7 +129,7 @@ void decode(void)
         if (c) {
             if (lineNumber >= compDataArraySize) break;
             c=getbit(8);
-            printf("+%d\n",c);
+            //printf("+%d\n",c);
             fprintf(outfile, "%d\n",c);
             //fputc(c, outfile);
             buffer[r++] = c;  r &= (N - 1);
@@ -155,8 +139,8 @@ void decode(void)
             if (lineNumber>=compDataArraySize) break;
             for (k = 0; k <= j + 1; k++) {
                 c = buffer[(i + k) & (N - 1)];
-                printf("=%d\n",c);
-                fprintf(outfile, "%ld\n",c);
+                //printf("=%d\n",c);
+                fprintf(outfile, "%d\n",c);
                 //fputc(c, outfile);
                 buffer[r++] = c;  r &= (N - 1);
             }
@@ -170,7 +154,7 @@ int main(int argc, char *argv[])
     char *s;
 
     if (argc != 3) {
-        printf("Usage: lzss d outfile\n\td = decode\n");
+        printf("Usage: lzss d arrSize outfile\n\td = decode\n");
         return 1;
     }
     s = argv[1];
@@ -179,10 +163,14 @@ int main(int argc, char *argv[])
     else {
         printf("? %s\n", s);  return 1;
     }
+    
     if ((outfile = fopen(argv[2], "wb")) == NULL) {
         printf("? %s\n", argv[2]);  return 1;
     }
-    if (denc) decode();
-    fclose(outfile);
+    
+    
+    if (denc) decompress();
+    fclose(outfile); 
     return 0;
 }
+

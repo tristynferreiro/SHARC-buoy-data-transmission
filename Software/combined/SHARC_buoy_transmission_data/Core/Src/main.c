@@ -131,7 +131,7 @@ int main(void)
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
 
-  char inputArray[] = {"13, 14, 15}"}; // sample array used for testing the encryption and compression system
+  char inputArray[] = {"-028,-0.51,0.32,2.47,-8.75,11.012}"}; // sample array used for testing the encryption and compression system
 
   //This displays the header which explains the formating of the data outputed.
   uint8_t header[81];

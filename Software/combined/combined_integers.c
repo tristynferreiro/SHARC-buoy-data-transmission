@@ -31,9 +31,9 @@ int bit_buffer = 0, bit_mask = 128;
 #define MAX_VALUE 32
 #define E_VALUE 3 /*65535*/
 
-char inputData [20];
+char inputData [120];
 
-int encryptedData[20];
+int encryptedData[40];
 int encryptedBits = 0;
 int e = E_VALUE;
 int n = 187;
@@ -126,7 +126,7 @@ void compress(void)
     
     for (i = 0; i < N - F; i++) buffer[i] = ' ';
     for (i = N - F; i < N * 2; i++) {
-        if (counter >= encryptedBits) break;
+        if (counter > encryptedBits) break;
         c = encryptedData[counter];
         buffer[i] = c;  counter++;
         printf("HERE2: %d\n",buffer[i]);
@@ -151,7 +151,7 @@ void compress(void)
             for (i = 0; i < N; i++) buffer[i] = buffer[i + N];
             bufferend -= N;  r -= N;  s -= N;
             while (bufferend < N * 2) {
-                if (counter >= encryptedBits) break;
+                if (counter > encryptedBits) break;
                 c = encryptedData[counter];
                 buffer[bufferend++] = c;  counter++;
             }
@@ -160,7 +160,7 @@ void compress(void)
 
     // WRITE compressed bits to FILE
     for (int jk=0;jk<compressedBits;jk++){
-        fprintf(outfile,"%d\n",compressed[jk]);
+        fprintf(outfile,"%d,\n",compressed[jk]);
     }
     
 }
@@ -198,6 +198,7 @@ void encrypt(char msg[]) {
         printf("%d\n",encryptedData[i]);
     }
     */
+    printf("BITS:%d",encryptedBits);
     //Call compression
     compress();
 }
@@ -210,7 +211,7 @@ int main(int argc, char *argv[])
     int dec;
     char *s;
 
-    char input[] = {"0.0007,-0.0122,0.0051,-0.3659,-0.0610,-0.3049}"};
+    char input[] = {"-0.28,-0.51,0.32,2.47,-8.75,11.012\n-0.28,-0.51,0.32,2.47,-8.75,11.012}"};
     if (argc != 3) {
         printf("Usage: combined e outfile\n\te = encrypt and compress\n");
         return 1;
