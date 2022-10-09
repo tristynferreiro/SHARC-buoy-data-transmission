@@ -16,10 +16,6 @@ lzss encoder.
 Encryption is based off of AES encryption.
 
 In future versions, the data will be read from the sensor HAT ICM2098 chip.
-
-IMPORTANT NOTE: When increasing the data to compress and encrypt, the compression
-				and encryption array sizes also need to be increased. Otherwise
-				the program will crash/not run.
   ******************************************************************************
   */
 /* USER CODE END Header */
@@ -67,7 +63,7 @@ IMPORTANT NOTE: When increasing the data to compress and encrypt, the compressio
 int bit_buffer = 0, bit_mask = 128;
 int buffer[N * 2];
 
-int compressed[80]; // should be at least half size of original data.
+int compressed[100]; // should be at least half size of original data.
 int compressedBits =0; //used to keep track of number of bits for transmission.
 
 /* FOR ENCRYPTION */
@@ -77,7 +73,7 @@ int d = 107;
 int p = 11;
 int q = 17;
 int encryptedBits = 0;
-int encryptedData[80];
+int encryptedData[100];
 
 //for timing
 int start, end, t;
@@ -136,11 +132,11 @@ int main(void)
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
 
-  char inputArray[] = {"-0.28,-0.51,0.32,2.47,-8.75,11.012\n-0.28,-0.51,0.32,2.47,-8.75,11.012}"}; // sample array used for testing the encryption and compression system
+  char inputArray[] = {"-0.0002,-0.0007,0.0010,-15.6098,0.0000,-0.1220}"}; // sample array used for testing the encryption and compression system
 
   //This displays the header which explains the formating of the data outputed.
-  uint8_t header[82];
-  sprintf(header, "\r\nAccel X (g),Accel Y (g),Accel Z (g),Gyro X (dps),Gyro Y (dps),Gyro Z (dps)\r\n");
+  uint8_t header[77];
+  sprintf((char*)header, "\r\nAccel X (g),Accel Y (g),Accel Z (g),Gyro X (dps),Gyro Y (dps),Gyro Z (dps)");
   HAL_UART_Transmit(&huart2, header, sizeof(header), 1000);
 
   int run = 0;
@@ -163,9 +159,9 @@ int main(void)
 	      int count = 0;
           /* Transmit compressed data */
 		  while (count < compressedBits) {
-			  char temp [5];
-			  sprintf(temp, "%d,",compressed[count]);
-			  HAL_UART_Transmit(&huart2, temp, sizeof(temp), 1000);
+			  char temp [7];
+			  sprintf(temp, "\r\n%d,",compressed[count]);
+			  HAL_UART_Transmit(&huart2, (uint8_t*)temp, sizeof(temp), 1000);
 			  count++;
 		  }
 		  //char time_buf[22];

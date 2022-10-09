@@ -5,7 +5,7 @@
 
 f = open("transmission.txt", "r")
 
-substring = ', ,'
+substring = ","
 output = ""
 elements = 0
 
@@ -13,10 +13,8 @@ for x in f:
     if('Accel' in x or 'IMU' in x):     # ignore the header and IMU initialisation.
         continue;
     elif(substring in x):               # if the substring exists in the line
-        index = x.find(substring)       
+        index = x.find(substring)
         output+=x[:index+1]             # remove the substring
-    else:
-        output+=x[0:-1]                 # remove newlines
     elements = elements+1               # increment array size 
 
 output = output[:-1]                    # remove trailing , delimiter
