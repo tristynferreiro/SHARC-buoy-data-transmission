@@ -1,3 +1,8 @@
+"""
+    This script is used for cleaning the serial data received from the stm32f0 before decompression and 
+    decryption.
+"""
+
 f = open("transmission.txt", "r")
 
 substring = ', ,'
