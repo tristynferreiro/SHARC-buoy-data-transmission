@@ -6,7 +6,7 @@ This project can be opened using STM32CubesIDE and then flashed onto an STM32F0 
 
 <u>Note:</u> the project specifically uses SPI, however the IMU is I2C compatible.
 
-## combined
+## combined/
 This contains all previous developed versions of the the combined algorithm code needed for testing. These versions were created throughout the development of the final solution and serve a different function.
 
 The diffrent versions are:
@@ -15,16 +15,16 @@ The diffrent versions are:
 - combined_dynamic_key.c
 - combined_integers.c
 
-## compression
+## compression/
 This folder contains all previous developed versions of the the compression algorithm needed for testing. These versions were created throughout the development of the final solution and serve different functions.<br /><br />
 
 A version lzss compression was used in the solution of this project. 
 
-## encryption
+## encryption/
 This folder contains all previous developed versions of the the encryption algorithm needed for testing. These versions were created throughout the development of the final solution and serve different functions. <br /><br />
 
 RSA encryption was used in the solution of this project. 
 
-## sensor
+## sensor/
 This is the contains the stm32CubeIDE project used to interface with the SparkFun 9Dof Breakout board's ICM20948. The project is based on [this gitHub repo](https://github.com/mokhwasomssi/stm32_hal_icm20948) but some functions and interfaces were changed for use in this project. The project is also setup for use on an stm32f4 so adaptations needed to be made. Only the [icm20948.h](https://github.com/mokhwasomssi/stm32_hal_icm20948/blob/master/icm20948.h) file and some methods from [icm20948.c](https://github.com/mokhwasomssi/stm32_hal_icm20948/blob/master/icm20948.h) were copied across and changed for use in the new project. 
 
