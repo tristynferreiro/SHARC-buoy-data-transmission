@@ -4,6 +4,8 @@ This folder contains all previous developed versions of the the combined algorit
 ## SHARC_buoy_transmission_data
 The STM32CubeIDE project of the combined algorithms (without sensor interfacing, instead hard coded array data is compressed and encrypted). Can be flashed on to a STM32F051 compatible microcontroller.
 
+**Note:** When increasing the data to compress and encrypt, the compression and encryption array sizes also need to be increased. Otherwise thr program will crash/not run correctly.
+
 ## combined_chars.c
 This version of the program:
 - prints the compressed-encrypted data to a file as **characters**.
