@@ -26,6 +26,7 @@ In future versions, the data will be read from the sensor HAT ICM2098 chip.
 /* USER CODE BEGIN Includes */
 #include "stdio.h"
 #include "stdlib.h"
+#include "math.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -62,7 +63,7 @@ In future versions, the data will be read from the sensor HAT ICM2098 chip.
 int bit_buffer = 0, bit_mask = 128;
 int buffer[N * 2];
 
-int compressed[20]; // should be at least half size of original data.
+int compressed[40]; // should be at least half size of original data.
 int compressedBits =0; //used to keep track of number of bits for transmission.
 
 /* FOR ENCRYPTION */
@@ -72,7 +73,7 @@ int d = 107;
 int p = 11;
 int q = 17;
 int encryptedBits = 0;
-int encryptedData[20];
+int encryptedData[40];
 
 //for timing
 int start, end, t;
@@ -131,7 +132,7 @@ int main(void)
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
 
-  char inputArray[] = {"-028,-0.51,0.32,2.47,-8.75,11.012}"}; // sample array used for testing the encryption and compression system
+  char inputArray[] = {"-0.28,-0.51,0.32,2.47,-8.75,11.012}"}; // sample array used for testing the encryption and compression system
 
   //This displays the header which explains the formating of the data outputed.
   uint8_t header[81];
@@ -158,8 +159,9 @@ int main(void)
 	      int count = 0;
           /* Transmit compressed data */
 		  while (count < compressedBits) {
-			  char temp[7];
-			  sprintf(temp, "\r\n%d, ",compressed[count]);
+			  char temp[5];
+			  sprintf(temp, "%d,",compressed[count]);
+			  //sprintf(temp, "\r\n%d: %d, ",count,compressed[count]);
 			  HAL_UART_Transmit(&huart2, temp, sizeof(temp), 1000);
 			  count++;
 		  }
