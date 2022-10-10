@@ -23,12 +23,17 @@ This folder contains all previous developed versions of the the compression algo
 A version lzss compression was used in the solution of this project. 
 
 ## encryption/
-This folder contains all previous developed versions of the the encryption algorithm needed for testing. These versions were created throughout the development of the final solution and serve different functions. <br /><br />
-
+This folder contains all previous developed versions of the the encryption algorithm needed for testing. These versions were created throughout the development of the final solution and serve different functions. <br />
 RSA encryption was used in the solution of this project. 
 
 ## sensor/
-This is the contains the stm32CubeIDE project used to interface with the SparkFun 9Dof Breakout board's ICM20948. The project is based on [this gitHub repo](https://github.com/mokhwasomssi/stm32_hal_icm20948) but some functions and interfaces were changed for use in this project. The project is also setup for use on an stm32f4 so adaptations needed to be made. Only the [icm20948.h](https://github.com/mokhwasomssi/stm32_hal_icm20948/blob/master/icm20948.h) file and some methods from [icm20948.c](https://github.com/mokhwasomssi/stm32_hal_icm20948/blob/master/icm20948.h) were copied across and changed for use in the new project. 
+This contains the stm32CubeIDE project used to interface with the SparkFun 9Dof Breakout board's ICM20948. The project is based on [this gitHub repo](https://github.com/mokhwasomssi/stm32_hal_icm20948) but some functions and interfaces were changed for use in this project. That repo project is also setup for use on an stm32f4 so adaptations needed to be made for use in this project. Only the [icm20948.h](https://github.com/mokhwasomssi/stm32_hal_icm20948/blob/master/icm20948.h) file and some methods from [icm20948.c](https://github.com/mokhwasomssi/stm32_hal_icm20948/blob/master/icm20948.h) were copied across and changed for use in the new project. 
+
+## Scripts/
+Contains all scripts used for gathering the data trasmitted from the stm32f0.
+-serialReceive.py
+-verify.py
+-FFTCompareScript.m
 
 # Common Bug fixes
 ### I changed the stm32 projects' input data and the program no longer runs

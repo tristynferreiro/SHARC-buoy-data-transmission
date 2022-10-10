@@ -185,11 +185,11 @@ int main(void)
   sprintf((char*)header, "\r\nAccel X (g),Accel Y (g),Accel Z (g),Gyro X (dps),Gyro Y (dps),Gyro Z (dps)");
   HAL_UART_Transmit(&huart2, header, sizeof(header), 1000);
 
-  int numReadings = 2; // number of sensor readings you want to take
+  int numReadings = 3; // number of sensor readings you want to take
   int numDataRecordings =0;
   int run = 0; // whether or not to run encrypt&compress
 
-  char inputArray[75] =""; // size = numReadings * 50+1
+  char inputArray[112] =""; // size = numReadings * 37+1
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -227,10 +227,8 @@ int main(void)
 		}
 		numDataRecordings++;
 	}
-	//strcat(input,"}");
-	//HAL_UART_Transmit(&huart2, (uint8_t*)input, sizeof(input), 1000);
-	//HAL_Delay(1000);
 
+	/* Run compression and encryption */
 	if (run ==1) {
 		char start[4];
 		sprintf(start, "\r\n#");

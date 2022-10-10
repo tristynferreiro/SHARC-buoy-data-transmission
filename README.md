@@ -17,11 +17,5 @@ Contains all the source code used in this project. For both the compression and 
 
 All folders contain READMEs explaining how to compile and run the files.
 
-## Scripts/
-Contains all scripts used throughout the development of this project:
--serialReceive.py
--verify.py
--FFTCompareScript.m
-
 ## Testing/
-Contains all the test data recorded and used throughout the design of the system.
+Contains all the test data recorded and used throughout the design of the system. The testing python scripts can also be found here.
