@@ -78,7 +78,7 @@ int numRecordings =0; // this keeps track of the number of recordings.
 
 int bit_buffer = 0, bit_mask = 128;
 int buffer[N * 2];
-int compressed[150]; // size of data to compress at one time
+int compressed[150]; // size of data to compress at one time (should be at least the size of encryption array)
 int compressedBits =0; //keep track of compressed bits for transmission
 
 // ENCRYPTION VARIABLES
@@ -114,9 +114,6 @@ void icm20948_accel_low_pass_filter(uint8_t config);
 void icm20948_gyro_low_pass_filter(uint8_t config);
 void icm20948_odr_align_enable();
 void icm20948_clock_source(uint8_t source);
-//void icm20948_i2c_master_clk_frq(uint8_t config);
-//void icm20948_i2c_master_enable();
-//void icm20948_i2c_master_reset();
 void icm20948_spi_slave_enable();
 void icm20948_sleep();
 void icm20948_wakeup();
@@ -201,19 +198,9 @@ int main(void)
 	icm20948_accel_read(&my_accel);
 	icm20948_gyro_read(&my_gyro);
 
-	//ak09916_mag_read(&my_mag);
-
 	// or unit conversion
 	icm20948_gyro_read_dps(&my_gyro);
 	icm20948_accel_read_g(&my_accel);
-
-	/*sprintf(temp, "\r\nAccel:x:%.4f y:%.4f z:%.4f",my_accel.x,my_accel.y,my_accel.z);
-	HAL_UART_Transmit(&huart2, temp, sizeof(temp), 1000);
-	memset(temp,0,sizeof(temp));
-
-	sprintf(temp, "\r\nGyro:x:%.4f y:%.4f z:%.4f",my_gyro.x,my_gyro.y,my_gyro.z);
-	HAL_UART_Transmit(&huart2, temp, sizeof(temp), 1000);
-	 */
 
 	if (run ==0) {
 		char input[50];
@@ -221,10 +208,19 @@ int main(void)
 		HAL_UART_Transmit(&huart2, (uint8_t*)input, sizeof(input), 1000);
 		HAL_Delay(1000);
 
+		char start[3];
+		sprintf(start, "\r\n#");
+		HAL_UART_Transmit(&huart2, (uint8_t*)start, sizeof(start), 1000);
+
 		encrypt(input);
 		int count = 0;
 		while (count < compressedBits) {
 			char temp [7];
+			/*
+			 * note that the numbers are of different lengths and so this causes extra blank space in the formatting
+			 * which the transmission will fill with random characters. Make sure to used clean.py or adapt it to remove
+			 * the unwanted characters.
+			 */
 			sprintf(temp, "\r\n%d,",compressed[count]);
 			HAL_UART_Transmit(&huart2, (uint8_t*)temp, sizeof(temp), 1000);
 			count++;
