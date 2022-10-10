@@ -13,9 +13,9 @@ def clean_transmittedCompressioData(fileLines,startCharIndex, numLines):
     elements = 0
 
     # removes unwanted newlines and blank spaces caused by transmission formatting
-    for x in range(startCharIndex,numLines-1): 
+    for x in range(startCharIndex+1,numLines): 
         index = fileLines[x].find(substring)    # if the substring exists in the line
-        cleaned += fileLines[x][:index+1]         # remove the substring       
+        cleaned+=fileLines[x][:index+1]         # remove the substring       
         elements = elements+1
     return cleaned[:-1], elements               # remove trailing , delimiter               
     
@@ -27,29 +27,44 @@ def clean_sensorData(sensorData):
     return cleanedSensorData
 
 def main():
-    numLines=1                      # number lines in file
+    numLines=0                      # number lines in file
     fileLines = []                  # lines in file
 
     originalSensorData = []
     cleanedSensorData = []          # real sensor data
 
-    startCharIndex = -1             # START sequence line number
-    cleanedCompressedData = ""      # real compressed bits
-    elements = 0                    # number of compressed bits
+    startCharIndex = []             # START sequence line number
+    cleanedCompressedData = []      # real compressed bits
+    elements = []                   # number of compressed bits
     
     f = open("transmission.txt", "r")
     # Read in lines
     for line in f:
         fileLines.append(line)
-        if(';' in line): #each data value 
+        if('}' in line):
             originalSensorData.append(line)
         if('#' in line):
-            startCharIndex=numLines
+            startCharIndex.append(numLines)
+            #if(startCharIndex == -1):
+              #  startCharIndex=numLines
+             #   continue;
         numLines = numLines+1
 
     f.close()
     cleanedSensorData = clean_sensorData(originalSensorData)
-    cleanedCompressedData, elements = clean_transmittedCompressioData(fileLines, startCharIndex,numLines)
+
+    for i in range(0,len(startCharIndex)):
+        if(i+1>=len(startCharIndex)):
+            cleaned, el = clean_transmittedCompressioData(fileLines, startCharIndex[i],numLines)
+            cleanedCompressedData.append(cleaned)
+            elements.append(el)
+            startCharIndex=numLines
+            break;
+        cleaned, el = clean_transmittedCompressioData(fileLines, startCharIndex[i],startCharIndex[i+1])
+        cleanedCompressedData.append(cleaned)
+        elements.append(el)
+        startCharIndex=numLines
+    #cleanedCompressedData, elements = clean_transmittedCompressioData(fileLines, startCharIndex,numLines)
 
     print(cleanedSensorData)
     print(cleanedCompressedData)

@@ -1,28 +1,28 @@
 /* USER CODE BEGIN Header */
 /**
-  ******************************************************************************
-  * @file           : main.c
-  * @brief          : Main program body
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2022 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
+  *************************************
+Info:		SHARC buoy compression and encryption
+Author:		Tristyn Ferreiro and Shameera Cassim
+*************************************
+This code compresses and encrypts data on the stm32.
 
-/*
-* icm20948.c
-*
-*  Created on: Dec 26, 2020
-*      Author: mokhwasomssi
+Code is also provided to send data from the STM32 to other devices using HAL's
+UART protocol. You will need a serial port reader on your PC to receive the data.
+
+The output data is compressed-encrypted data.
+
+The compression algorithm uses a modified version of (Haruhiko Okumura; public domain)'s
+lzss encoder.
+Encryption is based off of AES encryption.
+The icm20948.h and other methods are adapted from mokhwasomssi's github
+
+In future versions, the data will be read from the sensor HAT ICM2098 chip.
+
+NOTE: When increasing the input data, the input data, compression and encryption
+      array sizes also need to be increased. Otherwise the program will crash/not
+      run correctly.
+******************************************************************************
 */
-
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
@@ -33,6 +33,7 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "math.h"
+#include "string.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -78,7 +79,7 @@ int numRecordings =0; // this keeps track of the number of recordings.
 
 int bit_buffer = 0, bit_mask = 128;
 int buffer[N * 2];
-int compressed[150]; // size of data to compress at one time (should be at least the size of encryption array)
+int compressed[300]; // size of data to compress at one time (should be at least the size of encryption array)
 int compressedBits =0; //keep track of compressed bits for transmission
 
 // ENCRYPTION VARIABLES
@@ -87,7 +88,7 @@ int n = 187;
 int d = 107;
 int p = 11;
 int q = 17;
-int encryptedData[150]; // passed to compression
+int encryptedData[300]; // passed to compression
 int encryptedBits = 0; // needed for use in compression
 
 /* USER CODE END PV */
@@ -184,7 +185,11 @@ int main(void)
   sprintf((char*)header, "\r\nAccel X (g),Accel Y (g),Accel Z (g),Gyro X (dps),Gyro Y (dps),Gyro Z (dps)");
   HAL_UART_Transmit(&huart2, header, sizeof(header), 1000);
 
-  int run = 0;
+  int numReadings = 2; // number of sensor readings you want to take
+  int numDataRecordings =0;
+  int run = 0; // whether or not to run encrypt&compress
+
+  char inputArray[75] =""; // size = numReadings * 50+1
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -202,17 +207,36 @@ int main(void)
 	icm20948_gyro_read_dps(&my_gyro);
 	icm20948_accel_read_g(&my_accel);
 
-	if (run ==0) {
-		char input[50];
-		sprintf(input, "\r\n%.4f,%.4f,%.4f,%.4f,%.4f,%.4f}",my_accel.x,my_accel.y,my_accel.z,my_gyro.x,my_gyro.y,my_gyro.z);
-		HAL_UART_Transmit(&huart2, (uint8_t*)input, sizeof(input), 1000);
-		HAL_Delay(1000);
+	if(numDataRecordings <=numReadings-1){
+		/*
+		 * If any changes are made to the formatting of the readings, inputArray[] size needs to be updated.
+		 * The reading array size must also be updated. The strncat() must also be updated.
+		 */
+		char reading[37];
+		sprintf(reading, "\r\n%.2f,%.2f,%.2f,%.2f,%.2f,%.2f;",my_accel.x,my_accel.y,my_accel.z,
+				my_gyro.x,my_gyro.y,my_gyro.z);
+		// HAL_UART_Transmit(&huart2, (uint8_t*)reading, sizeof(reading), 1000);
 
-		char start[3];
+		strncat(inputArray,reading,37); //if reading formatting is changed this length needs to be updated
+
+		if(numDataRecordings ==numReadings-1){
+			strcat(inputArray,"}");
+			HAL_UART_Transmit(&huart2, (uint8_t*)inputArray, sizeof(inputArray), 1000);
+			HAL_Delay(1000);
+			run++;
+		}
+		numDataRecordings++;
+	}
+	//strcat(input,"}");
+	//HAL_UART_Transmit(&huart2, (uint8_t*)input, sizeof(input), 1000);
+	//HAL_Delay(1000);
+
+	if (run ==1) {
+		char start[4];
 		sprintf(start, "\r\n#");
 		HAL_UART_Transmit(&huart2, (uint8_t*)start, sizeof(start), 1000);
 
-		encrypt(input);
+		encrypt(inputArray);
 		int count = 0;
 		while (count < compressedBits) {
 			char temp [7];

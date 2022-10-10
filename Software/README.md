@@ -6,7 +6,7 @@ This project can be opened using STM32CubesIDE and then flashed onto an STM32F0 
 
 <u>Note:</u> the project specifically uses SPI, however the IMU is I2C compatible.
 
-**Important:** When increasing the data to compress and encrypt, the compression and encryption array sizes also need to be increased. Otherwise thr program will crash/not run correctly.
+**Important:** When increasing the input data, the input data, compression and encryption array sizes also need to be increased. Otherwise thr program will crash/not run correctly.
 
 ## combined/
 This contains all previous developed versions of the the combined algorithm code needed for testing. These versions were created throughout the development of the final solution and serve a different function.
@@ -32,5 +32,16 @@ This is the contains the stm32CubeIDE project used to interface with the SparkFu
 
 # Common Bug fixes
 ### I changed the stm32 projects' input data and the program no longer runs
-This is probably because the size of the compression and ecryption arrays are too small. Increase the sizes, reflash the microcontroller and test. Do this until the program runs again.
+When changing the number of recordings to read, a series of updates to the arrays in the code need to be made:
+1. If formatting changes are made:
+- update the size of reading[] accordingly.
+- update the strncat() call to the same size as the new reading[] size.
+- update the the clean.py script to reflect any changes if necessary 
+    (only needed if terminating/ start sequence characters are changed)
+2. Update the numReadings variable to the desired value
+3. Update the inputArray[] size using the formula in the code comments
+4. Update size of encryptionData[] array
+5. Update size of compressed[] array
+6. Reflash the microcontroller and test. Steps 4 and 5 might need to be repeated to find the right value. (Idea: make their values very big and then reduce the size until it breaks).
+
 However, there will be a point where the STM's RAM limit is reached, in this case decrease the size of the input data.

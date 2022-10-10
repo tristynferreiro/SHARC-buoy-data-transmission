@@ -27,9 +27,9 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
  11 .ARM.attributes 00000028  00000000  00000000  000201e8  2**0
                   CONTENTS, READONLY
- 12 .debug_info   00007dc4  00000000  00000000  00020210  2**0
+ 12 .debug_info   00007dc5  00000000  00000000  00020210  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 13 .debug_abbrev 00001495  00000000  00000000  00027fd4  2**0
+ 13 .debug_abbrev 00001495  00000000  00000000  00027fd5  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  14 .debug_aranges 000006a8  00000000  00000000  00029470  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS

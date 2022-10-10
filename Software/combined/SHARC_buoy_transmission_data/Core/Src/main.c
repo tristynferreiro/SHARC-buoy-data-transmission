@@ -16,6 +16,9 @@ lzss encoder.
 Encryption is based off of AES encryption.
 
 In future versions, the data will be read from the sensor HAT ICM2098 chip.
+
+NOTE: When increasing the input data, the input data, compression and encryption array
+	  sizes also need to be increased. Otherwise the program will crash/not run correctly.
   ******************************************************************************
   */
 /* USER CODE END Header */
