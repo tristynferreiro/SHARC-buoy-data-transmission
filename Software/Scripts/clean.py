@@ -37,6 +37,9 @@ def main():
     cleanedCompressedData = ""      # real compressed bits
     elements = 0                    # number of compressed bits
     
+    sensorDataFile = "sensor_data.txt"
+    compressedDataFile = "compressed_data.txt"
+
     f = open("enc_comp.txt", "r")
     # Read in lines
     for line in f:
@@ -48,8 +51,18 @@ def main():
         numLines = numLines+1
 
     f.close()
+
     cleanedSensorData = clean_sensorData(originalSensorData)
+    f = open(sensorDataFile, "a")
+    for x in cleanedSensorData:
+        f.write(x)
+    f.close()
+
     cleanedCompressedData, elements = clean_transmittedCompressioData(fileLines, startCharIndex,numLines)
+
+    with open(compressedDataFile, "a") as f:
+        f.write(cleanedCompressedData)
+        f.close()
 
     print(cleanedSensorData)
     print(cleanedCompressedData)
