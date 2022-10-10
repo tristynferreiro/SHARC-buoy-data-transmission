@@ -8,7 +8,7 @@ In its current form, the project will take a fixed number of sensor data recordi
 This project can be opened using STM32CubesIDE and then flashed onto an STM32F0 compatible board. Make sure to follow the sensor setup instructions as described [here](https://github.com/tristynferreiro/SHARC_buoy_data_transmission/blob/main/Software/Sensor/README.md). 
 <br/>
 *The project specifically uses SPI, however the IMU is I2C compatible.*
-<br/>
+<br/><br/>
 **Important:** When increasing the input data, the input data, compression and encryption array sizes also need to be increased. Otherwise thr program will crash/not run correctly.
 
 ## combined/
