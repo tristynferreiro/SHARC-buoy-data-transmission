@@ -136,7 +136,7 @@ void putbit1(void);
 void flush_bit_buffer(void);
 void output1(int c);
 void output2(int x, int y);
-void encode(int encryptedData[], int encryptedBits);
+void compress(int encryptedData[], int encryptedBits);
 int ENCmodpow(int base, int power, int mod);
 void encrypt(char msg[]);
 /* USER CODE END PFP */
@@ -847,7 +847,7 @@ void output2(int x, int y)
     }
 }
 
-void encode(int encryptedData[], int encryptedBits)
+void compress(int encryptedData[], int encryptedBits)
 {
     int i, j, f1, x, y, r, s, bufferend, c;
     int counter = 0;
@@ -929,7 +929,7 @@ void encrypt(char msg[]) {
             }*/
         }
         //call compression
-        encode(encryptedData, encryptedBits);
+        compress(encryptedData, encryptedBits);
 }
 
 /* USER CODE END 4 */

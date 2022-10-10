@@ -39,11 +39,11 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  17 .debug_line   0000af19  00000000  00000000  0003fccd  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    0006d7c5  00000000  00000000  0004abe6  2**0
+ 18 .debug_str    0006d7c7  00000000  00000000  0004abe6  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000050  00000000  00000000  000b83ab  2**0
+ 19 .comment      00000050  00000000  00000000  000b83ad  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  0000345c  00000000  00000000  000b83fc  2**2
+ 20 .debug_frame  0000345c  00000000  00000000  000b8400  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -5251,10 +5251,8 @@ int main(void)
  8002934:	18ba      	adds	r2, r7, r2
  8002936:	6013      	str	r3, [r2, #0]
 	}
-	//strcat(input,"}");
-	//HAL_UART_Transmit(&huart2, (uint8_t*)input, sizeof(input), 1000);
-	//HAL_Delay(1000);
 
+	/* Run compression and encryption */
 	if (run ==1) {
  8002938:	2390      	movs	r3, #144	; 0x90
  800293a:	005b      	lsls	r3, r3, #1
@@ -7891,9 +7889,9 @@ void output2(int x, int y)
  8003a20:	b004      	add	sp, #16
  8003a22:	bd80      	pop	{r7, pc}
 
-08003a24 <encode>:
+08003a24 <compress>:
 
-void encode(int encryptedData[], int encryptedBits)
+void compress(int encryptedData[], int encryptedBits)
 {
  8003a24:	b580      	push	{r7, lr}
  8003a26:	b08c      	sub	sp, #48	; 0x30
@@ -7908,8 +7906,8 @@ void encode(int encryptedData[], int encryptedBits)
     for (i = 0; i < N - F; i++) buffer[i] = ' ';
  8003a32:	2300      	movs	r3, #0
  8003a34:	62fb      	str	r3, [r7, #44]	; 0x2c
- 8003a36:	e007      	b.n	8003a48 <encode+0x24>
- 8003a38:	4b67      	ldr	r3, [pc, #412]	; (8003bd8 <encode+0x1b4>)
+ 8003a36:	e007      	b.n	8003a48 <compress+0x24>
+ 8003a38:	4b67      	ldr	r3, [pc, #412]	; (8003bd8 <compress+0x1b4>)
  8003a3a:	6afa      	ldr	r2, [r7, #44]	; 0x2c
  8003a3c:	0092      	lsls	r2, r2, #2
  8003a3e:	2120      	movs	r1, #32
@@ -7919,16 +7917,16 @@ void encode(int encryptedData[], int encryptedBits)
  8003a46:	62fb      	str	r3, [r7, #44]	; 0x2c
  8003a48:	6afb      	ldr	r3, [r7, #44]	; 0x2c
  8003a4a:	2b1e      	cmp	r3, #30
- 8003a4c:	ddf4      	ble.n	8003a38 <encode+0x14>
+ 8003a4c:	ddf4      	ble.n	8003a38 <compress+0x14>
     for (i = N - F; i < N * 2; i++) {
  8003a4e:	231f      	movs	r3, #31
  8003a50:	62fb      	str	r3, [r7, #44]	; 0x2c
- 8003a52:	e014      	b.n	8003a7e <encode+0x5a>
+ 8003a52:	e014      	b.n	8003a7e <compress+0x5a>
         if (counter > encryptedBits) break;
  8003a54:	693a      	ldr	r2, [r7, #16]
  8003a56:	683b      	ldr	r3, [r7, #0]
  8003a58:	429a      	cmp	r2, r3
- 8003a5a:	dc14      	bgt.n	8003a86 <encode+0x62>
+ 8003a5a:	dc14      	bgt.n	8003a86 <compress+0x62>
         c = encryptedData[counter];
  8003a5c:	693b      	ldr	r3, [r7, #16]
  8003a5e:	009b      	lsls	r3, r3, #2
@@ -7937,7 +7935,7 @@ void encode(int encryptedData[], int encryptedBits)
  8003a64:	681b      	ldr	r3, [r3, #0]
  8003a66:	60fb      	str	r3, [r7, #12]
         buffer[i] = c;  counter++;
- 8003a68:	4b5b      	ldr	r3, [pc, #364]	; (8003bd8 <encode+0x1b4>)
+ 8003a68:	4b5b      	ldr	r3, [pc, #364]	; (8003bd8 <compress+0x1b4>)
  8003a6a:	6afa      	ldr	r2, [r7, #44]	; 0x2c
  8003a6c:	0092      	lsls	r2, r2, #2
  8003a6e:	68f9      	ldr	r1, [r7, #12]
@@ -7951,8 +7949,8 @@ void encode(int encryptedData[], int encryptedBits)
  8003a7c:	62fb      	str	r3, [r7, #44]	; 0x2c
  8003a7e:	6afb      	ldr	r3, [r7, #44]	; 0x2c
  8003a80:	2b7f      	cmp	r3, #127	; 0x7f
- 8003a82:	dde7      	ble.n	8003a54 <encode+0x30>
- 8003a84:	e000      	b.n	8003a88 <encode+0x64>
+ 8003a82:	dde7      	ble.n	8003a54 <compress+0x30>
+ 8003a84:	e000      	b.n	8003a88 <compress+0x64>
         if (counter > encryptedBits) break;
  8003a86:	46c0      	nop			; (mov r8, r8)
         //printf("HERE2: %d\n",buffer[i]);
@@ -7966,13 +7964,13 @@ void encode(int encryptedData[], int encryptedBits)
  8003a90:	2300      	movs	r3, #0
  8003a92:	61bb      	str	r3, [r7, #24]
     while (r < bufferend) {
- 8003a94:	e096      	b.n	8003bc4 <encode+0x1a0>
+ 8003a94:	e096      	b.n	8003bc4 <compress+0x1a0>
         f1 = (F <= bufferend - r) ? F : bufferend - r;
  8003a96:	697a      	ldr	r2, [r7, #20]
  8003a98:	69fb      	ldr	r3, [r7, #28]
  8003a9a:	1ad3      	subs	r3, r2, r3
  8003a9c:	2b21      	cmp	r3, #33	; 0x21
- 8003a9e:	dd00      	ble.n	8003aa2 <encode+0x7e>
+ 8003a9e:	dd00      	ble.n	8003aa2 <compress+0x7e>
  8003aa0:	2321      	movs	r3, #33	; 0x21
  8003aa2:	60bb      	str	r3, [r7, #8]
         x = 0;  y = 1;  c = buffer[r];
@@ -7980,7 +7978,7 @@ void encode(int encryptedData[], int encryptedBits)
  8003aa6:	627b      	str	r3, [r7, #36]	; 0x24
  8003aa8:	2301      	movs	r3, #1
  8003aaa:	623b      	str	r3, [r7, #32]
- 8003aac:	4b4a      	ldr	r3, [pc, #296]	; (8003bd8 <encode+0x1b4>)
+ 8003aac:	4b4a      	ldr	r3, [pc, #296]	; (8003bd8 <compress+0x1b4>)
  8003aae:	69fa      	ldr	r2, [r7, #28]
  8003ab0:	0092      	lsls	r2, r2, #2
  8003ab2:	58d3      	ldr	r3, [r2, r3]
@@ -7989,34 +7987,34 @@ void encode(int encryptedData[], int encryptedBits)
  8003ab6:	69fb      	ldr	r3, [r7, #28]
  8003ab8:	3b01      	subs	r3, #1
  8003aba:	62fb      	str	r3, [r7, #44]	; 0x2c
- 8003abc:	e02b      	b.n	8003b16 <encode+0xf2>
+ 8003abc:	e02b      	b.n	8003b16 <compress+0xf2>
             if (buffer[i] == c) {
- 8003abe:	4b46      	ldr	r3, [pc, #280]	; (8003bd8 <encode+0x1b4>)
+ 8003abe:	4b46      	ldr	r3, [pc, #280]	; (8003bd8 <compress+0x1b4>)
  8003ac0:	6afa      	ldr	r2, [r7, #44]	; 0x2c
  8003ac2:	0092      	lsls	r2, r2, #2
  8003ac4:	58d3      	ldr	r3, [r2, r3]
  8003ac6:	68fa      	ldr	r2, [r7, #12]
  8003ac8:	429a      	cmp	r2, r3
- 8003aca:	d121      	bne.n	8003b10 <encode+0xec>
+ 8003aca:	d121      	bne.n	8003b10 <compress+0xec>
                 for (j = 1; j < f1; j++)
  8003acc:	2301      	movs	r3, #1
  8003ace:	62bb      	str	r3, [r7, #40]	; 0x28
- 8003ad0:	e010      	b.n	8003af4 <encode+0xd0>
+ 8003ad0:	e010      	b.n	8003af4 <compress+0xd0>
                     if (buffer[i + j] != buffer[r + j]) break;
  8003ad2:	6afa      	ldr	r2, [r7, #44]	; 0x2c
  8003ad4:	6abb      	ldr	r3, [r7, #40]	; 0x28
  8003ad6:	18d2      	adds	r2, r2, r3
- 8003ad8:	4b3f      	ldr	r3, [pc, #252]	; (8003bd8 <encode+0x1b4>)
+ 8003ad8:	4b3f      	ldr	r3, [pc, #252]	; (8003bd8 <compress+0x1b4>)
  8003ada:	0092      	lsls	r2, r2, #2
  8003adc:	58d2      	ldr	r2, [r2, r3]
  8003ade:	69f9      	ldr	r1, [r7, #28]
  8003ae0:	6abb      	ldr	r3, [r7, #40]	; 0x28
  8003ae2:	18c9      	adds	r1, r1, r3
- 8003ae4:	4b3c      	ldr	r3, [pc, #240]	; (8003bd8 <encode+0x1b4>)
+ 8003ae4:	4b3c      	ldr	r3, [pc, #240]	; (8003bd8 <compress+0x1b4>)
  8003ae6:	0089      	lsls	r1, r1, #2
  8003ae8:	58cb      	ldr	r3, [r1, r3]
  8003aea:	429a      	cmp	r2, r3
- 8003aec:	d107      	bne.n	8003afe <encode+0xda>
+ 8003aec:	d107      	bne.n	8003afe <compress+0xda>
                 for (j = 1; j < f1; j++)
  8003aee:	6abb      	ldr	r3, [r7, #40]	; 0x28
  8003af0:	3301      	adds	r3, #1
@@ -8024,15 +8022,15 @@ void encode(int encryptedData[], int encryptedBits)
  8003af4:	6aba      	ldr	r2, [r7, #40]	; 0x28
  8003af6:	68bb      	ldr	r3, [r7, #8]
  8003af8:	429a      	cmp	r2, r3
- 8003afa:	dbea      	blt.n	8003ad2 <encode+0xae>
- 8003afc:	e000      	b.n	8003b00 <encode+0xdc>
+ 8003afa:	dbea      	blt.n	8003ad2 <compress+0xae>
+ 8003afc:	e000      	b.n	8003b00 <compress+0xdc>
                     if (buffer[i + j] != buffer[r + j]) break;
  8003afe:	46c0      	nop			; (mov r8, r8)
                 if (j > y) {
  8003b00:	6aba      	ldr	r2, [r7, #40]	; 0x28
  8003b02:	6a3b      	ldr	r3, [r7, #32]
  8003b04:	429a      	cmp	r2, r3
- 8003b06:	dd03      	ble.n	8003b10 <encode+0xec>
+ 8003b06:	dd03      	ble.n	8003b10 <compress+0xec>
                     x = i;  y = j;
  8003b08:	6afb      	ldr	r3, [r7, #44]	; 0x2c
  8003b0a:	627b      	str	r3, [r7, #36]	; 0x24
@@ -8045,19 +8043,19 @@ void encode(int encryptedData[], int encryptedBits)
  8003b16:	6afa      	ldr	r2, [r7, #44]	; 0x2c
  8003b18:	69bb      	ldr	r3, [r7, #24]
  8003b1a:	429a      	cmp	r2, r3
- 8003b1c:	dacf      	bge.n	8003abe <encode+0x9a>
+ 8003b1c:	dacf      	bge.n	8003abe <compress+0x9a>
                 }
             }
         if (y <= P) {  y = 1;  output1(c);  }
  8003b1e:	6a3b      	ldr	r3, [r7, #32]
  8003b20:	2b01      	cmp	r3, #1
- 8003b22:	dc06      	bgt.n	8003b32 <encode+0x10e>
+ 8003b22:	dc06      	bgt.n	8003b32 <compress+0x10e>
  8003b24:	2301      	movs	r3, #1
  8003b26:	623b      	str	r3, [r7, #32]
  8003b28:	68fb      	ldr	r3, [r7, #12]
  8003b2a:	0018      	movs	r0, r3
  8003b2c:	f7ff ff2c 	bl	8003988 <output1>
- 8003b30:	e008      	b.n	8003b44 <encode+0x120>
+ 8003b30:	e008      	b.n	8003b44 <compress+0x120>
         else output2(x & (N - 1), y - 2);
  8003b32:	6a7b      	ldr	r3, [r7, #36]	; 0x24
  8003b34:	223f      	movs	r2, #63	; 0x3f
@@ -8079,18 +8077,18 @@ void encode(int encryptedData[], int encryptedBits)
         if (r >= N * 2 - F) {
  8003b54:	69fb      	ldr	r3, [r7, #28]
  8003b56:	2b5e      	cmp	r3, #94	; 0x5e
- 8003b58:	dd34      	ble.n	8003bc4 <encode+0x1a0>
+ 8003b58:	dd34      	ble.n	8003bc4 <compress+0x1a0>
             for (i = 0; i < N; i++) buffer[i] = buffer[i + N];
  8003b5a:	2300      	movs	r3, #0
  8003b5c:	62fb      	str	r3, [r7, #44]	; 0x2c
- 8003b5e:	e00c      	b.n	8003b7a <encode+0x156>
+ 8003b5e:	e00c      	b.n	8003b7a <compress+0x156>
  8003b60:	6afb      	ldr	r3, [r7, #44]	; 0x2c
  8003b62:	3340      	adds	r3, #64	; 0x40
  8003b64:	001a      	movs	r2, r3
- 8003b66:	4b1c      	ldr	r3, [pc, #112]	; (8003bd8 <encode+0x1b4>)
+ 8003b66:	4b1c      	ldr	r3, [pc, #112]	; (8003bd8 <compress+0x1b4>)
  8003b68:	0092      	lsls	r2, r2, #2
  8003b6a:	58d1      	ldr	r1, [r2, r3]
- 8003b6c:	4b1a      	ldr	r3, [pc, #104]	; (8003bd8 <encode+0x1b4>)
+ 8003b6c:	4b1a      	ldr	r3, [pc, #104]	; (8003bd8 <compress+0x1b4>)
  8003b6e:	6afa      	ldr	r2, [r7, #44]	; 0x2c
  8003b70:	0092      	lsls	r2, r2, #2
  8003b72:	50d1      	str	r1, [r2, r3]
@@ -8099,7 +8097,7 @@ void encode(int encryptedData[], int encryptedBits)
  8003b78:	62fb      	str	r3, [r7, #44]	; 0x2c
  8003b7a:	6afb      	ldr	r3, [r7, #44]	; 0x2c
  8003b7c:	2b3f      	cmp	r3, #63	; 0x3f
- 8003b7e:	ddef      	ble.n	8003b60 <encode+0x13c>
+ 8003b7e:	ddef      	ble.n	8003b60 <compress+0x13c>
             bufferend -= N;  r -= N;  s -= N;
  8003b80:	697b      	ldr	r3, [r7, #20]
  8003b82:	3b40      	subs	r3, #64	; 0x40
@@ -8111,13 +8109,13 @@ void encode(int encryptedData[], int encryptedBits)
  8003b8e:	3b40      	subs	r3, #64	; 0x40
  8003b90:	61bb      	str	r3, [r7, #24]
             while (bufferend < N * 2) {
- 8003b92:	e014      	b.n	8003bbe <encode+0x19a>
+ 8003b92:	e014      	b.n	8003bbe <compress+0x19a>
                 if (counter > encryptedBits) break;
  8003b94:	693a      	ldr	r2, [r7, #16]
  8003b96:	683b      	ldr	r3, [r7, #0]
  8003b98:	429a      	cmp	r2, r3
- 8003b9a:	dd00      	ble.n	8003b9e <encode+0x17a>
- 8003b9c:	e012      	b.n	8003bc4 <encode+0x1a0>
+ 8003b9a:	dd00      	ble.n	8003b9e <compress+0x17a>
+ 8003b9c:	e012      	b.n	8003bc4 <compress+0x1a0>
                 c = encryptedData[counter];
  8003b9e:	693b      	ldr	r3, [r7, #16]
  8003ba0:	009b      	lsls	r3, r3, #2
@@ -8129,7 +8127,7 @@ void encode(int encryptedData[], int encryptedBits)
  8003baa:	697b      	ldr	r3, [r7, #20]
  8003bac:	1c5a      	adds	r2, r3, #1
  8003bae:	617a      	str	r2, [r7, #20]
- 8003bb0:	4a09      	ldr	r2, [pc, #36]	; (8003bd8 <encode+0x1b4>)
+ 8003bb0:	4a09      	ldr	r2, [pc, #36]	; (8003bd8 <compress+0x1b4>)
  8003bb2:	009b      	lsls	r3, r3, #2
  8003bb4:	68f9      	ldr	r1, [r7, #12]
  8003bb6:	5099      	str	r1, [r3, r2]
@@ -8139,13 +8137,13 @@ void encode(int encryptedData[], int encryptedBits)
             while (bufferend < N * 2) {
  8003bbe:	697b      	ldr	r3, [r7, #20]
  8003bc0:	2b7f      	cmp	r3, #127	; 0x7f
- 8003bc2:	dde7      	ble.n	8003b94 <encode+0x170>
+ 8003bc2:	dde7      	ble.n	8003b94 <compress+0x170>
     while (r < bufferend) {
  8003bc4:	69fa      	ldr	r2, [r7, #28]
  8003bc6:	697b      	ldr	r3, [r7, #20]
  8003bc8:	429a      	cmp	r2, r3
- 8003bca:	da00      	bge.n	8003bce <encode+0x1aa>
- 8003bcc:	e763      	b.n	8003a96 <encode+0x72>
+ 8003bca:	da00      	bge.n	8003bce <compress+0x1aa>
+ 8003bcc:	e763      	b.n	8003a96 <compress+0x72>
 		sprintf(temp, "%i, ",compressed[count]);
 		HAL_UART_Transmit(&huart2, temp, sizeof(temp), 1000);
 		count++;
@@ -8262,13 +8260,13 @@ void encrypt(char msg[]) {
             }*/
         }
         //call compression
-        encode(encryptedData, encryptedBits);
+        compress(encryptedData, encryptedBits);
  8003c6c:	4b08      	ldr	r3, [pc, #32]	; (8003c90 <encrypt+0x74>)
  8003c6e:	681a      	ldr	r2, [r3, #0]
  8003c70:	4b06      	ldr	r3, [pc, #24]	; (8003c8c <encrypt+0x70>)
  8003c72:	0011      	movs	r1, r2
  8003c74:	0018      	movs	r0, r3
- 8003c76:	f7ff fed5 	bl	8003a24 <encode>
+ 8003c76:	f7ff fed5 	bl	8003a24 <compress>
 }
  8003c7a:	46c0      	nop			; (mov r8, r8)
  8003c7c:	46bd      	mov	sp, r7

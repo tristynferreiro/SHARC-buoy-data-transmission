@@ -32,8 +32,8 @@ This contains the stm32CubeIDE project used to interface with the SparkFun 9Dof 
 ## Scripts/
 Contains all scripts used for gathering the data trasmitted from the stm32f0.
 -serialReceive.py
--verify.py
--FFTCompareScript.m
+-clean.py
+-clean_multiTransmits.py
 
 # Common Bug fixes
 ### I changed the stm32 projects' input data and the program no longer runs
@@ -41,7 +41,7 @@ When changing the number of recordings to read, a series of updates to the array
 1. If formatting changes are made:
 - update the size of reading[] accordingly.
 - update the strncat() call to the same size as the new reading[] size.
-- update the the clean.py script to reflect any changes if necessary 
+- update the the [clean.py]() script to reflect any changes if necessary 
     (only needed if terminating/ start sequence characters are changed)
 2. Update the numReadings variable to the desired value
 3. Update the inputArray[] size using the formula in the code comments
