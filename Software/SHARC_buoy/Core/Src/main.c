@@ -247,7 +247,12 @@ int main(void)
 			HAL_UART_Transmit(&huart2, (uint8_t*)temp, sizeof(temp), 1000);
 			count++;
 		}
-		run++;
+		// TO ONLY TRANSMIT ONCE, COMMENT THESE LINES OUT
+		/** Reset the values for continued transmission **/
+		run=0;
+		numDataRecordings = 0;
+		memset(inputArray, 0, sizeof(inputArray));
+		HAL_Delay(5000); //add a delay before getting next block of recordings
 	}
 
   }

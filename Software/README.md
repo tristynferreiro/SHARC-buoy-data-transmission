@@ -1,11 +1,14 @@
 # Software
 ## SHARC_buoy/
-This is the latest version of the complete working project. It reads accelerometer and gyroscope data from the icm20948, encrypts and compresses it and then transmits the compressed-encrypted data over UART. 
+This is the latest version of the complete working project. It reads accelerometer and gyroscope data from the icm20948, encrypts and compresses it and then transmits the compressed-encrypted data over UART.
 
-This project can be opened using STM32CubesIDE and then flashed onto an STM32F0 compatible board. Make sure to following the sensor setup instructions as described [here](https://github.com/tristynferreiro/SHARC_buoy_data_transmission/blob/main/Software/Sensor/README.md). 
+In its current form, the project will take a fixed number of sensor data recordings (1 second apart) and store them in an array. This block of data is then sent off to encryption and compression and then trasmitted. Then there is a 5 second delay before the process is restarted. If you want to remove the restart or increase the delay consult lines 252-255 of the main.c file.
 
-<u>Note:</u> the project specifically uses SPI, however the IMU is I2C compatible.
-
+#### running the project
+This project can be opened using STM32CubesIDE and then flashed onto an STM32F0 compatible board. Make sure to follow the sensor setup instructions as described [here](https://github.com/tristynferreiro/SHARC_buoy_data_transmission/blob/main/Software/Sensor/README.md). 
+<br/>
+*The project specifically uses SPI, however the IMU is I2C compatible.*
+<br/>
 **Important:** When increasing the input data, the input data, compression and encryption array sizes also need to be increased. Otherwise thr program will crash/not run correctly.
 
 ## combined/
