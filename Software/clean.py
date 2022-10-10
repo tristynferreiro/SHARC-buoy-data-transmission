@@ -9,15 +9,26 @@ substring = ","
 output = ""
 elements = 0
 
-for x in f:
-    if('Accel' in x or 'IMU' in x):     # ignore the header and IMU initialisation.
-        continue;
-    elif(substring in x):               # if the substring exists in the line
-        index = x.find(substring)
-        output+=x[:index+1]             # remove the substring
-    elements = elements+1               # increment array size 
+fileLines = []
+numLines=0
+startCharIndex = -1
 
-output = output[:-1]                    # remove trailing , delimiter
+# Read in lines
+for lines in f:
+    fileLines.append(lines)
+    if('#' in lines):
+        startCharIndex = numLines
+    numLines = numLines+1
+
+#
+for x in range(startCharIndex+1,numLines):
+    if(substring in fileLines[x]):              # if the substring exists in the line
+        index = fileLines[x].find(substring)
+        output+=fileLines[x][:index+1]          # remove the substring
+    elements = elements+1                       # increment array size 
+
+output = output[:-1]                            # remove trailing , delimiter
+
 
 f.close()
 print(output)

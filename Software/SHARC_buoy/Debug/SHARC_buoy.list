@@ -21,9 +21,9 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, ALLOC, LOAD, DATA
   8 .data         000001e8  20000000  08009ce4  00020000  2**2
                   CONTENTS, ALLOC, LOAD, DATA
-  9 .bss          00000670  200001e8  08009ecc  000201e8  2**2
+  9 .bss          00000800  200001e8  08009ecc  000201e8  2**2
                   ALLOC
- 10 ._user_heap_stack 00000600  20000858  08009ecc  00020858  2**0
+ 10 ._user_heap_stack 00000600  200009e8  08009ecc  000209e8  2**0
                   ALLOC
  11 .ARM.attributes 00000028  00000000  00000000  000201e8  2**0
                   CONTENTS, READONLY
@@ -5235,7 +5235,7 @@ int main(void)
  8002924:	08009798 	.word	0x08009798
  8002928:	20000510 	.word	0x20000510
  800292c:	080097bc 	.word	0x080097bc
- 8002930:	200006a0 	.word	0x200006a0
+ 8002930:	20000768 	.word	0x20000768
 
 08002934 <SystemClock_Config>:
 /**
@@ -7420,7 +7420,7 @@ static uint8_t* read_multiple_icm20948_reg(userbank ub, uint8_t reg, uint8_t len
  8003724:	b005      	add	sp, #20
  8003726:	bd90      	pop	{r4, r7, pc}
  8003728:	20000204 	.word	0x20000204
- 800372c:	20000838 	.word	0x20000838
+ 800372c:	200009c8 	.word	0x200009c8
 
 08003730 <write_multiple_icm20948_reg>:
 
@@ -7569,7 +7569,7 @@ void store(int bitbuffer){
  8003822:	b003      	add	sp, #12
  8003824:	bd90      	pop	{r4, r7, pc}
  8003826:	46c0      	nop			; (mov r8, r8)
- 8003828:	200006a0 	.word	0x200006a0
+ 8003828:	20000768 	.word	0x20000768
  800382c:	20000510 	.word	0x20000510
 
 08003830 <putbit1>:
@@ -8149,8 +8149,8 @@ void encrypt(char msg[]) {
  8003bae:	46c0      	nop			; (mov r8, r8)
  8003bb0:	20000004 	.word	0x20000004
  8003bb4:	20000008 	.word	0x20000008
- 8003bb8:	200006a4 	.word	0x200006a4
- 8003bbc:	20000834 	.word	0x20000834
+ 8003bb8:	2000076c 	.word	0x2000076c
+ 8003bbc:	200009c4 	.word	0x200009c4
 
 08003bc0 <Error_Handler>:
 /**
@@ -8834,8 +8834,8 @@ void *_sbrk(ptrdiff_t incr)
  8003ede:	bd80      	pop	{r7, pc}
  8003ee0:	20002000 	.word	0x20002000
  8003ee4:	00000400 	.word	0x00000400
- 8003ee8:	20000840 	.word	0x20000840
- 8003eec:	20000858 	.word	0x20000858
+ 8003ee8:	200009d0 	.word	0x200009d0
+ 8003eec:	200009e8 	.word	0x200009e8
 
 08003ef0 <SystemInit>:
   * @brief  Setup the microcontroller system
@@ -8952,7 +8952,7 @@ LoopForever:
   ldr r2, =_sbss
  8003f44:	200001e8 	.word	0x200001e8
   ldr r4, =_ebss
- 8003f48:	20000858 	.word	0x20000858
+ 8003f48:	200009e8 	.word	0x200009e8
 
 08003f4c <ADC1_COMP_IRQHandler>:
  * @retval : None
@@ -9100,7 +9100,7 @@ __weak void HAL_IncTick(void)
  8003ff8:	bd80      	pop	{r7, pc}
  8003ffa:	46c0      	nop			; (mov r8, r8)
  8003ffc:	20000014 	.word	0x20000014
- 8004000:	20000844 	.word	0x20000844
+ 8004000:	200009d4 	.word	0x200009d4
 
 08004004 <HAL_GetTick>:
   * @note   This function is declared as __weak  to be overwritten  in case of other 
@@ -9119,7 +9119,7 @@ __weak uint32_t HAL_GetTick(void)
  800400e:	46bd      	mov	sp, r7
  8004010:	bd80      	pop	{r7, pc}
  8004012:	46c0      	nop			; (mov r8, r8)
- 8004014:	20000844 	.word	0x20000844
+ 8004014:	200009d4 	.word	0x200009d4
 
 08004018 <HAL_Delay>:
   *       implementations in user file.
@@ -19428,7 +19428,7 @@ __STATIC_FORCEINLINE void __set_PRIMASK(uint32_t priMask)
  80082e6:	6054      	str	r4, [r2, #4]
  80082e8:	e7ca      	b.n	8008280 <_free_r+0x24>
  80082ea:	46c0      	nop			; (mov r8, r8)
- 80082ec:	20000848 	.word	0x20000848
+ 80082ec:	200009d8 	.word	0x200009d8
 
 080082f0 <sbrk_aligned>:
  80082f0:	b570      	push	{r4, r5, r6, lr}
@@ -19460,7 +19460,7 @@ __STATIC_FORCEINLINE void __set_PRIMASK(uint32_t priMask)
  800832a:	0028      	movs	r0, r5
  800832c:	bd70      	pop	{r4, r5, r6, pc}
  800832e:	46c0      	nop			; (mov r8, r8)
- 8008330:	2000084c 	.word	0x2000084c
+ 8008330:	200009dc 	.word	0x200009dc
 
 08008334 <_malloc_r>:
  8008334:	b5f7      	push	{r0, r1, r2, r4, r5, r6, r7, lr}
@@ -19573,7 +19573,7 @@ __STATIC_FORCEINLINE void __set_PRIMASK(uint32_t priMask)
  8008414:	f000 f9d4 	bl	80087c0 <__malloc_unlock>
  8008418:	e7cd      	b.n	80083b6 <_malloc_r+0x82>
  800841a:	46c0      	nop			; (mov r8, r8)
- 800841c:	20000848 	.word	0x20000848
+ 800841c:	200009d8 	.word	0x200009d8
 
 08008420 <__ssputs_r>:
  8008420:	b5f0      	push	{r4, r5, r6, r7, lr}
@@ -19931,7 +19931,7 @@ __STATIC_FORCEINLINE void __set_PRIMASK(uint32_t priMask)
  80086fe:	6023      	str	r3, [r4, #0]
  8008700:	bd70      	pop	{r4, r5, r6, pc}
  8008702:	46c0      	nop			; (mov r8, r8)
- 8008704:	20000850 	.word	0x20000850
+ 8008704:	200009e0 	.word	0x200009e0
 
 08008708 <__assert_func>:
  8008708:	b530      	push	{r4, r5, lr}
@@ -20023,7 +20023,7 @@ __STATIC_FORCEINLINE void __set_PRIMASK(uint32_t priMask)
  80087b4:	f000 fc4f 	bl	8009056 <__retarget_lock_acquire_recursive>
  80087b8:	bd10      	pop	{r4, pc}
  80087ba:	46c0      	nop			; (mov r8, r8)
- 80087bc:	20000854 	.word	0x20000854
+ 80087bc:	200009e4 	.word	0x200009e4
 
 080087c0 <__malloc_unlock>:
  80087c0:	b510      	push	{r4, lr}
@@ -20031,7 +20031,7 @@ __STATIC_FORCEINLINE void __set_PRIMASK(uint32_t priMask)
  80087c4:	f000 fc48 	bl	8009058 <__retarget_lock_release_recursive>
  80087c8:	bd10      	pop	{r4, pc}
  80087ca:	46c0      	nop			; (mov r8, r8)
- 80087cc:	20000854 	.word	0x20000854
+ 80087cc:	200009e4 	.word	0x200009e4
 
 080087d0 <_realloc_r>:
  80087d0:	b5f7      	push	{r0, r1, r2, r4, r5, r6, r7, lr}
@@ -20902,7 +20902,7 @@ __STATIC_FORCEINLINE void __set_PRIMASK(uint32_t priMask)
  8008ed8:	f000 f8bd 	bl	8009056 <__retarget_lock_acquire_recursive>
  8008edc:	bd10      	pop	{r4, pc}
  8008ede:	46c0      	nop			; (mov r8, r8)
- 8008ee0:	20000855 	.word	0x20000855
+ 8008ee0:	200009e5 	.word	0x200009e5
 
 08008ee4 <__sfp_lock_release>:
  8008ee4:	b510      	push	{r4, lr}
@@ -20910,7 +20910,7 @@ __STATIC_FORCEINLINE void __set_PRIMASK(uint32_t priMask)
  8008ee8:	f000 f8b6 	bl	8009058 <__retarget_lock_release_recursive>
  8008eec:	bd10      	pop	{r4, pc}
  8008eee:	46c0      	nop			; (mov r8, r8)
- 8008ef0:	20000855 	.word	0x20000855
+ 8008ef0:	200009e5 	.word	0x200009e5
 
 08008ef4 <__sinit_lock_acquire>:
  8008ef4:	b510      	push	{r4, lr}
@@ -20918,7 +20918,7 @@ __STATIC_FORCEINLINE void __set_PRIMASK(uint32_t priMask)
  8008ef8:	f000 f8ad 	bl	8009056 <__retarget_lock_acquire_recursive>
  8008efc:	bd10      	pop	{r4, pc}
  8008efe:	46c0      	nop			; (mov r8, r8)
- 8008f00:	20000856 	.word	0x20000856
+ 8008f00:	200009e6 	.word	0x200009e6
 
 08008f04 <__sinit_lock_release>:
  8008f04:	b510      	push	{r4, lr}
@@ -20926,7 +20926,7 @@ __STATIC_FORCEINLINE void __set_PRIMASK(uint32_t priMask)
  8008f08:	f000 f8a6 	bl	8009058 <__retarget_lock_release_recursive>
  8008f0c:	bd10      	pop	{r4, pc}
  8008f0e:	46c0      	nop			; (mov r8, r8)
- 8008f10:	20000856 	.word	0x20000856
+ 8008f10:	200009e6 	.word	0x200009e6
 
 08008f14 <__sinit>:
  8008f14:	b513      	push	{r0, r1, r4, lr}
@@ -21269,7 +21269,7 @@ __STATIC_FORCEINLINE void __set_PRIMASK(uint32_t priMask)
  80091c6:	d000      	beq.n	80091ca <_kill_r+0x1e>
  80091c8:	6023      	str	r3, [r4, #0]
  80091ca:	bd70      	pop	{r4, r5, r6, pc}
- 80091cc:	20000850 	.word	0x20000850
+ 80091cc:	200009e0 	.word	0x200009e0
 
 080091d0 <_getpid_r>:
  80091d0:	b510      	push	{r4, lr}
@@ -21370,7 +21370,7 @@ __STATIC_FORCEINLINE void __set_PRIMASK(uint32_t priMask)
  800928e:	6023      	str	r3, [r4, #0]
  8009290:	bd70      	pop	{r4, r5, r6, pc}
  8009292:	46c0      	nop			; (mov r8, r8)
- 8009294:	20000850 	.word	0x20000850
+ 8009294:	200009e0 	.word	0x200009e0
 
 08009298 <_close_r>:
  8009298:	2300      	movs	r3, #0
@@ -21388,7 +21388,7 @@ __STATIC_FORCEINLINE void __set_PRIMASK(uint32_t priMask)
  80092b2:	6023      	str	r3, [r4, #0]
  80092b4:	bd70      	pop	{r4, r5, r6, pc}
  80092b6:	46c0      	nop			; (mov r8, r8)
- 80092b8:	20000850 	.word	0x20000850
+ 80092b8:	200009e0 	.word	0x200009e0
 
 080092bc <_fstat_r>:
  80092bc:	2300      	movs	r3, #0
@@ -21406,7 +21406,7 @@ __STATIC_FORCEINLINE void __set_PRIMASK(uint32_t priMask)
  80092d6:	d000      	beq.n	80092da <_fstat_r+0x1e>
  80092d8:	6023      	str	r3, [r4, #0]
  80092da:	bd70      	pop	{r4, r5, r6, pc}
- 80092dc:	20000850 	.word	0x20000850
+ 80092dc:	200009e0 	.word	0x200009e0
 
 080092e0 <_isatty_r>:
  80092e0:	2300      	movs	r3, #0
@@ -21424,7 +21424,7 @@ __STATIC_FORCEINLINE void __set_PRIMASK(uint32_t priMask)
  80092fa:	6023      	str	r3, [r4, #0]
  80092fc:	bd70      	pop	{r4, r5, r6, pc}
  80092fe:	46c0      	nop			; (mov r8, r8)
- 8009300:	20000850 	.word	0x20000850
+ 8009300:	200009e0 	.word	0x200009e0
 
 08009304 <_lseek_r>:
  8009304:	b570      	push	{r4, r5, r6, lr}
@@ -21444,7 +21444,7 @@ __STATIC_FORCEINLINE void __set_PRIMASK(uint32_t priMask)
  8009322:	6023      	str	r3, [r4, #0]
  8009324:	bd70      	pop	{r4, r5, r6, pc}
  8009326:	46c0      	nop			; (mov r8, r8)
- 8009328:	20000850 	.word	0x20000850
+ 8009328:	200009e0 	.word	0x200009e0
 
 0800932c <_read_r>:
  800932c:	b570      	push	{r4, r5, r6, lr}
@@ -21464,7 +21464,7 @@ __STATIC_FORCEINLINE void __set_PRIMASK(uint32_t priMask)
  800934a:	6023      	str	r3, [r4, #0]
  800934c:	bd70      	pop	{r4, r5, r6, pc}
  800934e:	46c0      	nop			; (mov r8, r8)
- 8009350:	20000850 	.word	0x20000850
+ 8009350:	200009e0 	.word	0x200009e0
 
 08009354 <log>:
  8009354:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
