@@ -107,4 +107,39 @@ hold on
 plot(Fv, FAlldcoc2(Iv))
 saveas(8, "CombinedCorrFFT.png");
 
+disp([sprintf('%s', "Accelerometer1: ") sprintf('%d,', FAccdcoc(1:end-1)), sprintf('%d', FAccdcoc(end))]);
+FID = fopen('Acc1.txt', 'w');
+if FID == -1, error('Cannot create file.'); end
+fprintf(FID, '%d\n', FAccdcoc);
+fclose(FID);
+
+disp([sprintf('%s', "Accelerometer2: ") sprintf('%d,', FAccdcoc2(1:end-1)), sprintf('%d', FAccdcoc2(end))]);
+FID = fopen('Acc2.txt', 'w');
+if FID == -1, error('Cannot create file.'); end
+fprintf(FID, '%d\n', FAccdcoc2);
+fclose(FID);
+
+disp([sprintf('%s', "Gyrometer1: ") sprintf('%d,', FGyrodcoc(1:end-1)), sprintf('%d', FGyrodcoc(end))]);
+FID = fopen('Gyro1.txt', 'w');
+if FID == -1, error('Cannot create file.'); end
+fprintf(FID, '%d\n', FGyrodcoc);
+fclose(FID);
+
+disp([sprintf('%s', "Gyrometer2: ") sprintf('%d,', FGyrodcoc2(1:end-1)), sprintf('%d', FGyrodcoc2(end))]);
+FID = fopen('Gyro2.txt', 'w');
+if FID == -1, error('Cannot create file.'); end
+fprintf(FID, '%d\n', FGyrodcoc2);
+fclose(FID);
+
+disp([sprintf('%s', "AllData1: ") sprintf('%d,', FAlldcoc(1:end-1)), sprintf('%d', FAlldcoc(end))]);
+FID = fopen('AllData1.txt', 'w');
+if FID == -1, error('Cannot create file.'); end
+fprintf(FID, '%d\n', FAlldcoc);
+fclose(FID);
+
+disp([sprintf('%s', "AllData2: ") sprintf('%d,', FAlldcoc2(1:end-1)), sprintf('%d', FAlldcoc2(end))]);
+FID = fopen('AllData2.txt', 'w');
+if FID == -1, error('Cannot create file.'); end
+fprintf(FID, '%d\n', FAlldcoc2);
+fclose(FID);
 
