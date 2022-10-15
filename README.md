@@ -1,5 +1,5 @@
 # SHARC_buoy_data_transmission
-This project deals with implementation of encryption and compression of data from sensors on an STM32F0-discovery. This project aims to provide a solution to the data size problems highlighted in the SHARC Buoy design by [Jamie Nicholas Jacobson](https://github.com/tristynferreiro/SHARC_buoy_data_transmission/blob/main/Docs/Other/thesis_ebe_2021_jacobson%20jamie%20nicholas.pdf). This repo details a solution designed, tested, documented and implemented by **Shameera Cassim and Tristyn Ferreiro**.
+This project deals with implementation of encryption and compression of data from sensors on an STM32F0-discovery. This project aims to provide a solution to the data size problems highlighted in the SHARC Buoy design by [Jamie Nicholas Jacobson](https://github.com/tristynferreiro/SHARC_buoy_data_transmission/blob/main/Docs/Other/thesis_ebe_2021_jacobson%20jamie%20nicholas.pdf). This repo details a solution designed, tested, documented and implemented by **[Shameera Cassim](https://github.com/ShameeraC) and Tristyn Ferreiro**.
 
 ## Docs/
 Contains the documentation of the project. The thesis is a copy of the support behind and background of the project.
