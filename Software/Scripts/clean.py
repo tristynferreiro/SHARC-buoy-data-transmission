@@ -15,7 +15,7 @@ def clean_transmittedCompressioData(fileLines,startCharIndex, numLines):
     # removes unwanted newlines and blank spaces caused by transmission formatting
     for x in range(startCharIndex,numLines-1): 
         index = fileLines[x].find(substring)    # if the substring exists in the line
-        cleaned += fileLines[x][:index+1]         # remove the substring       
+        cleaned += fileLines[x][:index]         # remove the substring       
         elements = elements+1
     return cleaned[:-1], elements               # remove trailing , delimiter               
     
@@ -55,14 +55,17 @@ def main():
     cleanedSensorData = clean_sensorData(originalSensorData)
     f = open(sensorDataFile, "a")
     for x in cleanedSensorData:
+        f.write("\n")
         f.write(x)
     f.close()
 
     cleanedCompressedData, elements = clean_transmittedCompressioData(fileLines, startCharIndex,numLines)
 
-    with open(compressedDataFile, "a") as f:
-        f.write(cleanedCompressedData)
-        f.close()
+    f = open(compressedDataFile, "a")
+    for y in cleanedSensorData:
+        f.write("\n")
+        f.write(cleanedCompressedData[y])
+    f.close()
 
     print(cleanedSensorData)
     print(cleanedCompressedData)
