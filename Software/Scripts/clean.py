@@ -9,15 +9,16 @@ substring = ","
 #Functions
 
 def clean_transmittedCompressioData(fileLines,startCharIndex, numLines):
-    cleaned = ""
+    cleaned = []
     elements = 0
-
     # removes unwanted newlines and blank spaces caused by transmission formatting
-    for x in range(startCharIndex,numLines-1): 
+    for x in range(startCharIndex[0],numLines-1): 
         index = fileLines[x].find(substring)    # if the substring exists in the line
-        cleaned += fileLines[x][:index]         # remove the substring       
+        line = fileLines[x]
+        print(x)
+        cleaned.append(line[:index])         # remove the substring       
         elements = elements+1
-    return cleaned[:-1], elements               # remove trailing , delimiter               
+    return cleaned              # remove trailing , delimiter               
     
 def clean_sensorData(sensorData):
     cleanedSensorData = []
@@ -33,7 +34,7 @@ def main():
     originalSensorData = []
     cleanedSensorData = []          # real sensor data
 
-    startCharIndex = -1             # START sequence line number
+    startCharIndex = []             # START sequence line number
     cleanedCompressedData = ""      # real compressed bits
     elements = 0                    # number of compressed bits
     
@@ -47,7 +48,7 @@ def main():
         if(';' in line): #each data value 
             originalSensorData.append(line)
         if('#' in line):
-            startCharIndex=numLines
+            startCharIndex.append(numLines)
         numLines = numLines+1
 
     f.close()
@@ -59,10 +60,13 @@ def main():
         f.write(x)
     f.close()
 
-    cleanedCompressedData, elements = clean_transmittedCompressioData(fileLines, startCharIndex,numLines)
+    cleanedCompressedData= clean_transmittedCompressioData(fileLines, startCharIndex,numLines)
 
     f = open(compressedDataFile, "a")
-    for y in cleanedSensorData:
+    for y in range(len(cleanedCompressedData)-1):
+        if (y ==0):
+            f.write(cleanedCompressedData[y])
+            continue
         f.write("\n")
         f.write(cleanedCompressedData[y])
     f.close()

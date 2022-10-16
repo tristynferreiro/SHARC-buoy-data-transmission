@@ -1,4 +1,4 @@
-../Core/Src/main.c:152:5:main	360	static
+../Core/Src/main.c:152:5:main	640	static
 ../Core/Src/main.c:266:6:SystemClock_Config	80	static
 ../Core/Src/main.c:302:13:MX_SPI2_Init	8	static
 ../Core/Src/main.c:342:13:MX_USART2_UART_Init	8	static

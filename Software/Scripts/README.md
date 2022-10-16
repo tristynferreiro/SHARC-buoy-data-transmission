@@ -14,7 +14,9 @@ This script is used for reading and saving serial data recieved from the stm32f0
         Simply open the script and run as normal (for Visual Studio Code, you would simoly press the play button (triangle) in the top right hand corner)
         <br><br>
         
-        NOTE: if you are using Visual Studio Code to run the script, please ensure you have pip-packages, pylance and python extensions installed or you may have trouble with running the script
+        NOTE: if you are using Visual Studio Code to run the script, please ensure you have installed pyserial and not serial. This can be done by running the command: <br>
+            $ pip install pyserial <br>
+        If you get the error "AttributeError: 'module' object has no attribute 'Serial'", uninstall serial and pyserial (if they are installed) and reinstall pyserial to fix the problem.
         <br><br>
 
 Please ensure that you choose an empty file to save the data to as the script appends data to the file.

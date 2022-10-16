@@ -79,7 +79,7 @@ int numRecordings =0; // this keeps track of the number of recordings.
 
 int bit_buffer = 0, bit_mask = 128;
 int buffer[N * 2];
-int compressed[300]; // size of data to compress at one time (should be at least the size of encryption array)
+int compressed[500]; // size of data to compress at one time (should be at least the size of encryption array)
 int compressedBits =0; //keep track of compressed bits for transmission
 
 // ENCRYPTION VARIABLES
@@ -88,7 +88,7 @@ int n = 187;
 int d = 107;
 int p = 11;
 int q = 17;
-int encryptedData[300]; // passed to compression
+int encryptedData[500]; // passed to compression
 int encryptedBits = 0; // needed for use in compression
 
 /* USER CODE END PV */
@@ -185,11 +185,11 @@ int main(void)
   sprintf((char*)header, "\r\nAccel X (g),Accel Y (g),Accel Z (g),Gyro X (dps),Gyro Y (dps),Gyro Z (dps)");
   HAL_UART_Transmit(&huart2, header, sizeof(header), 1000);
 
-  int numReadings = 3; // number of sensor readings you want to take
+  int numReadings = 10; // number of sensor readings you want to take
   int numDataRecordings =0;
   int run = 0; // whether or not to run encrypt&compress
 
-  char inputArray[112] =""; // size = numReadings * 37+1
+  char inputArray[390] =""; // size = numReadings * 37+1
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -212,7 +212,7 @@ int main(void)
 		 * If any changes are made to the formatting of the readings, inputArray[] size needs to be updated.
 		 * The reading array size must also be updated. The strncat() must also be updated.
 		 */
-		char reading[37];
+		char reading[40];
 		sprintf(reading, "\r\n%.2f,%.2f,%.2f,%.2f,%.2f,%.2f;",my_accel.x,my_accel.y,my_accel.z,
 				my_gyro.x,my_gyro.y,my_gyro.z);
 		// HAL_UART_Transmit(&huart2, (uint8_t*)reading, sizeof(reading), 1000);
@@ -249,7 +249,7 @@ int main(void)
 		}
 		// TO ONLY TRANSMIT ONCE, COMMENT THESE LINES OUT
 		/** Reset the values for continued transmission **/
-		run=0;
+		run=1;
 		numDataRecordings = 0;
 		memset(inputArray, 0, sizeof(inputArray));
 		HAL_Delay(5000); //add a delay before getting next block of recordings
