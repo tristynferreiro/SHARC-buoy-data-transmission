@@ -1,23 +1,12 @@
-/**
-**************************************************
-Info:		encryption (RSA) and compresstion (lzss)
-Author:		Tristyn Ferreiro and Shameera Cassim
-****************************************************
-This code compresses and encrypts data in a hard coded array and prints the result 
-to a file (as INTEGER VALUES). The encryption uses a FIXED KEY.
-
-The compression algorithm uses a modified version of (Haruhiko Okumura; public domain)'s 
-lzss encoder. Encryption is based off of AES encryption. Modifications to both of these 
-algorithms have been made to suite the desing requirements of this project.
-******************************************************************************
-*/
+/* 
+ * This is a modified version of the original LZSS encoder-decoder (Haruhiko Okumura; public domain) 
+ * Instead of taking in a file an array of values is used as input. This input is compressed and stored in another array.
+ * The integer values of the compressed array are printed to a file.
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <time.h>
 
-//For compression:
 #define EI  6  /* typically 10..13 */
 #define EJ  5  /* typically 4..5 */
 #define P   1  /* If match length <= P then output one character */
@@ -25,35 +14,29 @@ algorithms have been made to suite the desing requirements of this project.
 #define F ((1 << EJ) + 1)  /* lookahead buffer size */
 
 int bit_buffer = 0, bit_mask = 128;
+unsigned long codecount = 0, textcount = 0;
+unsigned char buffer[N * 2];
 
+FILE *outfile; //the file to print the compressed bits to.
 
-//For encryption:
-#define MAX_VALUE 32
-#define E_VALUE 3 /*65535*/
-
-char inputData [120];
-
-int encryptedData[40];
-int encryptedBits = 0;
-int e = E_VALUE;
-int n = 187;
-int d = 107;
-int p = 11;
-int q = 17;
-
-/**
- * This array stores the encoded bit_buffers of all the data. The size needs to be chosen based on the 
- * number of bits of data. For the STM32F0 implementation, the size will need to be determine based on 
- * available space on the STM. This will likely be through trial and error.
+/** 
+ * This array stores the encoded bit_buffers of all the data. The size needs to be chosen based on the number of bits of data.
+ * For the STM32F0 implementation, the size will need to be determine based on available space on the STM. This will likely be 
+ * through trial and error
  */
-char compressed[200]; // should be at leas half the size of the inout data.
+int compressed[4970000]; // needs to be atleast the size of the input data (minimum). this size should be the limit of data stored at any one time
 int compressedBits =0;
 
-FILE *outfile;
+/**
+ * This is the mock input array of data to be compressed
+ */
+char inputArray[] = "0.054000001,6,0.0024,-0.0006,3.856600046,-0.061000001,-0.061000001,0,34.83589935, 0.054000001,6,0.0024,-0.0006,3.856600046,-0.061000001,-0.061000001,0,34.83589935";
 
-/***************
- * COMPRESSION *
- ***************/
+void error(void)
+{
+    //printf("Output error\n");  
+    exit(1);
+}
 
 /**
  * This method has been added to store the compression bits in one array for printing/transmission.
@@ -160,74 +143,30 @@ void compress(void)
 
     // WRITE compressed bits to FILE
     for (int jk=0;jk<compressedBits;jk++){
-        fprintf(outfile,"%d,\n",compressed[jk]);
+        fprintf(outfile,"%d\n",compressed[jk]);
     }
     
 }
 
-/**************
- * ENCRYPTION *
- **************/
-int ENCmodpow(int base, int power, int mod)
-{
-        int i;
-        int result = 1;
-        for (i = 0; i < power; i++)
-        {
-                result = (result * base) % mod;
-        }
-        return result;
-}
-
-void encrypt(char msg[]) {
-    int c;
-	int i;
-        for (i = 0; msg[i]!= '}'; i++)
-        {
-            c = ENCmodpow(msg[i],e,n);
-            encryptedData[i] = c;
-            encryptedBits++;
-            //int mesg[4];
-           // if (i > 0) {
-           // sprintf(mesg, "%d and i-1 =%dP",encryptedData[i], encryptedData[i-1]);
-           //  HAL_UART_Transmit(&huart2, mesg, sizeof(mesg), 1000);
-           // }
-        }
-    /*
-    for(int i =0; i<encryptedBits;i++){
-        printf("%d\n",encryptedData[i]);
-    }
-    */
-    printf("BITS:%d",encryptedBits);
-    //Call compression
-    compress();
-}
-
-
-
 int main(int argc, char *argv[])
 {
     int enc;
-    int dec;
     char *s;
-
-    char input[] = {"-0.28,-0.51,0.32,2.47,-8.75,11.012}"};
+    
     if (argc != 3) {
-        printf("Usage: combined e outfile\n\te = encrypt and compress\n");
+        printf("Usage: lzss e outfile\n\te = compress\n"); //only deals with encryption
         return 1;
     }
     s = argv[1];
-
-    if (s[1] == 0 && (*s == 'e' || *s == 'E')) {
+    if (s[1] == 0 && (*s == 'e' || *s == 'E'))
         enc = (*s == 'e' || *s == 'E');
+    else {
+        printf("? %s\n", s);  return 1;
     }
-   else {
-       printf("? %s\n", s);  return 1;
-   }
-    if ((outfile = fopen(argv[2], "w")) == NULL) {
+    if ((outfile = fopen(argv[2], "wb")) == NULL) {
         printf("? %s\n", argv[2]);  return 1;
     }
-    if (enc) {encrypt(input);}
+    if (enc) compress();
     fclose(outfile);
     return 0;
 }

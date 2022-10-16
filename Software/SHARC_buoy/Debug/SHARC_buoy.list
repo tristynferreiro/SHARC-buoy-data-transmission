@@ -5342,6 +5342,7 @@ int main(void)
  80029cc:	429a      	cmp	r2, r3
  80029ce:	dbd7      	blt.n	8002980 <main+0x1f8>
 		}
+		// TO ONLY TRANSMIT ONCE, COMMENT THESE LINES OUT
 		/** Reset the values for continued transmission **/
 		run=0;
  80029d0:	2300      	movs	r3, #0
@@ -5363,7 +5364,7 @@ int main(void)
  80029ec:	2100      	movs	r1, #0
  80029ee:	0018      	movs	r0, r3
  80029f0:	f003 fd93 	bl	800651a <memset>
-		HAL_Delay(5000);
+		HAL_Delay(5000); //add a delay before getting next block of recordings
  80029f4:	4b0c      	ldr	r3, [pc, #48]	; (8002a28 <main+0x2a0>)
  80029f6:	0018      	movs	r0, r3
  80029f8:	f001 fb8a 	bl	8004110 <HAL_Delay>

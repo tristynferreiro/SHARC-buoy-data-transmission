@@ -129,7 +129,7 @@ void compress(void)
         if (counter > encryptedBits) break;
         c = encryptedData[counter];
         buffer[i] = c;  counter++;
-        printf("HERE2: %d\n",buffer[i]);
+        //printf("buffer = %d\n",buffer[i]);
         //printf("c = %d\n", c);;
     }
     bufferend = i;  r = N - F;  s = 0;
@@ -160,7 +160,7 @@ void compress(void)
 
     // WRITE compressed bits to FILE
     for (int jk=0;jk<compressedBits;jk++){
-        fprintf(outfile,"%d,\n",compressed[jk]);
+        fprintf(outfile,"%d\n",compressed[jk]);
     }
     
 }

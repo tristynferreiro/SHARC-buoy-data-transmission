@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define EI 6  /* typically 10..13 */
+#define EI  6  /* typically 10..13 */
 #define EJ  5  /* typically 4..5 */
 #define P   1  /* If match length <= P then output one character */
 #define N (1 << EI)  /* buffer size */
@@ -16,78 +16,7 @@
 int bit_buffer = 0, bit_mask = 128;
 int buffer[N * 2];
 
-FILE *outfile;
-
-int inputComp[]={-100,
-82,
--20,
-21,
-72,
--67,
--116,
--8,
-99,
-49,
--85,
-26,
-96,
-81,
-42,
--106,
-58,
--91,
--125,
-87,
--124,
-72,
-8,
--67,
--125,
-9,
-25,
--79,
--58,
--93,
-86,
-10,
-92,
-106,
--87,
-65,
-74,
-26,
--92,
-93,
--96,
-1,
--126,
-51,
-26,
--79,
--119,
-5,
-18,
--87,
-99,
--86,
-88,
-53,
-120,
-64,
--32,
--117,
--40,
-48,
--111,
--101,
-28,
-106,
-53,
-96,
--91,
--58,
--86,
--112};
+FILE *infile, *outfile;
 
 int compDataArraySize = 70;
 int lineNumber =0;
@@ -100,10 +29,8 @@ int getbit(int n) /* get n bits */
     x = 0;
     for (i = 0; i < n; i++) {
         if (mask == 0) {
-            if (lineNumber>=compDataArraySize) break;
-            
-            //printf("%d; %d\n",lineNumber,inputComp[lineNumber]);
-            buf = inputComp[lineNumber];
+            if ((fscanf(infile, "%d", &buf)) == EOF) return EOF;
+            //printf("=%d\n",buf);
             mask = 128;
             lineNumber++;
         }
@@ -119,24 +46,19 @@ void decompress()
     int i, j, k, r, c;
 
     lineNumber=0;
-
-    //fileToArray();
-   //printf("SIZE: %d",compDataArraySize);
-
+    
     for (i = 0; i < N - F; i++) buffer[i] = ' ';
     r = N - F;
     while ((c = getbit(1)) != EOF) {
         if (c) {
-            if (lineNumber >= compDataArraySize) break;
-            c=getbit(8);
+            if ((c = getbit(8)) == EOF) break;
             //printf("+%d\n",c);
             fprintf(outfile, "%d\n",c);
             //fputc(c, outfile);
             buffer[r++] = c;  r &= (N - 1);
         } else {
-            i = getbit(EI);
-            j = getbit(EJ);
-            if (lineNumber>=compDataArraySize) break;
+            if ((i = getbit(EI)) == EOF) break;
+            if ((j = getbit(EJ)) == EOF) break;
             for (k = 0; k <= j + 1; k++) {
                 c = buffer[(i + k) & (N - 1)];
                 //printf("=%d\n",c);
@@ -150,27 +72,28 @@ void decompress()
 
 int main(int argc, char *argv[])
 {
-    int denc;
+    int dec;
     char *s;
 
-    if (argc != 3) {
-        printf("Usage: lzss d arrSize outfile\n\td = decode\n");
+    if (argc != 4) {
+        printf("Usage: lzss d infile outfile\n\td = decompress\n");
         return 1;
     }
     s = argv[1];
     if (s[1] == 0 && (*s == 'd' || *s == 'D'))
-        denc = (*s == 'd' || *s == 'D');
+        dec = (*s == 'd' || *s == 'D');
     else {
         printf("? %s\n", s);  return 1;
     }
-    
-    if ((outfile = fopen(argv[2], "wb")) == NULL) {
-        printf("? %s\n", argv[2]);  return 1;
+    if ((infile  = fopen(argv[2], "rb")) == NULL) {
+       printf("? %s\n", argv[2]);  return 1;
+    }
+    if ((outfile = fopen(argv[3], "wb")) == NULL) {
+        printf("? %s\n", argv[3]);  return 1;
     }
     
-    
-    if (denc) decompress();
-    fclose(outfile); 
+    if (dec) decompress();
+    fclose(infile); fclose(outfile); 
     return 0;
 }
 

@@ -1,7 +1,7 @@
 /* 
  * This is a modified version of the original LZSS encoder-decoder (Haruhiko Okumura; public domain) 
- * Instead of taking in a file an array of values is used as input. This input is compressed and stored in another array.
- * The integer values of the compressed array are printed to a file.
+ * Instead of taking in a file an array of values is used as input.
+ * Instead of printing to a file, the compressed data is store in an array.
  */
 
 #include <stdio.h>
@@ -17,20 +17,18 @@ int bit_buffer = 0, bit_mask = 128;
 unsigned long codecount = 0, textcount = 0;
 unsigned char buffer[N * 2];
 
-FILE *outfile; //the file to print the compressed bits to.
-
 /** 
  * This array stores the encoded bit_buffers of all the data. The size needs to be chosen based on the number of bits of data.
  * For the STM32F0 implementation, the size will need to be determine based on available space on the STM. This will likely be 
  * through trial and error
  */
-int compressed[4970000]; // needs to be atleast the size of the input data (minimum). this size should be the limit of data stored at any one time
+int compressed[2000]; // needs to be atleast the size of the input data (minimum). this size should be the limit of data stored at any one time
 int compressedBits =0;
 
 /**
- * This is the mock input array of data to be compressed
- */
-char inputArray[] = "0.054000001,6,0.0024,-0.0006,3.856600046,-0.061000001,-0.061000001,0,34.83589935, 0.054000001,6,0.0024,-0.0006,3.856600046,-0.061000001,-0.061000001,0,34.83589935";
+* This is the mock input array of data to be compressed
+*/
+char encryptedData[] = "encrypted array";
 
 void error(void)
 {
@@ -100,16 +98,17 @@ void output2(int x, int y)
     }
 }
 
-void encode(void)
+void encode(void) // should bee modified to take in value
 {
     int i, j, f1, x, y, r, s, bufferend, c;
     
     int counter = 0;
     for (i = 0; i < N - F; i++) buffer[i] = ' ';
     for (i = N - F; i < N * 2; i++) {
-        if ( counter >= sizeof(inputArray)) break;
-        c = inputArray[counter];
+        if ( counter >= sizeof(encryptedData)) break;
+        c = encryptedData[counter];
         buffer[i] = c;  counter++;
+        //textcount++;
     }
     bufferend = i;  r = N - F;  s = 0;
     while (r < bufferend) {
@@ -130,17 +129,68 @@ void encode(void)
             for (i = 0; i < N; i++) buffer[i] = buffer[i + N];
             bufferend -= N;  r -= N;  s -= N;
             while (bufferend < N * 2) {
-                if ( counter >= sizeof(inputArray)) break;
-                c = inputArray[counter];
+                if ( counter >= sizeof(encryptedData)) break;
+                c = encryptedData[counter];
                 buffer[bufferend++] = c;  counter++;
                 //textcount++;
             }
         }
     }
-    
-    // WRITE compressed bits to FILE
+    /*
+    // USED TO TEST THAT THE VALUES ARE BEING COMPRESSED BY PRINTING TO FILE
+    FILE *f = fopen("testcomp", "w+");
     for (int jk=0;jk<compressedBits;jk++){
-        fprintf(outfile,"%d\n",compressed[jk]);
+        fprint(compressed[jk]); //print to screen instead
+        fputc(compressed[jk],f);
+    }
+    //fprintf(f, "%s",compressed);
+    fclose(f);
+    */
+}
+
+int compressedIndex = 0;
+int getbit(int n) /* get n bits */
+{
+    int i, x;
+    static int buf, mask = 0;
+    
+    x = 0;
+    for (i = 0; i < n; i++) {
+        if (mask == 0) {
+            if (compressedIndex<compressedBits) break;
+            buf = compressed[compressedIndex];
+            compressedIndex++;
+            mask = 128;
+        }
+        x <<= 1;
+        if (buf & mask) x++;
+        mask >>= 1;
+    }
+    return x;
+}
+
+void decode(void)
+{
+    int i, j, k, r, c;
+    
+    compressedIndex=0; //reset this
+    
+    for (i = 0; i < N - F; i++) buffer[i] = ' ';
+    r = N - F;
+    while ((c = getbit(1)) != EOF) {
+        if (c) {
+            if ((c = getbit(8)) == EOF) break;
+            printf("%c",c);
+            buffer[r++] = c;  r &= (N - 1);
+        } else {
+            if ((i = getbit(EI)) == EOF) break;
+            if ((j = getbit(EJ)) == EOF) break;
+            for (k = 0; k <= j + 1; k++) {
+                c = buffer[(i + k) & (N - 1)];
+                printf("%c",c);
+                buffer[r++] = c;  r &= (N - 1);
+            }
+        }
     }
 }
 
@@ -149,20 +199,17 @@ int main(int argc, char *argv[])
     int enc;
     char *s;
     
-    if (argc != 3) {
-        printf("Usage: lzss e outfile\n\te = encode\n"); //only deals with encryption
+    if (argc != 2) {
+        printf("Usage: lzss e/d \n\te = encode\td = decode\n");
         return 1;
     }
     s = argv[1];
-    if (s[1] == 0 && (*s == 'e' || *s == 'E'))
+    if (s[1] == 0 && (*s == 'd' || *s == 'D' || *s == 'e' || *s == 'E'))
         enc = (*s == 'e' || *s == 'E');
     else {
         printf("? %s\n", s);  return 1;
     }
-    if ((outfile = fopen(argv[2], "wb")) == NULL) {
-        printf("? %s\n", argv[2]);  return 1;
-    }
-    if (enc) encode();
-    fclose(outfile);
+   
+    if (enc) encode(); else decode();
     return 0;
 }

@@ -69,7 +69,7 @@ void decrypt() {
         	}
        		h = (qInv * m1m2) % p;
         	m = m2 + h * q;
-        	fprintf(outfile, "%d", m);
+        	fprintf(outfile, "%c", m);
             printf("%c", m);
 	}
 	fclose(infile);
@@ -79,10 +79,13 @@ void decrypt() {
 
 int main(int argc, char *argv[])
 {
-    int enc;
     int dec;
     char *s;
 
+    if (argc != 4) {
+        printf("Usage: rsa d infile outfile\n\td = decrypt\n");
+        return 1;
+    }
     s = argv[1];
     if (s[1] == 0 && (*s == 'd' || *s == 'D' )) {
         dec = (*s == 'd' || *s == 'D');

@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define EI 6  /* typically 10..13 */
+#define EI  6  /* typically 10..13 */
 #define EJ  5  /* typically 4..5 */
 #define P   1  /* If match length <= P then output one character */
 #define N (1 << EI)  /* buffer size */
@@ -18,9 +18,78 @@ int buffer[N * 2];
 
 FILE *outfile;
 
-int inputComp[]={-58,80,105,118,10,93,46,-57,56,66,-88,-44,102,-63,25,-116,-40,-42,-126,53,84,86,56,84,-41,25,65,78,120,-48,-95,-119,0,99,70,-86,-123,-126,124,19,88};
+int inputComp[]={-100,
+82,
+-20,
+21,
+72,
+-67,
+-116,
+-8,
+99,
+49,
+-85,
+26,
+96,
+81,
+42,
+-106,
+58,
+-91,
+-125,
+87,
+-124,
+72,
+8,
+-67,
+-125,
+9,
+25,
+-79,
+-58,
+-93,
+86,
+10,
+92,
+106,
+-87,
+65,
+74,
+26,
+-92,
+93,
+-96,
+1,
+-126,
+51,
+26,
+-79,
+-119,
+5,
+18,
+-87,
+99,
+-86,
+88,
+53,
+120,
+64,
+-32,
+-117,
+-40,
+48,
+-111,
+-101,
+28,
+106,
+53,
+96,
+-91,
+-58,
+-86,
+-112};
 
-int compDataArraySize = 41;
+int compDataArraySize = 70;
 int lineNumber =0;
 
 int getbit(int n) /* get n bits */
@@ -85,7 +154,7 @@ int main(int argc, char *argv[])
     char *s;
 
     if (argc != 3) {
-        printf("Usage: lzss d arrSize outfile\n\td = decode\n");
+        printf("Usage: lzss d outfile\n\td = decode\n");
         return 1;
     }
     s = argv[1];
