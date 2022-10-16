@@ -243,7 +243,7 @@ int main(void)
 			 * which the transmission will fill with random characters. Make sure to used clean.py or adapt it to remove
 			 * the unwanted characters.
 			 */
-			sprintf(temp, "\r\n%d",compressed[count]);
+			sprintf(temp, "\r\n%d,",compressed[count]);
 			HAL_UART_Transmit(&huart2, (uint8_t*)temp, sizeof(temp), 1000);
 			count++;
 		}

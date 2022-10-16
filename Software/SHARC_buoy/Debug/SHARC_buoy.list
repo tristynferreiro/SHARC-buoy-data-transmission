@@ -5299,7 +5299,7 @@ int main(void)
 			 * which the transmission will fill with random characters. Make sure to used clean.py or adapt it to remove
 			 * the unwanted characters.
 			 */
-			sprintf(temp, "\r\n%d,",compressed[count]);
+			sprintf(temp, "\r\n%d",compressed[count]);
  8002980:	4b26      	ldr	r3, [pc, #152]	; (8002a1c <main+0x294>)
  8002982:	24fc      	movs	r4, #252	; 0xfc
  8002984:	2620      	movs	r6, #32
