@@ -34,34 +34,34 @@ $(wildcard ../makefile.init) \
 $(wildcard ../makefile.targets) \
 
 
-BUILD_ARTIFACT_NAME := SHARC_buoy_transmission_data
+BUILD_ARTIFACT_NAME := SHARC_buoy_no_sensor
 BUILD_ARTIFACT_EXTENSION := elf
 BUILD_ARTIFACT_PREFIX :=
 BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ARTIFACT_EXTENSION),.$(BUILD_ARTIFACT_EXTENSION),)
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXECUTABLES += \
-SHARC_buoy_transmission_data.elf \
+SHARC_buoy_no_sensor.elf \
 
 MAP_FILES += \
-SHARC_buoy_transmission_data.map \
+SHARC_buoy_no_sensor.map \
 
 SIZE_OUTPUT += \
 default.size.stdout \
 
 OBJDUMP_LIST += \
-SHARC_buoy_transmission_data.list \
+SHARC_buoy_no_sensor.list \
 
 
 # All Target
 all: main-build
 
 # Main-build Target
-main-build: SHARC_buoy_transmission_data.elf secondary-outputs
+main-build: SHARC_buoy_no_sensor.elf secondary-outputs
 
 # Tool invocations
-SHARC_buoy_transmission_data.elf SHARC_buoy_transmission_data.map: $(OBJS) $(USER_OBJS) /Users/tris/Documents/2022UCT/2nd\ sem/3097/SHARC_buoy_data_transmission/Software/combined/SHARC_buoy_transmission_data/STM32F051R8TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "SHARC_buoy_transmission_data.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m0 -T"/Users/tris/Documents/2022UCT/2nd sem/3097/SHARC_buoy_data_transmission/Software/combined/SHARC_buoy_transmission_data/STM32F051R8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="SHARC_buoy_transmission_data.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+SHARC_buoy_no_sensor.elf SHARC_buoy_no_sensor.map: $(OBJS) $(USER_OBJS) /Users/tris/Documents/2022UCT/2nd\ sem/3097/SHARC_buoy_data_transmission/Software/combined/SHARC_buoy_no_sensor/STM32F051R8TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "SHARC_buoy_no_sensor.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m0 -T"/Users/tris/Documents/2022UCT/2nd sem/3097/SHARC_buoy_data_transmission/Software/combined/SHARC_buoy_no_sensor/STM32F051R8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="SHARC_buoy_no_sensor.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -70,14 +70,14 @@ default.size.stdout: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-SHARC_buoy_transmission_data.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "SHARC_buoy_transmission_data.list"
+SHARC_buoy_no_sensor.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "SHARC_buoy_no_sensor.list"
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) SHARC_buoy_transmission_data.elf SHARC_buoy_transmission_data.list SHARC_buoy_transmission_data.map default.size.stdout
+	-$(RM) SHARC_buoy_no_sensor.elf SHARC_buoy_no_sensor.list SHARC_buoy_no_sensor.map default.size.stdout
 	-@echo ' '
 
 secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)

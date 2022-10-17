@@ -66,7 +66,7 @@ NOTE: When increasing the input data, the input data, compression and encryption
 int bit_buffer = 0, bit_mask = 128;
 int buffer[N * 2];
 
-int compressed[100]; // should be at least half size of original data.
+int compressed[500]; // should be at least half size of original data.
 int compressedBits =0; //used to keep track of number of bits for transmission.
 
 /* FOR ENCRYPTION */
@@ -76,7 +76,7 @@ int d = 107;
 int p = 11;
 int q = 17;
 int encryptedBits = 0;
-int encryptedData[100];
+int encryptedData[500];
 
 //for timing
 int start, end, t;
@@ -135,7 +135,8 @@ int main(void)
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
 
-  char inputArray[] = {"-0.0002,-0.0007,0.0010,-15.6098,0.0000,-0.1220}"}; // sample array used for testing the encryption and compression system
+  char inputArray[] = {"0.46,-0.84,-0.76,13.13,-19.71,-1.13\n0.45,-0.8,-0.75,11.34,-24.79,0.46\n0.48,-0.86,-0.71,12.79,-18.03,-0.85\n0.44,-0.74,-0.63,17.01,-42.35,10.5"
+		  "\n0.51,-0.85,-0.7,14.08,39.07,-38.23\n0.39,-0.76,-0.44,11.51,6.11,-24.26\n0.44,-0.62,-0.25,47.54,-51.3,32.38}"}; // sample array used for testing the encryption and compression system
 
   //This displays the header which explains the formating of the data outputed.
   uint8_t header[77];
