@@ -1,7 +1,7 @@
 % code used from https://www.mathworks.com/matlabcentral/answers/308231-fft-from-csv-data-file
 
 %FIGURE 1
-filename = "C:\Users\9510 i9\Desktop\wave1.csv";
+filename = "C:\Users\9510 i9\Desktop\out.txt";
 
 X = readmatrix(filename);
 Fs = 80000;                                       % Sampling frequency
@@ -39,7 +39,7 @@ Fv = linspace(0, 1, fix(L/2)+1)*Fn;                 % Frequency Vector
 Iv = 1:length(Fv);                                  % Index Vector
 
 %FIGURE 2
-filename2 = "C:\Users\9510 i9\Desktop\wave1.csv";
+filename2 = "C:\Users\9510 i9\Desktop\sensor_data.txt";
 X2 = readmatrix(filename);
 
 tmp12 = X2(:,1);
@@ -87,17 +87,6 @@ saveas(5, "accCorrFFT.png");
 
 
 figure(6)
-plot(Fv, FGyrodcoc(Iv))
-grid
-title('Fourier Transform Of D-C Offset Corrected Gyroscope Data')
-xlabel('Frequency (Hz)')
-ylabel('Amplitude')
-hold on
-plot(Fv, FGyrodcoc2(Iv))
-saveas(6, "GyroCorrFFT.png");
-
-
-figure(8)
 plot(Fv, FAlldcoc(Iv))
 grid
 title('Fourier Transform Of D-C Offset Corrected All Data')
@@ -105,7 +94,18 @@ xlabel('Frequency (Hz)')
 ylabel('Amplitude')
 hold on
 plot(Fv, FAlldcoc2(Iv))
-saveas(8, "CombinedCorrFFT.png");
+saveas(6, "CombinedCorrFFT.png");
+
+
+figure(8)
+plot(Fv, FGyrodcoc(Iv))
+grid
+title('Fourier Transform Of D-C Offset Corrected Gyroscope Data')
+xlabel('Frequency (Hz)')
+ylabel('Amplitude')
+hold on
+plot(Fv, FGyrodcoc2(Iv))
+saveas(8, "GyroCorrFFT.png");
 
 disp([sprintf('%s', "Accelerometer1: ") sprintf('%d,', FAccdcoc(1:end-1)), sprintf('%d', FAccdcoc(end))]);
 FID = fopen('Acc1.txt', 'w');
