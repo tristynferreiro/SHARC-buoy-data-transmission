@@ -1,7 +1,7 @@
 % code used from https://www.mathworks.com/matlabcentral/answers/308231-fft-from-csv-data-file
 
 %FIGURE 1
-filename = "C:\Users\9510 i9\Desktop\out.txt";
+filename = "C:\Users\9510 i9\Desktop\STM\Algorithm Test\arrayData.txt";
 
 X = readmatrix(filename);
 Fs = 80000;                                       % Sampling frequency
@@ -39,7 +39,7 @@ Fv = linspace(0, 1, fix(L/2)+1)*Fn;                 % Frequency Vector
 Iv = 1:length(Fv);                                  % Index Vector
 
 %FIGURE 2
-filename2 = "C:\Users\9510 i9\Desktop\sensor_data.txt";
+filename2 = "C:\Users\9510 i9\Desktop\STM\Algorithm Test\decryp.txt";
 X2 = readmatrix(filename);
 
 tmp12 = X2(:,1);
