@@ -60,8 +60,8 @@ all: main-build
 main-build: SHARC_buoy_no_sensor.elf secondary-outputs
 
 # Tool invocations
-SHARC_buoy_no_sensor.elf SHARC_buoy_no_sensor.map: $(OBJS) $(USER_OBJS) /Users/tris/Documents/2022UCT/2nd\ sem/3097/SHARC_buoy_data_transmission/Software/combined/SHARC_buoy_no_sensor/STM32F051R8TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "SHARC_buoy_no_sensor.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m0 -T"/Users/tris/Documents/2022UCT/2nd sem/3097/SHARC_buoy_data_transmission/Software/combined/SHARC_buoy_no_sensor/STM32F051R8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="SHARC_buoy_no_sensor.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+SHARC_buoy_no_sensor.elf SHARC_buoy_no_sensor.map: $(OBJS) $(USER_OBJS) C:\Users\9510\ i9\Desktop\SHARC_buoy_data_transmission\Software\combined\SHARC_buoy_no_sensor\STM32F051R8TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "SHARC_buoy_no_sensor.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m0 -T"C:\Users\9510 i9\Desktop\SHARC_buoy_data_transmission\Software\combined\SHARC_buoy_no_sensor\STM32F051R8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="SHARC_buoy_no_sensor.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
