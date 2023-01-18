@@ -21,7 +21,7 @@ The diffrent versions are:
 - combined_integers.c
 
 ## compression/
-This folder contains all previous developed versions of the the compression algorithm needed for testing. These versions were created throughout the development of the final solution and serve different functions.<br /><br />
+This folder contains all previously developed versions of the the compression algorithm needed for testing. These versions were created throughout the development of the final solution and serve different functions.<br /><br />
 
 A version lzss compression was used in the solution of this project. 
 
