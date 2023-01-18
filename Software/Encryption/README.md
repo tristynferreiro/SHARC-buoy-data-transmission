@@ -12,7 +12,7 @@ The different versions are:
 ### - rsa #
 This version of the code dynamically generates a key each time it is run. It takes in a hard-coded array and outputs a file for encryption and takes in and outputs a file for decryption. <br /><br />
 
-### To run this program on a Unix-based terminal using gcc compiling:
+#### To run this program on a Unix-based terminal using gcc compiling:
 \$ gcc rsa.c <br /><br />
 **encryption:** <br />
 \$ ./a.out rsa e *\<input file name\> \<output file name\>* <br />
