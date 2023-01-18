@@ -1,8 +1,6 @@
 # Encryption-Compression
 This folder contains all previous developed versions of the the combined algorithm code needed for testing. These versions were created throughout the development of the final solution and serve a different functions.
 
-**Note: to run any of the above commands using a Windows-based terminal, replace ./a.out with a.exe**
-
 ## SHARC_buoy_transmission_data
 The STM32CubeIDE project of the combined algorithms (without sensor interfacing - a hard coded array data is compressed and encrypted instead). Can be flashed onto a STM32F051 compatible microcontroller.
 
@@ -37,3 +35,5 @@ This version of the program:
 ### To run this program on a Unix-based terminal using gcc compiling:
 \$ gcc combined_integers.c <br />
 \$ ./a.out e *\<output file name\>*
+
+**_Note: to run any of the above commands using a Windows-based terminal, replace ./a.out with a.exe_**
