@@ -12,13 +12,9 @@ This version of the program:
 - uses a hardcoded array of values as input.
 - uses a **static** encryption key.
 
-### Running:
-#### Unix:
-$ gcc combined_chars.c <br />
-$ ./.aout e *nameOfOutfile*.
-#### Windows:
-$ gcc combined_chars.c <br />
-$ a.exe e *nameOfOutfile*
+### To run this program on a Unix-based terminal using gcc compiling:
+\$ gcc combined_chars.c <br />
+\$ ./a.out e *\<output file name\>*
 
 ## combined_dynamic_key.c
 This version of the program:
@@ -26,13 +22,9 @@ This version of the program:
 - uses a hardcoded array of values as input.
 - uses a **dynamic** encryption key.
 
-### Running:
-#### Unix:
-$ gcc combined_dynamic_key.c <br />
-$ ./.aout e *nameOfOutfile*.
-#### Windows:
-$ gcc combined_dynamic_key.c <br />
-$ a.exe e *nameOfOutfile*
+### To run this program on a Unix-based terminal using gcc compiling:
+\$ gcc combined_dynamic_key.c <br />
+\$ ./a.out e *\<output file name\>*
 
 
 ## combined_integers.c
@@ -41,10 +33,8 @@ This version of the program:
 - uses a hardcoded array of values as input.
 - uses a **static** encryption key.
 
-### Running:
-#### Unix:
-$ gcc combined_integers.c <br />
-$ ./.aout e *nameOfOutfile*.
-#### Windows:
-$ gcc combined_integers.c <br />
-$ a.exe e *nameOfOutfile*
+### To run this program on a Unix-based terminal using gcc compiling:
+\$ gcc combined_integers.c <br />
+\$ ./a.out e *\<output file name\>*
+
+**Note: to run any of the above commands using a Windows-based terminal, replace ./a.out with a.exe**

@@ -46,7 +46,7 @@ This version of the code includes a hard-coded key and is only used for decrypti
 \$ gcc rsa_decrypted.c <br />
 \$ ./a.out rsa_decrypted d *\<input file name\> \<output file name\>* <br /><br />
 
-**Note: to run any of the above commands using a Wondows-based terminal, replace ./a.out with a.exe**
+**Note: to run any of the above commands using a Windows-based terminal, replace ./a.out with a.exe**
 
 ## ChaCha20Poly1305V2/
 This contains the orignal attempt at implementing encryption using ChaCha20Poly1305. This implementation is based on that developed by Jonas Schnelli available at https://github.com/jonasschnelli/chacha20poly1305. **This code is not used in the final version of the project.** It was kept in the git repository for completeness.
