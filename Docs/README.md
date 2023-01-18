@@ -4,8 +4,8 @@ This folder contains datasheets and project documentation relating to the EEE309
 ## Datasheets/
 Datasheets and informational documents relating to sensors used and considered as well as the STM32F051 are available here.
 
-## Other
+## Other/
 Interfacing diagrams, the EEE3097S project brief and a thesis regarding the SHARC buoy project are available here.
 
-## Reports
+## Reports/
 The reports submitted for EEE3097S are available in both PDF and Latex formats. Please note that some of the links in these reports may not work due to restructuring of this repository.
