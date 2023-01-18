@@ -1,4 +1,4 @@
-# Encryption-Compression/
+# Encryption-Compression
 This folder contains all previous developed versions of the the combined algorithm code needed for testing. These versions were created throughout the development of the final solution and serve a different functions.
 
 ## SHARC_buoy_transmission_data
