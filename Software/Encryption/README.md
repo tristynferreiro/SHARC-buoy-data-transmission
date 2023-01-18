@@ -35,7 +35,7 @@ This version of the code is the same as rsa_modified_array_output above except t
 ### To run this program on a Unix-based terminal using gcc compiling:
 \$ gcc rsa_modified_array_output_fixed_key.c <br /><br />
 **encryption:** <br />
-\$ ./a.out rsa_modified_array_output_fixed_key e *\<input file name\> \<output file name\>*
+\$ ./a.out rsa_modified_array_output_fixed_key e *\<input file name\> \<output file name\>* <br />
 **decryption:** <br />
 \$ ./a.out rsa_modified_array_output_fixed_key d *\<input file name\> \<output file name\>* <br /><br />
 
