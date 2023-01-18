@@ -16,10 +16,10 @@ To run this program a Windows terminal and using gcc compiling: <br />
 \$ gcc rsa.c <br /><br />
 
 encryption: <br />
-\$ a.exe rsa e \<input file\> \<output file\> <br />
+\$ a.exe rsa e *\<input file name\> \<output file name\>* <br />
 
 decryption: <br />
-\$ a.exe rsa d \<input file\> \<output file\> <br /><br />
+\$ a.exe rsa d *\<input file name\> \<output file name\>* <br /><br />
 
 ### - rsa_modified_array_output #
 This version of the code is the same as rsa above except that the **encryption function writes the encrypted data to an array** instead of a file. <br /><br />
@@ -28,10 +28,10 @@ To run this program a Windows terminal and using gcc compiling: <br />
 \$ gcc rsa_modified_array_output.c <br /><br />
 
 encryption: <br />
-\$ a.exe rsa_modified_array_output e \<input file\> \<output file\> <br />
+\$ a.exe rsa_modified_array_output e *\<input file name\> \<output file name\>* <br />
 
 decryption: <br />
-\$ a.exe rsa_modified_array_output d \<input file\> \<output file\> <br /><br />
+\$ a.exe rsa_modified_array_output d *\<input file\> \<output file name\>* <br /><br />
 
 ### - rsa_modified_array_output_fixed_key #
 This version of the code is the same as rsa_modified_array_output above except that a **hard-coded key is used.** <br /><br />
@@ -40,17 +40,17 @@ To run this program a Windows terminal and using gcc compiling: <br />
 \$ gcc rsa_modified_array_output_fixed_key.c <br /><br />
 
 encryption: <br />
-\$ a.exe rsa_modified_array_output_fixed_key e \<input file\> \<output file\>
+\$ a.exe rsa_modified_array_output_fixed_key e *\<input file name\> \<output file name\>*
 
 decryption: <br />
-\$ a.exe rsa_modified_array_output_fixed_key d \<input file\> \<output file\> <br /><br />
+\$ a.exe rsa_modified_array_output_fixed_key d *\<input file name\> \<output file name\>* <br /><br />
 
 ### - rsa_decrypted #
 This version of the code includes a hard-coded key and is only used for decryption. It takes in a takes in an encrypted file and outputs a decrypted file. <br /><br />
 
 To run this program a Windows terminal and using gcc compiling: <br />
 \$ gcc rsa_decrypted.c <br />
-\$ a.exe rsa_decrypted d \<input file\> \<output file\> <br /><br />
+\$ a.exe rsa_decrypted d *\<input file name\> \<output file name\>* <br /><br />
 
 
 ## ChaCha20Poly1305V2/
