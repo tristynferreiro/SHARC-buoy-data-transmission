@@ -3,4 +3,7 @@ This project deals with implementation of encryption and compression of data fro
 
 Although the system is designed as a solution for the SHARC Buoy system, it is also a encryption-compression solution for other resource-constrained systems. If used for other systems, the algorithm should be optimised for the expected data. This involves testing different compression window and encryption key sizes.
 
+<\br>
 ![Screenshot](https://github.com/tristynferreiro/SHARC_buoy_data_transmission/blob/main/Docs/Other/system_interfacing.png)
+
+The [final design report](https://github.com/tristynferreiro/SHARC_buoy_data_transmission/blob/main/Docs/Reports/Final%20Report/Final_Report.pdf) provides a holistic and detailed description of the sytem's interactions, tests and designs.
