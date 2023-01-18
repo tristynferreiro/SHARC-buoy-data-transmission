@@ -1,5 +1,5 @@
 # Encryption-Compression
-This folder contains all previous developed versions of the the combined algorithm code needed for testing. These versions were created throughout the development of the final solution and serve a different functions.
+This folder contains all previous developed versions of the the combined algorithm code needed for testing. These versions were created throughout the development of the final solution and serve different functions.
 
 ## SHARC_buoy_transmission_data
 The STM32CubeIDE project of the combined algorithms (without sensor interfacing - a hard coded array data is compressed and encrypted instead). Can be flashed onto a STM32F051 compatible microcontroller.
