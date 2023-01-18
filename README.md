@@ -3,21 +3,20 @@ This project deals with implementation of encryption and compression of data fro
 
 Although the system is designed as a solution for the SHARC Buoy system, it is also a encryption-compression solution for other resource-constrained systems. If used for other systems, the algorithm should be optimised for the expected data. This involves testing different compression window and encryption key sizes.
 
-## Docs/
+
+
+
+
+## Structure
+### Docs/
 Contains the documentation of the project. The thesis is a copy of the support behind and background of the project.
+ - Datasheets/ : Contains the data sheets of the components used in this project.
+ - Reports/ : Contains all the reports created throughout the design process of this project. This includes the paper design, two progress reports and the final design report. The [final design report]() provides a holistic and detailed description of the sytem's interactions, tests and designs.
 
-### Datasheets/
-Contains the data sheets of the components used in this project.
-
-### Reports/
-Contains all the reports created throughout the design process of this project. This includes the paper design, two progress reports and the final design report. 
-
-The [final design report]() provides a holistic and detailed description of the sytem's interactions, tests and designs.
-
-## Software/
+### Software/
 Contains all the source code used in this project. For both the compression and encryption algorithms, there are multiple veersions of the source code which served different purposes during the design and implementation phases of the project. They are named descriptively.
 
 All folders contain READMEs explaining how to compile and run the files.
 
-## Testing/
+### Testing/
 Contains all the test data recorded and used throughout the design of the system. The testing python scripts can also be found here.
