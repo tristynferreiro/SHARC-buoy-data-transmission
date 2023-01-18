@@ -1,4 +1,35 @@
 # Software
+
+## Compression/
+Contains all previously developed versions of the the compression algorithm needed for testing. These versions were created throughout the development of the final solution and serve different functions.<br /><br />
+
+A version of lzss compression was used in the solution of this project. 
+
+## Encryption-Compression/
+Contains all previous developed versions of the the combined algorithm code needed for testing. These versions were created throughout the development of the final solution and serve a different function.
+
+The diffrent versions are:
+- SHARC_buoy_transmission_data
+- combined_chars.c
+- combined_dynamic_key.c
+- combined_integers.c
+
+## Encryption/
+Contains all previous developed versions of the the encryption algorithm needed for testing. These versions were created throughout the development of the final solution and serve different functions. <br />
+RSA encryption was used in the solution of this project. 
+
+## Full System (stm32f0)/
+Contains the STM32CubeIDE projects and serial scripts used in the final system and sensor interfacing.
+
+### Sensor/
+This contains the stm32CubeIDE project used to interface with the SparkFun 9Dof Breakout board's ICM20948. The project is based on [this gitHub repo](https://github.com/mokhwasomssi/stm32_hal_icm20948) but some functions and interfaces were changed for use in this project. That repo project is also setup for use on an stm32f4 so adaptations needed to be made for use in this project. Only the [icm20948.h](https://github.com/mokhwasomssi/stm32_hal_icm20948/blob/master/icm20948.h) file and some methods from [icm20948.c](https://github.com/mokhwasomssi/stm32_hal_icm20948/blob/master/icm20948.h) were copied across and changed for use in the new project. 
+
+### Scripts/
+Contains all scripts used for gathering the data trasmitted from the stm32f0.
+-serialReceive.py
+-clean.py
+-clean_multiTransmits.py
+
 ## SHARC_buoy/
 This is the latest version of the complete working project. It reads accelerometer and gyroscope data from the icm20948, encrypts and compresses it and then transmits the compressed-encrypted data over UART.
 
@@ -10,33 +41,6 @@ This project can be opened using STM32CubesIDE and then flashed onto an STM32F0 
 *The project specifically uses SPI, however the IMU is I2C compatible.*
 <br/><br/>
 **Important:** When increasing the input data, the input data, compression and encryption array sizes also need to be increased. Otherwise thr program will crash/not run correctly.
-
-## combined/
-This contains all previous developed versions of the the combined algorithm code needed for testing. These versions were created throughout the development of the final solution and serve a different function.
-
-The diffrent versions are:
-- SHARC_buoy_transmission_data
-- combined_chars.c
-- combined_dynamic_key.c
-- combined_integers.c
-
-## compression/
-This folder contains all previously developed versions of the the compression algorithm needed for testing. These versions were created throughout the development of the final solution and serve different functions.<br /><br />
-
-A version lzss compression was used in the solution of this project. 
-
-## encryption/
-This folder contains all previous developed versions of the the encryption algorithm needed for testing. These versions were created throughout the development of the final solution and serve different functions. <br />
-RSA encryption was used in the solution of this project. 
-
-## sensor/
-This contains the stm32CubeIDE project used to interface with the SparkFun 9Dof Breakout board's ICM20948. The project is based on [this gitHub repo](https://github.com/mokhwasomssi/stm32_hal_icm20948) but some functions and interfaces were changed for use in this project. That repo project is also setup for use on an stm32f4 so adaptations needed to be made for use in this project. Only the [icm20948.h](https://github.com/mokhwasomssi/stm32_hal_icm20948/blob/master/icm20948.h) file and some methods from [icm20948.c](https://github.com/mokhwasomssi/stm32_hal_icm20948/blob/master/icm20948.h) were copied across and changed for use in the new project. 
-
-## Scripts/
-Contains all scripts used for gathering the data trasmitted from the stm32f0.
--serialReceive.py
--clean.py
--clean_multiTransmits.py
 
 # Common Bug fixes
 ### I changed the stm32 projects' input data and the program no longer runs
