@@ -9,9 +9,9 @@ Although the system is designed as a solution for the SHARC Buoy system, it is a
 The [final design report](https://github.com/tristynferreiro/SHARC_buoy_data_transmission/blob/main/Docs/Reports/Final%20Report/Final_Report.pdf) provides a holistic and detailed description of the sytem's interactions, tests and designs.
 
 ### What you will need
--STM32F0Discovery board
--SparkFun 9Dof Breakout board's ICM20948
--A computer with STM32CubeIDE installed on it
--FTDI chip with micro or USB connector
--Jumper cables
--2x microUSB to USB connector
+- STM32F0Discovery board
+- SparkFun 9Dof Breakout board's ICM20948
+- A computer with STM32CubeIDE installed on it
+- FTDI chip with micro or USB connector
+- Jumper cables
+- 2x microUSB to USB connector
