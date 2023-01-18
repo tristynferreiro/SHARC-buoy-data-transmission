@@ -16,7 +16,7 @@ This is the latest version of the complete working project. It reads acceleromet
 In its current form, the project will take a fixed number of sensor data recordings (1 second apart) and stores them in an array. This block of data is then sent off to encryption and compression and then trasmitted. This is followed by a 5 second delay before the process is restarted. To remove the restart or increase the delay lines 252-255 of the main.c file can be editted.
 
 ### running the project
-This project can be opened using STM32CubesIDE and then flashed onto an STM32F0 compatible board. Make sure to follow the sensor setup instructions as described [here](https://github.com/tristynferreiro/SHARC_buoy_data_transmission/blob/main/Software/Full System (stm32f0)/Sensor/README.md). 
+This project can be opened using STM32CubesIDE and then flashed onto an STM32F0 compatible board. Make sure to follow the sensor setup instructions as described [here](https://github.com/tristynferreiro/SHARC_buoy_data_transmission/blob/main/Software/Full\ System\ (stm32f0)/Sensor/README.md). 
 <br/>
 *The project uses SPI, however the IMU is I2C compatible.*
 <br/><br/>
