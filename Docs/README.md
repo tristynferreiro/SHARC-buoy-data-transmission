@@ -8,4 +8,4 @@ Datasheets and informational documents relating to sensors used and considered a
 Interfacing diagrams, the EEE3097S project brief and a thesis regarding the SHARC buoy project are available here.
 
 ## Reports/
-The reports submitted for EEE3097S are available in both PDF and Latex formats. Please note that some of the links in these reports may not work due to restructuring of this repository.
+The reports submitted for EEE3097S are available in both PDF and Latex formats. Please note that some of the links in these reports may not work due to the restructuring of this repository.
