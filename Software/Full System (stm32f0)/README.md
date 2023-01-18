@@ -6,9 +6,9 @@ This contains the stm32CubeIDE project used to interface with the SparkFun 9Dof 
 
 ## Scripts/
 Contains all scripts used for gathering the data trasmitted from the stm32f0.
--serialReceive.py
--clean.py
--clean_multiTransmits.py
+- serialReceive.py
+- clean.py
+- clean_multiTransmits.py
 
 ## SHARC_buoy/
 This is the latest version of the complete working project. It reads accelerometer and gyroscope data from the icm20948, encrypts and compresses it and then transmits the compressed-encrypted data over UART.
