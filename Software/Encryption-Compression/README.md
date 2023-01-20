@@ -1,7 +1,7 @@
 # Encryption-Compression
 This folder contains all previous developed versions of the the combined algorithm code needed for testing. These versions were created throughout the development of the final solution and serve different functions.
 <br /><br />
-**_Note: to run any of the commands using a Windows-based terminal, replace ./a.out with a.exe_**
+**_Note: to run any of the commands using a Windows-based terminal, replace ./a.out with a.exe_** <br />
 **_Additionally, all the programs are only for encoding data, the [decompression](https://github.com/tristynferreiro/SHARC_buoy_data_transmission/blob/main/Software/Compression/lzss_decompression.c) and [decryption](https://github.com/tristynferreiro/SHARC_buoy_data_transmission/blob/main/Software/Encryption/RSA/rsa_decryption.c) algorithms can be used to recover the original data_**
 
 ## SHARC_buoy_transmission_data
