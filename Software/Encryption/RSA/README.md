@@ -1,15 +1,16 @@
 # RSA/
+Please note: While the below C files take in an input file as an argument, these are not used for encryption. The main methods of these files were used largely for PC testing and were not edited to accomodate for encryption and decryption calls separately. 
+<br /><br />
+**Note: to run any of the above commands using a Windows-based terminal, replace ./a.out with a.exe**
 
-Please note: While the below C files take in an input file as an argument, these are not used for encryption. The main methods of these files were used largely for PC testing and were not edited to accomodate for encryption and decryption calls separately. <br /><br /> 
-
-## rsa 
-This version of the code dynamically generates a key each time it is run. It takes in a hard-coded array and outputs a file for encryption and takes in and outputs a file for decryption. <br /><br />
+## rsa.c
+This version of the code dynamically generates a key each time it is run. It takes in a hard-coded array and outputs a file for encryption and takes in and outputs a file for decryption.
 
 ### To run this program on a Unix-based terminal using gcc compiling:
 ```bash
 $ gcc rsa.c 
 ```
-**Encryption:** <br />
+**Encryption:** 
 ```bash
 $ ./a.out rsa e <input file name> <output file name> 
 ```
@@ -18,8 +19,8 @@ $ ./a.out rsa e <input file name> <output file name>
 $ ./a.out rsa d <input file name> <output file name> 
 ```
 
-## rsa_modified_array_output 
-This version of the code is the same as rsa above except that the **encryption function writes the encrypted data to an array** instead of a file. <br /><br />
+## rsa_modified_array_output.c
+This version of the code is the same as rsa above except that the **encryption function writes the encrypted data to an array** instead of a file.
 
 ### To run this program on a Unix-based terminal using gcc compiling:
 ```bash
@@ -35,7 +36,7 @@ $ ./a.out rsa_modified_array_output d <input file name> <output file name>
 ```
 
 ## rsa_modified_array_output_fixed_key 
-This version of the code is the same as rsa_modified_array_output above except that a **hard-coded key is used.** <br /><br />
+This version of the code is the same as rsa_modified_array_output above except that a **hard-coded key is used.**
 
 ### To run this program on a Unix-based terminal using gcc compiling:
 ```bash
@@ -51,11 +52,11 @@ $ ./a.out rsa_modified_array_output_fixed_key d <input file name> <output file n
 ```
 
 ## rsa_decrypted 
-This version of the code includes a hard-coded key and is only used for decryption. It takes in a takes in an encrypted file and outputs a decrypted file. <br /><br />
+This version of the code includes a hard-coded key and is only used for decryption. It takes in a takes in an encrypted file and outputs a decrypted file.
 
 ### To run this program on a Unix-based terminal using gcc compiling:
 ```bash
 $ gcc rsa_decrypted.c
 $ ./a.out rsa_decrypted d <input file name> <output file name> 
 ```
-**Note: to run any of the above commands using a Windows-based terminal, replace ./a.out with a.exe**
+

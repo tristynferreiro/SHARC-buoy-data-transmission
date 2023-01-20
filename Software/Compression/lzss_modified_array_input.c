@@ -14,8 +14,10 @@
 #define F ((1 << EJ) + 1)  /* lookahead buffer size */
 
 int bit_buffer = 0, bit_mask = 128;
+unsigned long codecount = 0, textcount = 0;
+unsigned char buffer[N * 2];
 
-FILE *infile,*outfile; //the file to print the compressed bits to.
+FILE *outfile; //the file to print the compressed bits to.
 
 /** 
  * This array stores the encoded bit_buffers of all the data. The size needs to be chosen based on the number of bits of data.
@@ -24,6 +26,11 @@ FILE *infile,*outfile; //the file to print the compressed bits to.
  */
 int compressed[4970000]; // needs to be atleast the size of the input data (minimum). this size should be the limit of data stored at any one time
 int compressedBits =0;
+
+/**
+ * This is the mock input array of data to be compressed
+ */
+char inputArray[] = "0.054000001,6,0.0024,-0.0006,3.856600046,-0.061000001,-0.061000001,0,34.83589935, 0.054000001,6,0.0024,-0.0006,3.856600046,-0.061000001,-0.061000001,0,34.83589935";
 
 void error(void)
 {
@@ -102,9 +109,10 @@ void compress(void)
     
     for (i = 0; i < N - F; i++) buffer[i] = ' ';
     for (i = N - F; i < N * 2; i++) {
-        if ((fscanf(infile, "%c", &c)) == EOF) break;
+        if (counter > encryptedBits) break;
+        c = encryptedData[counter];
         buffer[i] = c;  counter++;
-        //printf("%d\n",buffer[i]);
+        //printf("buffer value: %d\n",buffer[i]);
         //printf("c = %d\n", c);;
     }
     bufferend = i;  r = N - F;  s = 0;
@@ -115,7 +123,7 @@ void compress(void)
             if (buffer[i] == c) {
                 for (j = 1; j < f1; j++)
                     if (buffer[i + j] != buffer[r + j]) break;
-                if (j > y) {
+                if (j > y) {s
                     x = i;  y = j;
                 }
             }
@@ -126,11 +134,13 @@ void compress(void)
             for (i = 0; i < N; i++) buffer[i] = buffer[i + N];
             bufferend -= N;  r -= N;  s -= N;
             while (bufferend < N * 2) {
-                if ((fscanf(infile, "%c", &c)) == EOF) break;
+                if (counter > encryptedBits) break;
+                c = encryptedData[counter];
                 buffer[bufferend++] = c;  counter++;
             }
         }
     }
+
     // WRITE compressed bits to FILE
     for (int jk=0;jk<compressedBits;jk++){
         fprintf(outfile,"%d\n",compressed[jk]);
@@ -143,8 +153,8 @@ int main(int argc, char *argv[])
     int enc;
     char *s;
     
-    if (argc != 4) {
-        printf("Usage: lzss e infile outfile\n\te = compress\n"); //only deals with compression
+    if (argc != 3) {
+        printf("Usage: lzss e outfile\n\te = compress\n"); //only deals with encryption
         return 1;
     }
     s = argv[1];
@@ -153,13 +163,10 @@ int main(int argc, char *argv[])
     else {
         printf("? %s\n", s);  return 1;
     }
-    if ((infile  = fopen(argv[2], "rb")) == NULL) {
+    if ((outfile = fopen(argv[2], "wb")) == NULL) {
         printf("? %s\n", argv[2]);  return 1;
     }
-    if ((outfile = fopen(argv[3], "wb")) == NULL) {
-        printf("? %s\n", argv[3]);  return 1;
-    }
     if (enc) compress();
-    fclose(infile);fclose(outfile);
+    fclose(outfile);
     return 0;
 }

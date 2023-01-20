@@ -1,7 +1,5 @@
 /*
  * This is a modified version of the original LZSS decoder (Haruhiko Okumura; public domain)
- * Instead of taking in a file an array of values is used as input.
- * The decompressed data is then printed to a file.
  */
 
 #include <stdio.h>
