@@ -35,8 +35,8 @@ $ python3 clean.py
 The values in the output file must be copied into the decompression source code before compilation. The comma-seperated list must be copied into the _inputComp[]_ array and the last integer value is the _compDataArraySize_:
 
 ```c
-    int inputComp[]={-100,50,-2};
-    int compDataArraySize = 70;
+int inputComp[]={-100,50,-2};
+int compDataArraySize = 3; //Should be the number of items in the inputComp array
 ```
 _Note: if the output is not from an stm32f0 project, the array and array size need to be populated manually with the values in the lzss-compressed file.
 
