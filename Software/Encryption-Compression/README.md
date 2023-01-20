@@ -13,8 +13,10 @@ This version of the program:
 - uses a **static** encryption key.
 
 ### To run this program on a Unix-based terminal using gcc compiling:
-\$ gcc combined_chars.c <br />
-\$ ./a.out e *\<output file name\>*
+```bash
+$ gcc combined_chars.c
+$ ./a.out e <output file name>
+```
 
 ## combined_dynamic_key.c
 This version of the program:
@@ -23,8 +25,10 @@ This version of the program:
 - uses a **dynamic** encryption key.
 
 ### To run this program on a Unix-based terminal using gcc compiling:
-\$ gcc combined_dynamic_key.c <br />
-\$ ./a.out e *\<output file name\>*
+```bash
+$ gcc combined_dynamic_key.c
+$ ./a.out e <output file name>
+```
 
 ## combined_integers.c
 This version of the program:
@@ -33,8 +37,10 @@ This version of the program:
 - uses a **static** encryption key.
 
 ### To run this program on a Unix-based terminal using gcc compiling:
-\$ gcc combined_integers.c <br />
-\$ ./a.out e *\<output file name\>*
+```bash
+$ gcc combined_integers.c
+$ ./a.out e <output file name>
+```
 
 **_Note: to run any of the above commands using a Windows-based terminal, replace ./a.out with a.exe_**
 ## **_Additionally, all the above programs are for encoding data, the [decompression]() and [decryption](https://github.com/tristynferreiro/SHARC_buoy_data_transmission/blob/main/Software/Encryption/RSA/rsa_decryption.c) algorithms can be used to recover the original data_**
