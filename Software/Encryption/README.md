@@ -1,8 +1,8 @@
 # Encryption #
-This contains both ChaCha20Poly1305 and RSA code. ChaCha20Poly1305 was the original algorithm chosen in the paper design, however the system was updated to utilize RSA for encryption in the first progress report. **RSA is used in the final working system.** <br /><br /> 
+This contains both ChaCha20Poly1305 and RSA code. ChaCha20Poly1305 was the original algorithm chosen in the paper design, however the system was updated to utilize RSA for encryption in the first progress report. **RSA is used in the final working system.**
 
 ## RSA/
-This contains all previous developed versions of the the RSA implementation needed for testing. These were created throughout the development of the final solution and serve a different function. The RSA implementation is based on that developed by Yiğit Usta available at https://github.com/yigitusta/RSA-Implementation. <br /><br />
+This contains all previous developed versions of the the RSA implementation needed for testing. These were created throughout the development of the final solution and serve a different function. The RSA implementation is based on that developed by Yiğit Usta available at https://github.com/yigitusta/RSA-Implementation.
 
 
 ## ChaCha20Poly1305V2/
