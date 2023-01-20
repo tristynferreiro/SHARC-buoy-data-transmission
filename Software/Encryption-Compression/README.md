@@ -43,4 +43,4 @@ $ ./a.out e <output file name>
 ```
 
 **_Note: to run any of the above commands using a Windows-based terminal, replace ./a.out with a.exe_**
-## **_Additionally, all the above programs are for encoding data, the [decompression](https://github.com/tristynferreiro/SHARC_buoy_data_transmission/blob/main/Software/Compression/lzss_decompression.c) and [decryption](https://github.com/tristynferreiro/SHARC_buoy_data_transmission/blob/main/Software/Encryption/RSA/rsa_decryption.c) algorithms can be used to recover the original data_**
+### **_Additionally, all the above programs are for encoding data, the [decompression](https://github.com/tristynferreiro/SHARC_buoy_data_transmission/blob/main/Software/Compression/lzss_decompression.c) and [decryption](https://github.com/tristynferreiro/SHARC_buoy_data_transmission/blob/main/Software/Encryption/RSA/rsa_decryption.c) algorithms can be used to recover the original data_**
