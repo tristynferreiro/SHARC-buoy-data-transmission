@@ -1,7 +1,7 @@
 # Compression
 This folder contains all previous developed versions of the the lzss compression algorithms required for development of the subsystem. The steps for compiling and running these algorithms are outlined below. These algorithms are adapted from Haruhiko Okumura's LZSS encoder-decoder.
 <br /><br />
-**Note: to run any of the commands using a Windows-based terminal, replace ./a.out with a.exe**
+**_Note: to run any of the commands using a Windows-based terminal, replace ./a.out with a.exe_**
 
 ## lzss_decompression.c
 This is an adaptation of the original decoder. This version of the program:
