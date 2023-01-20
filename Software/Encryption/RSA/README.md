@@ -1,4 +1,4 @@
-# RSA/
+# RSA Encryption
 Please note: While the below C files take in an input file as an argument, these are not used for encryption. The main methods of these files were used largely for PC testing and were not edited to accomodate for encryption and decryption calls separately. 
 <br /><br />
 **_Note: to run any of the above commands using a Windows-based terminal, replace ./a.out with a.exe_**
