@@ -37,7 +37,7 @@ def main():
     cleanedCompressedData = []      # real compressed bits
     elements = []                   # number of compressed bits
     
-    f = open("transmission.txt", "r")
+    f = open("enc_comp", "r")
     # Read in lines
     for line in f:
         fileLines.append(line)

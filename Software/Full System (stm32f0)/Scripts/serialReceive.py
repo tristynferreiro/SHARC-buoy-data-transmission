@@ -2,11 +2,17 @@ import serial
 import time
 import os
 
-serialPort = serial.Serial(port = "COM4", baudrate=9600, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
+# Use the code below to find the serial port (should be the last one on the list, for windows it might look more like "COM4")
+# import serial.tools.list_ports as port_list
+# ports = list(port_list.comports())
+# for p in ports:
+#     print (p.device)
+
+serialPort = serial.Serial(port = "/dev/cu.usbserial-0001", baudrate=9600, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
 serialPort.flushInput()
 
 serialString = ""                           # Used to hold data coming over UART
-file = "enc_comp.txt"
+file = "./Desktop/enc_comp.txt"
 #compileCMD = 'gcc rsa_decrypted.c' 
 #runCMD = 'a.exe d test.txt out.txt'
 
@@ -23,3 +29,5 @@ while(1):
        # os.system(compileCMD)
        # os.system(runCMD)
        # print("complete")
+
+

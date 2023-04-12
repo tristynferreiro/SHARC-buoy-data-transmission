@@ -37,13 +37,13 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  16 .debug_macro  00012cd5  00000000  00000000  0002d020  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_line   0000acf0  00000000  00000000  0003fcf5  2**0
+ 17 .debug_line   0000aeb3  00000000  00000000  0003fcf5  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    0006d796  00000000  00000000  0004a9e5  2**0
+ 18 .debug_str    0006d7f7  00000000  00000000  0004aba8  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000050  00000000  00000000  000b817b  2**0
+ 19 .comment      00000050  00000000  00000000  000b839f  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  0000345c  00000000  00000000  000b81cc  2**2
+ 20 .debug_frame  0000345c  00000000  00000000  000b83f0  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -8712,81 +8712,53 @@ void SysTick_Handler(void)
  8003ea8:	bd80      	pop	{r7, pc}
 
 08003eaa <_getpid>:
-void initialise_monitor_handles()
-{
-}
-
-int _getpid(void)
-{
  8003eaa:	b580      	push	{r7, lr}
  8003eac:	af00      	add	r7, sp, #0
-	return 1;
  8003eae:	2301      	movs	r3, #1
-}
  8003eb0:	0018      	movs	r0, r3
  8003eb2:	46bd      	mov	sp, r7
  8003eb4:	bd80      	pop	{r7, pc}
 
 08003eb6 <_kill>:
-
-int _kill(int pid, int sig)
-{
  8003eb6:	b580      	push	{r7, lr}
  8003eb8:	b082      	sub	sp, #8
  8003eba:	af00      	add	r7, sp, #0
  8003ebc:	6078      	str	r0, [r7, #4]
  8003ebe:	6039      	str	r1, [r7, #0]
-	errno = EINVAL;
  8003ec0:	f002 fb16 	bl	80064f0 <__errno>
  8003ec4:	0003      	movs	r3, r0
  8003ec6:	2216      	movs	r2, #22
  8003ec8:	601a      	str	r2, [r3, #0]
-	return -1;
  8003eca:	2301      	movs	r3, #1
  8003ecc:	425b      	negs	r3, r3
-}
  8003ece:	0018      	movs	r0, r3
  8003ed0:	46bd      	mov	sp, r7
  8003ed2:	b002      	add	sp, #8
  8003ed4:	bd80      	pop	{r7, pc}
 
 08003ed6 <_exit>:
-
-void _exit (int status)
-{
  8003ed6:	b580      	push	{r7, lr}
  8003ed8:	b082      	sub	sp, #8
  8003eda:	af00      	add	r7, sp, #0
  8003edc:	6078      	str	r0, [r7, #4]
-	_kill(status, -1);
  8003ede:	2301      	movs	r3, #1
  8003ee0:	425a      	negs	r2, r3
  8003ee2:	687b      	ldr	r3, [r7, #4]
  8003ee4:	0011      	movs	r1, r2
  8003ee6:	0018      	movs	r0, r3
  8003ee8:	f7ff ffe5 	bl	8003eb6 <_kill>
-	while (1) {}		/* Make sure we hang here */
  8003eec:	e7fe      	b.n	8003eec <_exit+0x16>
 
 08003eee <_read>:
-}
-
-__attribute__((weak)) int _read(int file, char *ptr, int len)
-{
  8003eee:	b580      	push	{r7, lr}
  8003ef0:	b086      	sub	sp, #24
  8003ef2:	af00      	add	r7, sp, #0
  8003ef4:	60f8      	str	r0, [r7, #12]
  8003ef6:	60b9      	str	r1, [r7, #8]
  8003ef8:	607a      	str	r2, [r7, #4]
-	int DataIdx;
-
-	for (DataIdx = 0; DataIdx < len; DataIdx++)
  8003efa:	2300      	movs	r3, #0
  8003efc:	617b      	str	r3, [r7, #20]
  8003efe:	e00a      	b.n	8003f16 <_read+0x28>
-	{
-		*ptr++ = __io_getchar();
  8003f00:	e000      	b.n	8003f04 <_read+0x16>
  8003f02:	bf00      	nop
  8003f04:	0001      	movs	r1, r0
@@ -8795,7 +8767,6 @@ __attribute__((weak)) int _read(int file, char *ptr, int len)
  8003f0a:	60ba      	str	r2, [r7, #8]
  8003f0c:	b2ca      	uxtb	r2, r1
  8003f0e:	701a      	strb	r2, [r3, #0]
-	for (DataIdx = 0; DataIdx < len; DataIdx++)
  8003f10:	697b      	ldr	r3, [r7, #20]
  8003f12:	3301      	adds	r3, #1
  8003f14:	617b      	str	r3, [r7, #20]
@@ -8803,34 +8774,22 @@ __attribute__((weak)) int _read(int file, char *ptr, int len)
  8003f18:	687b      	ldr	r3, [r7, #4]
  8003f1a:	429a      	cmp	r2, r3
  8003f1c:	dbf0      	blt.n	8003f00 <_read+0x12>
-	}
-
-return len;
  8003f1e:	687b      	ldr	r3, [r7, #4]
-}
  8003f20:	0018      	movs	r0, r3
  8003f22:	46bd      	mov	sp, r7
  8003f24:	b006      	add	sp, #24
  8003f26:	bd80      	pop	{r7, pc}
 
 08003f28 <_write>:
-
-__attribute__((weak)) int _write(int file, char *ptr, int len)
-{
  8003f28:	b580      	push	{r7, lr}
  8003f2a:	b086      	sub	sp, #24
  8003f2c:	af00      	add	r7, sp, #0
  8003f2e:	60f8      	str	r0, [r7, #12]
  8003f30:	60b9      	str	r1, [r7, #8]
  8003f32:	607a      	str	r2, [r7, #4]
-	int DataIdx;
-
-	for (DataIdx = 0; DataIdx < len; DataIdx++)
  8003f34:	2300      	movs	r3, #0
  8003f36:	617b      	str	r3, [r7, #20]
  8003f38:	e009      	b.n	8003f4e <_write+0x26>
-	{
-		__io_putchar(*ptr++);
  8003f3a:	68bb      	ldr	r3, [r7, #8]
  8003f3c:	1c5a      	adds	r2, r3, #1
  8003f3e:	60ba      	str	r2, [r7, #8]
@@ -8838,7 +8797,6 @@ __attribute__((weak)) int _write(int file, char *ptr, int len)
  8003f42:	0018      	movs	r0, r3
  8003f44:	e000      	b.n	8003f48 <_write+0x20>
  8003f46:	bf00      	nop
-	for (DataIdx = 0; DataIdx < len; DataIdx++)
  8003f48:	697b      	ldr	r3, [r7, #20]
  8003f4a:	3301      	adds	r3, #1
  8003f4c:	617b      	str	r3, [r7, #20]
@@ -8846,128 +8804,82 @@ __attribute__((weak)) int _write(int file, char *ptr, int len)
  8003f50:	687b      	ldr	r3, [r7, #4]
  8003f52:	429a      	cmp	r2, r3
  8003f54:	dbf1      	blt.n	8003f3a <_write+0x12>
-	}
-	return len;
  8003f56:	687b      	ldr	r3, [r7, #4]
-}
  8003f58:	0018      	movs	r0, r3
  8003f5a:	46bd      	mov	sp, r7
  8003f5c:	b006      	add	sp, #24
  8003f5e:	bd80      	pop	{r7, pc}
 
 08003f60 <_close>:
-
-int _close(int file)
-{
  8003f60:	b580      	push	{r7, lr}
  8003f62:	b082      	sub	sp, #8
  8003f64:	af00      	add	r7, sp, #0
  8003f66:	6078      	str	r0, [r7, #4]
-	return -1;
  8003f68:	2301      	movs	r3, #1
  8003f6a:	425b      	negs	r3, r3
-}
  8003f6c:	0018      	movs	r0, r3
  8003f6e:	46bd      	mov	sp, r7
  8003f70:	b002      	add	sp, #8
  8003f72:	bd80      	pop	{r7, pc}
 
 08003f74 <_fstat>:
-
-
-int _fstat(int file, struct stat *st)
-{
  8003f74:	b580      	push	{r7, lr}
  8003f76:	b082      	sub	sp, #8
  8003f78:	af00      	add	r7, sp, #0
  8003f7a:	6078      	str	r0, [r7, #4]
  8003f7c:	6039      	str	r1, [r7, #0]
-	st->st_mode = S_IFCHR;
  8003f7e:	683b      	ldr	r3, [r7, #0]
  8003f80:	2280      	movs	r2, #128	; 0x80
  8003f82:	0192      	lsls	r2, r2, #6
  8003f84:	605a      	str	r2, [r3, #4]
-	return 0;
  8003f86:	2300      	movs	r3, #0
-}
  8003f88:	0018      	movs	r0, r3
  8003f8a:	46bd      	mov	sp, r7
  8003f8c:	b002      	add	sp, #8
  8003f8e:	bd80      	pop	{r7, pc}
 
 08003f90 <_isatty>:
-
-int _isatty(int file)
-{
  8003f90:	b580      	push	{r7, lr}
  8003f92:	b082      	sub	sp, #8
  8003f94:	af00      	add	r7, sp, #0
  8003f96:	6078      	str	r0, [r7, #4]
-	return 1;
  8003f98:	2301      	movs	r3, #1
-}
  8003f9a:	0018      	movs	r0, r3
  8003f9c:	46bd      	mov	sp, r7
  8003f9e:	b002      	add	sp, #8
  8003fa0:	bd80      	pop	{r7, pc}
 
 08003fa2 <_lseek>:
-
-int _lseek(int file, int ptr, int dir)
-{
  8003fa2:	b580      	push	{r7, lr}
  8003fa4:	b084      	sub	sp, #16
  8003fa6:	af00      	add	r7, sp, #0
  8003fa8:	60f8      	str	r0, [r7, #12]
  8003faa:	60b9      	str	r1, [r7, #8]
  8003fac:	607a      	str	r2, [r7, #4]
-	return 0;
  8003fae:	2300      	movs	r3, #0
-}
  8003fb0:	0018      	movs	r0, r3
  8003fb2:	46bd      	mov	sp, r7
  8003fb4:	b004      	add	sp, #16
  8003fb6:	bd80      	pop	{r7, pc}
 
 08003fb8 <_sbrk>:
- *
- * @param incr Memory size
- * @return Pointer to allocated memory
- */
-void *_sbrk(ptrdiff_t incr)
-{
  8003fb8:	b580      	push	{r7, lr}
  8003fba:	b086      	sub	sp, #24
  8003fbc:	af00      	add	r7, sp, #0
  8003fbe:	6078      	str	r0, [r7, #4]
-  extern uint8_t _end; /* Symbol defined in the linker script */
-  extern uint8_t _estack; /* Symbol defined in the linker script */
-  extern uint32_t _Min_Stack_Size; /* Symbol defined in the linker script */
-  const uint32_t stack_limit = (uint32_t)&_estack - (uint32_t)&_Min_Stack_Size;
  8003fc0:	4a14      	ldr	r2, [pc, #80]	; (8004014 <_sbrk+0x5c>)
  8003fc2:	4b15      	ldr	r3, [pc, #84]	; (8004018 <_sbrk+0x60>)
  8003fc4:	1ad3      	subs	r3, r2, r3
  8003fc6:	617b      	str	r3, [r7, #20]
-  const uint8_t *max_heap = (uint8_t *)stack_limit;
  8003fc8:	697b      	ldr	r3, [r7, #20]
  8003fca:	613b      	str	r3, [r7, #16]
-  uint8_t *prev_heap_end;
-
-  /* Initialize heap end at first call */
-  if (NULL == __sbrk_heap_end)
  8003fcc:	4b13      	ldr	r3, [pc, #76]	; (800401c <_sbrk+0x64>)
  8003fce:	681b      	ldr	r3, [r3, #0]
  8003fd0:	2b00      	cmp	r3, #0
  8003fd2:	d102      	bne.n	8003fda <_sbrk+0x22>
-  {
-    __sbrk_heap_end = &_end;
  8003fd4:	4b11      	ldr	r3, [pc, #68]	; (800401c <_sbrk+0x64>)
  8003fd6:	4a12      	ldr	r2, [pc, #72]	; (8004020 <_sbrk+0x68>)
  8003fd8:	601a      	str	r2, [r3, #0]
-  }
-
-  /* Protect heap from growing into the reserved MSP stack */
-  if (__sbrk_heap_end + incr > max_heap)
  8003fda:	4b10      	ldr	r3, [pc, #64]	; (800401c <_sbrk+0x64>)
  8003fdc:	681a      	ldr	r2, [r3, #0]
  8003fde:	687b      	ldr	r3, [r7, #4]
@@ -8975,33 +8887,23 @@ void *_sbrk(ptrdiff_t incr)
  8003fe2:	693a      	ldr	r2, [r7, #16]
  8003fe4:	429a      	cmp	r2, r3
  8003fe6:	d207      	bcs.n	8003ff8 <_sbrk+0x40>
-  {
-    errno = ENOMEM;
  8003fe8:	f002 fa82 	bl	80064f0 <__errno>
  8003fec:	0003      	movs	r3, r0
  8003fee:	220c      	movs	r2, #12
  8003ff0:	601a      	str	r2, [r3, #0]
-    return (void *)-1;
  8003ff2:	2301      	movs	r3, #1
  8003ff4:	425b      	negs	r3, r3
  8003ff6:	e009      	b.n	800400c <_sbrk+0x54>
-  }
-
-  prev_heap_end = __sbrk_heap_end;
  8003ff8:	4b08      	ldr	r3, [pc, #32]	; (800401c <_sbrk+0x64>)
  8003ffa:	681b      	ldr	r3, [r3, #0]
  8003ffc:	60fb      	str	r3, [r7, #12]
-  __sbrk_heap_end += incr;
  8003ffe:	4b07      	ldr	r3, [pc, #28]	; (800401c <_sbrk+0x64>)
  8004000:	681a      	ldr	r2, [r3, #0]
  8004002:	687b      	ldr	r3, [r7, #4]
  8004004:	18d2      	adds	r2, r2, r3
  8004006:	4b05      	ldr	r3, [pc, #20]	; (800401c <_sbrk+0x64>)
  8004008:	601a      	str	r2, [r3, #0]
-
-  return (void *)prev_heap_end;
  800400a:	68fb      	ldr	r3, [r7, #12]
-}
  800400c:	0018      	movs	r0, r3
  800400e:	46bd      	mov	sp, r7
  8004010:	b006      	add	sp, #24
