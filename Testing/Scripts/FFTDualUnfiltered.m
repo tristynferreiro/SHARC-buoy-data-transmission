@@ -1,7 +1,7 @@
 % code used from https://www.mathworks.com/matlabcentral/answers/308231-fft-from-csv-data-file
 
 %FIGURE 1
-filename = "C:\Users\9510 i9\Desktop\STM\Algorithm Test\arrayData.txt";
+filename = "C:\Users\9510 i9\Desktop\SHARC_buoy_data_transmission\Testing\Simulation Data\Cleaned Data\Higher sampled turntable Example Data.csv";
 
 X = readmatrix(filename);
 Fs = 80000;                                       % Sampling frequency
@@ -12,18 +12,19 @@ L = height(X);                                           % Length of signal
 
 Fn = Fs*2;                                          % Nyquist Frequency
 FX = fft(X)/L;                                      % Fourier Transform
-Fv = linspace(0, 1, fix(L/2)+1)*Fn;                 % Frequency Vector
+%Fv = linspace(0, 1, fix(L/2)+1)*Fn;                 % Frequency Vector
+Fv = X(:,1);
 Iv = 1:length(Fv);                                  % Index Vector
 
-tmp1 = X(:,1);
-tmp2 = X(:,2);
-tmp3 = X(:,3);
+tmp1 = X(:,3);
+tmp2 = X(:,4);
+tmp3 = X(:,5);
 Acc = [tmp1, tmp2, tmp3];
 AccCorr = [(tmp1-mean(tmp1)), (tmp2 - mean(tmp2)), (tmp3-mean(tmp3))];
 
-tmp4 = X(:,4);
-tmp5 = X(:,5);
-tmp6 = X(:,6); 
+tmp4 = X(:,6);
+tmp5 = X(:,7);
+tmp6 = X(:,8); 
 Gyro = [tmp4, tmp5, tmp6];
 %tmpGyro = [tmp4, tmp5, tmp6];
 %Gyro = smoothdata(tmpGyro, "gaussian", 50);
@@ -39,18 +40,18 @@ Fv = linspace(0, 1, fix(L/2)+1)*Fn;                 % Frequency Vector
 Iv = 1:length(Fv);                                  % Index Vector
 
 %FIGURE 2
-filename2 = "C:\Users\9510 i9\Desktop\STM\Algorithm Test\decryp.txt";
+filename2 = "C:\Users\9510 i9\Desktop\SHARC_buoy_data_transmission\Testing\Simulation Data\Cleaned Data\Higher sampled turntable Example Data.csv";
 X2 = readmatrix(filename);
 
-tmp12 = X2(:,1);
-tmp22 = X2(:,2);
-tmp32 = X2(:,3);
+tmp12 = X2(:,3);
+tmp22 = X2(:,4);
+tmp32 = X2(:,5);
 Acc2 = [tmp12, tmp22, tmp32];
 AccCorr2 = [(tmp12-mean(tmp12)), (tmp22 - mean(tmp22)), (tmp32-mean(tmp32))];
 
-tmp42 = X2(:,4);
-tmp52 = X2(:,5);
-tmp62 = X2(:,6); 
+tmp42 = X2(:,6);
+tmp52 = X2(:,7);
+tmp62 = X2(:,8); 
 Gyro2 = [tmp42, tmp52, tmp62];
 %tmpGyro2 = [tmp42, tmp52, tmp62];
 %Gyro2 = smoothdata(tmpGyro2, "gaussian", 50);
