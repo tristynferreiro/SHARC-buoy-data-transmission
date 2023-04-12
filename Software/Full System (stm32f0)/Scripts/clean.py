@@ -1,6 +1,7 @@
 """
     This script is used for cleaning the serial data received from the stm32f0 before decompression and 
     decryption.
+    Known issue: sometimes data that doesnt end in ; is excluded from the senor_data.txt file.
 """
 
 # Global Variables

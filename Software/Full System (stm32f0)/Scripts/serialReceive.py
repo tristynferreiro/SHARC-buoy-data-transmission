@@ -1,7 +1,11 @@
 import serial
 import time
 import os
-
+"""
+Note: please click the reset button on the stm dev board when first connecting.
+Ignore the first data received as it is runover from the last transmission the
+STM attempted to make. Only partial recovery of this data will be achieved.
+"""
 # Use the code below to find the serial port (should be the last one on the list, for windows it might look more like "COM4")
 # import serial.tools.list_ports as port_list
 # ports = list(port_list.comports())
